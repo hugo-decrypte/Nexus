@@ -3,7 +3,7 @@
 use Psr\Container\ContainerInterface;
 use nexus\api\actions\EnregistrerAction;
 use nexus\api\actions\ConnexionAction;
-use nexus\api\middlewares\AuthnSigninValidationMiddleware;
+use nexus\api\middlewares\AuthnConnexionValidationMiddleware;
 use nexus\api\middlewares\JwtAuthMiddleware;
 use nexus\core\application\usecases\interfaces\ServiceAuthnInterface;
 
@@ -21,8 +21,8 @@ return [
         return new EnregistrerAction($c->get(ServiceAuthnInterface::class));
     },
 
-    AuthnSigninValidationMiddleware::class => function (ContainerInterface $c) {
-        return new AuthnSigninValidationMiddleware();
+    AuthnConnexionValidationMiddleware::class => function (ContainerInterface $c) {
+        return new AuthnConnexionValidationMiddleware();
     },
 
     JwtAuthMiddleware::class => function (ContainerInterface $c) {

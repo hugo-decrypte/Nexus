@@ -14,19 +14,19 @@ class EnregistrerAction {
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
         try {
-            $user_dto = $request->getAttribute('user_dto') ?? null;
+            $utilisateur_dto = $request->getAttribute('user_dto') ?? null;
 
-            if(is_null($user_dto)) {
+            if(is_null($utilisateur_dto)) {
                 throw new \Exception("Erreur récupération DTO de création d'un utilisateur");
             }
 
-            $user_dto->email = filter_var(trim($user_dto->email), FILTER_SANITIZE_EMAIL);
+            $utilisateur_dto->email = filter_var(trim($utilisateur_dto->email), FILTER_SANITIZE_EMAIL);
 
-            if (!filter_var($user_dto->email, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($utilisateur_dto->email, FILTER_VALIDATE_EMAIL)) {
                 throw new \Exception("Email invalide");
             }
 
-            $password = trim($user_dto->password ?? '');
+            $password = trim($utilisateur_dto->password ?? '');
             $minLength = 8;
             $maxLength = 64;
 
@@ -38,7 +38,7 @@ class EnregistrerAction {
                 throw new \Exception("Le mot de passe ne doit pas dépasser $maxLength caractères");
             }
 
-            $res = $this->serviceAuthn->register($user_dto, 1);
+            $res = $this->serviceAuthn->enregister($utilisateur_dto, 'client');
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
 

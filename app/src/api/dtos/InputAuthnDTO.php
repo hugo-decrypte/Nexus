@@ -6,11 +6,11 @@ use Exception;
 
 class InputAuthnDTO {
     private string $email;
-    private string $password;
+    private string $mot_de_passe;
 
     public function __construct(array $data) {
         $this->email = $data['email'];
-        $this->password = $data['password'];
+        $this->mot_de_passe = $data['mot_de_passe'];
     }
 
     /**

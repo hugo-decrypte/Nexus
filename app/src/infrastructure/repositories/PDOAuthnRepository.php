@@ -4,11 +4,11 @@ namespace nexus\infra\repositories;
 
 use DI\NotFoundException;
 use Exception;
+use nexus\core\domain\entities\utilisateur\Utilisateur;
 use PDO;
 use Ramsey\Uuid\Uuid;
 use Slim\Exception\HttpInternalServerErrorException;
 use nexus\api\dtos\CredentialsDTO;
-use nexus\core\domain\entities\user\Utilisateur;
 use nexus\infra\repositories\interface\AuthnRepositoryInterface;
 
 class PDOAuthnRepository implements AuthnRepositoryInterface {
@@ -20,10 +20,10 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         $this->authn_pdo = $authn_pdo;
     }
 
-    public function getUser(string $email): Utilisateur
+    public function obtenirUtilisateur(string $email): Utilisateur
     {
         try {
-            $query = $this->authn_pdo->query("SELECT id, email, password, role FROM users WHERE email = '$email'");
+            $query = $this->authn_pdo->query("SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateur WHERE email = '$email'");
             $res = $query->fetch(PDO::FETCH_ASSOC);
         } catch (HttpInternalServerErrorException) {
             //500
@@ -38,24 +38,28 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             return new Utilisateur(
                 id: $res['id'],
                 email: $res['email'],
-                password: $res['password'],
+                nom: $res['nom'],
+                prenom: $res['prenom'],
+                mot_de_passe: $res['mot_de_passe'],
                 role: $res['role']
             );
         }
     }
 
-    public function saveUser(CredentialsDTO $cred, ?int $role = 1): void
+    public function sauvegarderUtilisateur(CredentialsDTO $cred, ?string $role = 'client'): void
     {
         try {
             $id = Uuid::uuid4()->toString();
             // Le mot de passe est hashé dans le DTO
             $stmt = $this->authn_pdo->prepare(
-                "INSERT INTO users (id, email, password, role) VALUES (:id, :email, :password, :role)"
+                "INSERT INTO utilisateur (id, nom, prenom, email, mot_de_passe, role) VALUES (:id, :nom, :prenom, :email, :mdp, :role)"
             );
             $stmt->execute([
                 'id' => $id,
+                'nom' => $cred->nom,
+                'prenom' => $cred->prenom,
                 'email' => $cred->email,
-                'password' => $cred->password,
+                'mdp' => $cred->mot_de_passe,
                 'role' => $role
             ]);
 

@@ -11,7 +11,7 @@ use nexus\infra\repositories\interface\AuthnRepositoryInterface;
 
 class ServiceAuthn implements ServiceAuthnInterface {
 
-    private AuthnProviderInterface $userProvider;
+    private AuthnProviderInterface $utilisateurProvider;
     private AuthnRepositoryInterface $authnRepository;
     private string $secretKey;
 
@@ -21,10 +21,10 @@ class ServiceAuthn implements ServiceAuthnInterface {
         $this->secretKey = $jwtSecret;
     }
 
-    public function login(InputAuthnDTO $user_dto, string $host) : string {
+    public function connecter(InputAuthnDTO $utilisateur_dto, string $host) : string {
 
         // 1. On valide l'utilisateur
-        $user = $this->userProvider->signin($user_dto);
+        $utilisateur = $this->userProvider->connecter($utilisateur_dto);
 
         // 2. On construit le payload
         $payload = [
@@ -32,10 +32,10 @@ class ServiceAuthn implements ServiceAuthnInterface {
             "aud" => $host,
             "iat" => time(),
             "exp" => time() + 3600,
-            "sub" => $user->id,
+            "sub" => $utilisateur->id,
             "data" => [
-                "email" => $user->email,
-                "role" => $user->role,
+                "email" => $utilisateur->email,
+                "role" => $utilisateur->role,
             ]
         ];
 
@@ -43,12 +43,12 @@ class ServiceAuthn implements ServiceAuthnInterface {
         return JWT::encode($payload, $this->secretKey, 'HS512');
     }
 
-    public function register(InputUserDTO $user_dto, ?int $role = 1): array {
+    public function enregister(InputUserDTO $utilisateur_dto, ?string $role = "client"): array {
         try {
-            $passwordhash = password_hash($user_dto->password, PASSWORD_BCRYPT);
-            $credential = new CredentialsDTO($user_dto->email, $passwordhash);
+            $passwordhash = password_hash($utilisateur_dto->mot_de_passe, PASSWORD_BCRYPT);
+            $credential = new CredentialsDTO($utilisateur_dto->email, $passwordhash);
 
-            $this->authnRepository->saveUser($credential, $role);
+            $this->authnRepository->sauvegarderUtilisateur($credential, $role);
         } catch (\Exception $e) {
             return [
                 'status' => $e->getCode(),

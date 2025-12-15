@@ -5,12 +5,12 @@ namespace nexus\api\dtos;
 class CredentialsDTO{
 
     private string $email;
-    private string $password;
+    private string $mot_de_passe;
 
-    public function __construct(string $email, string $password)
+    public function __construct(string $email, string $mot_de_passe)
     {
         $this->email = $email;
-        $this->password = $password;
+        $this->mot_de_passe = $mot_de_passe;
     }
 
     public function __get(string $name){
@@ -27,6 +27,6 @@ class CredentialsDTO{
 
     public function getPassword(): string
     {
-        return $this->password;
+        return $this->mot_de_passe;
     }
 }

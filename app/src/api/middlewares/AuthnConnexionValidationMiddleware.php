@@ -10,7 +10,7 @@ use Respect\Validation\Validator as v;
 use Slim\Exception\HttpBadRequestException;
 use nexus\api\dtos\InputAuthnDTO;
 
-class AuthnSigninValidationMiddleware {
+class AuthnConnexionValidationMiddleware {
 
     public function __invoke(ServerRequestInterface $request, RequestHandlerInterface $next) : ResponseInterface {
 
@@ -23,12 +23,12 @@ class AuthnSigninValidationMiddleware {
         }
 
         $data["email"] = $data["email"] ?? "";
-        $data["password"] = $data["password"] ?? "";
+        $data["mot_de_passe"] = $data["mot_de_passe"] ?? "";
 
         // 3. On valide
         try {
             v::key('email', v::stringType()->notEmpty()->email())
-            ->key('password', v::stringType()->notEmpty())
+            ->key('mot_de_passe', v::stringType()->notEmpty())
                 ->assert($data);
 
         } catch (NestedValidationException $e) {

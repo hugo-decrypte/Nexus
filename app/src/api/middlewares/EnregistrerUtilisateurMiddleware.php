@@ -18,7 +18,9 @@ class EnregistrerUtilisateurMiddleware {
 
         try {
             v::key('email', v::stringType()->notEmpty())
-                ->key('password', v::stringType()->notEmpty())
+                ->key('mot_de_passe', v::stringType()->notEmpty())
+                ->key('nom', v::stringType()->notEmpty())
+                ->key('prenom', v::stringType()->notEmpty())
                 ->assert($data);
 
         } catch (NestedValidationException $e) {

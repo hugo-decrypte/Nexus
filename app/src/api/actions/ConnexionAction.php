@@ -19,10 +19,10 @@ class ConnexionAction {
     public function __invoke(Request $request, Response $response): Response {
 
         // 1. On récupère le DTO que le middleware a validé et créé
-        $user_dto = $request->getAttribute('auth_dto');
+        $utilisateur_dto = $request->getAttribute('auth_dto');
 
         // Sécurité : si le DTO est absent, c'est une erreur de configuration
-        if ($user_dto === null) {
+        if ($utilisateur_dto === null) {
             throw new HttpInternalServerErrorException($request, "Erreur de configuration du middleware.");
         }
 
@@ -31,7 +31,7 @@ class ConnexionAction {
 
         // 3. On appelle le service
         try {
-            $token = $this->authnService->login($user_dto, $host);
+            $token = $this->authnService->connecter($utilisateur_dto, $host);
 
             $responseData = ['token' => $token];
 

@@ -9,6 +9,8 @@ class AuthnDTO {
     public function __construct(
         public readonly string $id,
         public readonly string $email,
+        public readonly string $nom,
+        public readonly string $prenom,
         public readonly string $role,
     ) {}
 }
