@@ -15,7 +15,7 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
 WORKDIR /var/www/html
 
-COPY src/ .
+COPY app/ .
 
 # S'assurer que les permissions sont correctes
 RUN chown -R www-data:www-data /var/www/html
