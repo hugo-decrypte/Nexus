@@ -2,7 +2,7 @@
 
 use application_core\application\usecases\AuthnProvider;
 use application_core\application\usecases\interfaces\AuthnProviderInterface;
-use infrastructure\repositories\interface\AuthnRepositoryInterface;
+use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use infrastructure\repositories\PDOAuthnRepository;
 use Psr\Container\ContainerInterface;
 
