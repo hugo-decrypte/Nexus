@@ -8,3 +8,147 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.20.0.4. Set the 'ServerName' directive globally to suppress this message
 [Tue Dec 16 08:32:40.060387 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.65 (Debian) PHP/8.2.29 configured -- resuming normal operations
 [Tue Dec 16 08:32:40.061033 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Tue Dec 16 09:00:39.697909 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:47982] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:00:49.765513 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:34140] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:00:59.869630 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:50322] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:01:09.947748 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:55514] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:01:20.042997 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:49628] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:01:30.119325 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:46222] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:01:40.184350 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:48726] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:01:50.253244 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:57828] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:02:00.336765 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:37714] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:02:10.423657 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:42178] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:02:20.507794 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:57474] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:02:30.626067 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:52586] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:02:40.716782 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:38756] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:02:50.792434 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:53336] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:03:00.865933 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:37724] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:03:10.931982 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:45348] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:03:21.000038 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:34560] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:03:31.095610 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:35434] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:03:41.184842 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:40760] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:03:51.250793 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:38888] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:04:01.328815 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:58434] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:04:11.406121 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:46670] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:04:21.504415 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:38250] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:04:31.576587 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:39870] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:04:41.659747 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:44248] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:04:51.753458 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:58056] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:05:01.840295 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:36084] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:05:11.914721 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:47228] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:05:21.990738 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:59674] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:05:32.087258 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:40100] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:05:42.160567 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:41206] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:05:52.238084 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:51642] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:06:02.333281 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:43010] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:06:12.396226 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:34832] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:06:22.471451 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:40534] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:06:32.541952 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:55192] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:06:42.640671 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:41968] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:06:52.724584 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:49904] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:07:02.814985 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:44828] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:07:12.891437 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:48806] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:07:22.966847 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:38850] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:07:33.054552 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:38088] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:07:43.120517 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:57854] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:07:53.206614 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:35416] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:08:03.341069 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:50962] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:08:13.434137 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:41662] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:08:23.517417 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:53518] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:08:33.592426 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:40280] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:08:43.669556 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:47024] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:08:53.755189 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:46806] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:09:03.824217 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:59466] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:09:13.891772 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:37412] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:09:23.975397 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:57902] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:09:34.047058 2025] [php:error] [pid 40:tid 40] [client 127.0.0.1:53062] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:09:44.119587 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:45546] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:09:54.176077 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.20.0.4. Set the 'ServerName' directive globally to suppress this message
+[Tue Dec 16 09:09:56.888250 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.65 (Debian) PHP/8.2.29 configured -- resuming normal operations
+[Tue Dec 16 09:09:56.888825 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Tue Dec 16 09:10:01.658712 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:44254] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:06.754054 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:52322] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:11.861114 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:52336] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:16.958671 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:38528] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:22.043003 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:38532] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:27.152418 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:49304] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:37.241475 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:49124] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:47.316103 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:36242] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:10:57.386008 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:37172] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:11:07.462122 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:42094] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:11:17.573450 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:35220] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:11:27.651496 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:41400] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:11:37.714167 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:53140] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:11:47.794587 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:44858] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:11:57.858059 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:41904] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:12:07.925665 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:51280] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:12:17.998274 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:48360] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:12:28.065353 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:32994] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:12:38.138096 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:48328] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:12:48.241443 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:51970] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:12:58.320105 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:52530] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:13:08.406896 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:57590] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:13:18.478032 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:52882] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:13:28.553123 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:34860] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:13:38.667892 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:45222] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:13:48.740363 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:39956] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:13:58.810027 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:39632] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:14:08.890715 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:40804] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:14:18.956389 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:57134] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:14:29.044054 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:53274] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:14:39.118635 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:54356] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:14:49.184046 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:49576] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:14:59.270251 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:59436] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:15:09.358366 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:38646] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:15:19.435088 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:51574] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:15:29.520177 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:39484] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:15:39.611256 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:37700] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:15:49.688802 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:39892] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:15:59.770415 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:44836] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:16:09.836171 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:46266] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:16:19.923858 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:41894] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:16:29.983345 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:42722] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:16:40.071526 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:35606] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:16:50.157123 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:57648] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:16:55.619105 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.20.0.4. Set the 'ServerName' directive globally to suppress this message
+[Tue Dec 16 09:17:11.845371 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.65 (Debian) PHP/8.2.29 configured -- resuming normal operations
+[Tue Dec 16 09:17:11.845991 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Tue Dec 16 09:17:16.726889 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:54638] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:17:21.815295 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:54646] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:17:26.889131 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:34410] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:17:31.964120 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:34420] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:17:37.051532 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:44944] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:17:42.120430 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:44946] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:17:52.204039 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:59544] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:18:02.303885 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:48966] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:18:12.394995 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:43526] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:18:22.463684 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:43134] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:18:32.535059 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:41236] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:18:42.610970 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:49726] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:18:52.690140 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:42306] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:19:02.755484 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:36874] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:19:12.822836 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:36816] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:19:22.896303 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:43912] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:19:33.007004 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:33810] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:19:43.068674 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:58916] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:19:53.175700 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:38830] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:20:03.254269 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:39804] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:20:13.326013 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:55932] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:20:23.413432 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:44692] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:20:33.494456 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:43920] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:20:43.576860 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:40944] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:20:53.646037 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:52268] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:21:03.732132 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:36742] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:21:13.818980 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:43866] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:21:23.896243 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:50056] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:21:33.983629 2025] [php:error] [pid 20:tid 20] [client 127.0.0.1:36150] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:21:44.071442 2025] [php:error] [pid 21:tid 21] [client 127.0.0.1:51546] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:21:54.172376 2025] [php:error] [pid 17:tid 17] [client 127.0.0.1:37418] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:22:04.252588 2025] [php:error] [pid 18:tid 18] [client 127.0.0.1:39132] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:22:14.334544 2025] [php:error] [pid 19:tid 19] [client 127.0.0.1:54808] script '/var/www/html/health.php' not found or unable to stat
+[Tue Dec 16 09:22:36.415671 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.20.0.4. Set the 'ServerName' directive globally to suppress this message
+[Tue Dec 16 09:22:54.225917 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.65 (Debian) PHP/8.2.29 configured -- resuming normal operations
+[Tue Dec 16 09:22:54.226517 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
