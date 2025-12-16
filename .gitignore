@@ -1,0 +1,16 @@
+.idea/
+# IDE
+.vscode/
+.DS_STORE
+/coverage/
+# Vendor
+/vendor/
+# Cache
+/var/cache/*
+.phpunit.result.cache
+cache.properties
+.php_cs.cache
+# Composer
+composer.phar
+composer.lock
+.env
