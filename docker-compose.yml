@@ -15,12 +15,7 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - payment_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+
 
   # Interface Adminer
   adminer:
@@ -32,9 +27,7 @@ services:
     networks:
       - payment_network
     depends_on:
-      db:
-        condition: service_healthy
-
+      - db
   # API PHP (Backend)
   api:
     build: ./api
@@ -52,18 +45,13 @@ services:
       - ./api/src:/var/www/html
       - ./api/logs:/var/log/apache2
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+
     ports:
       - "8000:80"
     networks:
       - payment_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health.php"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+
 
   # Site Web (Frontend)
   web:
@@ -77,18 +65,12 @@ services:
       - ./web/public:/usr/share/nginx/html
       - ./web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      api:
-        condition: service_healthy
+      - api
     ports:
       - "8080:80"
     networks:
       - payment_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+
 
 volumes:
   db_data:
