@@ -7,7 +7,7 @@ use api\dtos\InputUserDTO;
 use application_core\application\usecases\interfaces\AuthnProviderInterface;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use Firebase\JWT\JWT;
-use infrastructure\repositories\interface\AuthnRepositoryInterface;
+use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 
 class ServiceAuthn implements ServiceAuthnInterface {
 
