@@ -6,7 +6,7 @@ use api\dtos\CredentialsDTO;
 use application_core\domain\entities\utilisateur\Utilisateur;
 use DI\NotFoundException;
 use Exception;
-use infrastructure\repositories\interface\AuthnRepositoryInterface;
+use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use PDO;
 use Ramsey\Uuid\Uuid;
 use Slim\Exception\HttpInternalServerErrorException;
