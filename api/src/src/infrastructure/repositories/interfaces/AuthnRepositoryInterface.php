@@ -1,6 +1,6 @@
 <?php
 
-namespace infrastructure\repositories\interface;
+namespace infrastructure\repositories\interfaces;
 
 use api\dtos\CredentialsDTO;
 use application_core\domain\entities\utilisateur\Utilisateur;
