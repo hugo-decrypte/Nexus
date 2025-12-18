@@ -27,7 +27,7 @@ CREATE TABLE transactions (
 
 CREATE TABLE logs (
       id UUID PRIMARY KEY,
-      acteur_id VARCHAR(50),
+      acteur_id UUID,
       action_type VARCHAR(100) NOT NULL,
       details JSON,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
