@@ -16,7 +16,7 @@ CREATE TABLE utilisateurs (
 
 CREATE TABLE transactions (
       id UUID PRIMARY KEY,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       emetteur_id UUID NULL,
       recepteur_id UUID NULL,
       montant DECIMAL(10,2) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE logs (
       acteur_id UUID,
       action_type VARCHAR(100) NOT NULL,
       details JSON,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (acteur_id) REFERENCES utilisateurs(id)
 );
 
