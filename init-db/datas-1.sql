@@ -17,8 +17,8 @@ CREATE TABLE utilisateurs (
 CREATE TABLE transactions (
       id UUID PRIMARY KEY,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      emetteur_id VARCHAR(50) NULL,
-      recepteur_id VARCHAR(50) NULL,
+      emetteur_id UUID NULL,
+      recepteur_id UUID NULL,
       montant DECIMAL(10,2) NOT NULL,
       hash CHAR(64) NOT NULL UNIQUE,
       FOREIGN KEY (emetteur_id) REFERENCES utilisateurs(id) ON DELETE SET NULL,
