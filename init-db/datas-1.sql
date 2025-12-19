@@ -34,4 +34,4 @@ CREATE TABLE logs (
       FOREIGN KEY (acteur_id) REFERENCES utilisateurs(id)
 );
 
-CREATE INDEX idx_logs_created_at ON logs(created_at);
+CREATE INDEX idx_logs_created_at ON logs(date_creation);
