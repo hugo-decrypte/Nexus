@@ -2,18 +2,17 @@
 namespace api\dtos;
 
 class TransactionDTO{
-    private string $id;
-    private ?int $emetteur_id;
-    private ?int $recepteur_id;
-    private float $montant;
-    private string $hash;
-    public function __construct(array $data)
-    {
-        $this->id = $data['id'];
-        $this->montant = $data['montant'];
-        $this->hash = $data['hash'];
-        $this->emetteur_id = $data['emetteur_id'];
-        $this->recepteur_id = $data['recepteur_id'];
+
+    public function __construct(
+        public string $id,
+        public float $montant,
+        public string $hash,
+        public ?string $emetteur_id = null,
+        public ?string $recepteur_id = null
+    ) {
+        if ($this->montant <= 0) {
+            throw new \InvalidArgumentException("Le montant doit être supérieur à zéro.");
+        }
     }
 
     public function __get(string $name){

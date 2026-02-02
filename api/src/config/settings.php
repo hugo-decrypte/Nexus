@@ -6,7 +6,7 @@ return [
     // settings
     'displayErrorDetails' => true,
     'logs.dir' => __DIR__ . '/../var/logs',
-    'db.config' => __DIR__ . '/nexus.env',
+    'db.config' => __DIR__ . '/.env',
 
     // infra
      'nexus.pdo' => function (ContainerInterface $c) {

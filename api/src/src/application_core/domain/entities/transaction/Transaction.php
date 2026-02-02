@@ -8,8 +8,8 @@ class Transaction
 {
     private string $id;
     private string $created_at;
-    private ?int $emetteur_id;
-    private ?int $recepteur_id;
+    private ?string $emetteur_id;
+    private ?string $recepteur_id;
     private float $montant;
     private string $hash;
 
@@ -17,8 +17,8 @@ class Transaction
         string $id,
         float $montant,
         string $hash,
-        ?int $emetteur_id = null,
-        ?int $recepteur_id = null
+        ?string $emetteur_id = null,
+        ?string $recepteur_id = null
     ) {
         $this->id = $id;
         $this->montant = $montant;

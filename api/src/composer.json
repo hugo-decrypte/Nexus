@@ -22,8 +22,8 @@
   "autoload": {
     "psr-4" : {
       "api\\" : "./src/api",
-      "core\\" : "./src/application_core",
-      "infra\\" : "./src/infrastructure"
+      "application_core\\" : "./src/application_core",
+      "infrastructure\\" : "./src/infrastructure"
     }
   }
 }
