@@ -17,5 +17,9 @@ return [
         return new PDOTransactionRepository($c->get("auth.pdo"));
     }
 
+    TransactionRepositoryInterface::class => function(ContainerInterface $c){
+        return new PDOTransactionRepository($c->get(TransactionRepositoryInterface::class));
+    }
+
 ];
 
