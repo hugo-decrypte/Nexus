@@ -1,13 +1,12 @@
 <?php
 
 use Psr\Container\ContainerInterface;
-use nexus\api\actions\PraticiensAction;
 
 return [
     // settings
     'displayErrorDetails' => true,
     'logs.dir' => __DIR__ . '/../var/logs',
-    'db.config' => __DIR__ . '/.env',
+    'db.config' => __DIR__ . '/nexus.env',
 
     // infra
      'nexus.pdo' => function (ContainerInterface $c) {
