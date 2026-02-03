@@ -29,6 +29,8 @@ return function( App $app): App {
         ->add(AuthnConnexionValidationMiddleware::class);
     $app->post('/register', EnregistrerAction::class)
         ->add(new EnregistrerUtilisateurMiddleware());
+    $app->post('/users', EnregistrerAction::class)
+        ->add(new EnregistrerUtilisateurMiddleware());
 
     return $app;
 };
