@@ -1,6 +1,7 @@
 <?php
 
 use api\actions\ConnexionAction;
+use api\actions\CreateTransactionAction;
 use api\actions\EnregistrerAction;
 use api\actions\TransactionAction;
 use api\actions\TransactionsAction;
@@ -23,6 +24,9 @@ return [
     },
     TransactionAction::class => function (ContainerInterface $c) {
         return new TransactionAction($c->get(ServiceTransactionInterface::class));
+    },
+    CreateTransactionAction::class => function (ContainerInterface $c) {
+        return new CreateTransactionAction($c->get(ServiceTransactionInterface::class));
     },
     TransactionsAction::class => function (ContainerInterface $c) {
         return new TransactionsAction($c->get(ServiceTransactionInterface::class));

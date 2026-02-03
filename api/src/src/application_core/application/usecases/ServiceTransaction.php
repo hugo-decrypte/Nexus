@@ -16,11 +16,10 @@ class ServiceTransaction implements ServiceTransactionInterface {
 
     public function calculSolde(string $id_user): float
     {
-        // TODO: Implement calculSolde() method.
-        return 0;
+        return $this->transaction_repository->calculSolde($id_user);
     }
 
-    public function getTransaction(string $id_user) : TransactionDTO
+    public function getTransaction(string $id_user): TransactionDTO
     {
         try {
             $trans = $this->transaction_repository->getTransaction($id_user);
@@ -29,13 +28,7 @@ class ServiceTransaction implements ServiceTransactionInterface {
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-        return new TransactionDTO(
-            id: $trans->id,
-            montant: $trans->montant,
-            hash: $trans->hash,
-            emetteur_id: $trans->emetteur_id,
-            recepteur_id: $trans->recepteur_id
-        );
+        return $this->toDTO($trans);
     }
 
     public function getTransactions(): array
@@ -46,14 +39,23 @@ class ServiceTransaction implements ServiceTransactionInterface {
             throw new \Exception($e->getMessage());
         }
 
-        return array_map(function ($trans) {
-            return new TransactionDTO(
-                id: $trans->id,
-                montant: $trans->montant,
-                hash: $trans->hash,
-                emetteur_id: $trans->emetteur_id,
-                recepteur_id: $trans->recepteur_id
-            );
-        }, $transactions);
+        return array_map(fn ($trans) => $this->toDTO($trans), $transactions);
+    }
+
+    public function creerTransaction(string $emetteur_id, string $recepteur_id, float $montant): TransactionDTO
+    {
+        $trans = $this->transaction_repository->creerTransaction($emetteur_id, $recepteur_id, $montant);
+        return $this->toDTO($trans);
+    }
+
+    private function toDTO($trans): TransactionDTO
+    {
+        return new TransactionDTO(
+            id: $trans->id,
+            montant: $trans->montant,
+            hash: $trans->hash,
+            emetteur_id: $trans->emetteur_id,
+            recepteur_id: $trans->recepteur_id
+        );
     }
 }

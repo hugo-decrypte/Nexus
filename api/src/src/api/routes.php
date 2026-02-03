@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use api\actions\ConnexionAction;
+use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
 use api\actions\EnregistrerAction;
 use api\actions\TransactionAction;
@@ -25,6 +26,7 @@ return function( App $app): App {
     $app->delete('/users/{id_user}', DeleteUserAction::class);
     $app->get("/transactions/{id_user}", TransactionAction::class);
     $app->get("/transactions", TransactionsAction::class);
+    $app->post("/transactions", CreateTransactionAction::class);
     $app->post("/signin", ConnexionAction::class)
         ->add(AuthnConnexionValidationMiddleware::class);
     $app->post('/register', EnregistrerAction::class)
