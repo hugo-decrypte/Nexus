@@ -26,7 +26,7 @@ class EnregistrerAction {
                 throw new \Exception("Email invalide");
             }
 
-            $password = trim($utilisateur_dto->password ?? '');
+            $password = trim($utilisateur_dto->mot_de_passe ?? '');
             $minLength = 8;
             $maxLength = 64;
 
@@ -38,7 +38,7 @@ class EnregistrerAction {
                 throw new \Exception("Le mot de passe ne doit pas dépasser $maxLength caractères");
             }
 
-            $res = $this->serviceAuthn->enregister($utilisateur_dto, 'client');
+            $res = $this->serviceAuthn->signup($utilisateur_dto, 'client');
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
 

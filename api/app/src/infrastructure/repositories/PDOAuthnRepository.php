@@ -20,39 +20,81 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         $this->authn_pdo = $authn_pdo;
     }
 
-    public function obtenirUtilisateur(string $email): Utilisateur
+    public function getUserByEmail(string $email): Utilisateur
     {
-        try {
-            $query = $this->authn_pdo->query("SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateur WHERE email = '$email'");
-            $res = $query->fetch(PDO::FETCH_ASSOC);
-        } catch (HttpInternalServerErrorException) {
-            //500
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requete SQL.");
-        } catch(\Throwable) {
-            throw new Exception("Erreur lors de la reception de l'utilisateur.");
-        }
+        $stmt = $this->authn_pdo->prepare(
+            "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE email = :email LIMIT 1"
+        );
+        $stmt->execute(['email' => $email]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$res) {
-            //404
-            throw new NotFoundException("L'utilisateur ayant pour email ".$email." n'existe pas.");
-        } else {
-            return new Utilisateur(
-                id: $res['id'],
-                email: $res['email'],
-                nom: $res['nom'],
-                prenom: $res['prenom'],
-                mot_de_passe: $res['mot_de_passe'],
-                role: $res['role']
+            throw new NotFoundException("L'utilisateur ayant pour email " . $email . " n'existe pas.");
+        }
+        return new Utilisateur(
+            id: $res['id'],
+            nom: $res['nom'],
+            prenom: $res['prenom'],
+            email: $res['email'],
+            mot_de_passe: $res['mot_de_passe'],
+            role: $res['role']
+        );
+    }
+
+    public function getUserById(string $id): Utilisateur
+    {
+        $stmt = $this->authn_pdo->prepare(
+            "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE id = :id LIMIT 1"
+        );
+        $stmt->execute(['id' => $id]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$res) {
+            throw new NotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.");
+        }
+        return new Utilisateur(
+            id: $res['id'],
+            nom: $res['nom'],
+            prenom: $res['prenom'],
+            email: $res['email'],
+            mot_de_passe: $res['mot_de_passe'],
+            role: $res['role']
+        );
+    }
+
+    public function getUsers(): array
+    {
+        $stmt = $this->authn_pdo->query(
+            "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs ORDER BY nom, prenom"
+        );
+        $users = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $users[] = new Utilisateur(
+                id: $row['id'],
+                nom: $row['nom'],
+                prenom: $row['prenom'],
+                email: $row['email'],
+                mot_de_passe: $row['mot_de_passe'],
+                role: $row['role']
             );
+        }
+        return $users;
+    }
+
+    public function deleteUser(string $id): void
+    {
+        $stmt = $this->authn_pdo->prepare("DELETE FROM utilisateurs WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        if ($stmt->rowCount() === 0) {
+            throw new NotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.");
         }
     }
 
-    public function sauvegarderUtilisateur(CredentialsDTO $cred, ?string $role = 'client'): void
+    public function saveUser(CredentialsDTO $cred, ?string $role = 'client'): void
     {
         try {
             $id = Uuid::uuid4()->toString();
             // Le mot de passe est hashé dans le DTO
             $stmt = $this->authn_pdo->prepare(
-                "INSERT INTO utilisateur (id, nom, prenom, email, mot_de_passe, role) VALUES (:id, :nom, :prenom, :email, :mdp, :role)"
+                "INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role) VALUES (:id, :nom, :prenom, :email, :mdp, :role)"
             );
             $stmt->execute([
                 'id' => $id,

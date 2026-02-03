@@ -8,11 +8,11 @@ interface ServiceAuthnInterface {
 
     /**
      * Orchestre la connexion.
-     * @param InputAuthnDTO $utilisateur_dto Les identifiants (email/mdp)
+     * @param InputAuthnDTO $user_dto Les identifiants (email/mdp)
      * @param string $host Le nom d'hôte (ex: "api.mondomaine.com")
      * @return string Le token JWT
      */
-    public function connecter(InputAuthnDTO $utilisateur_dto, string $host) : string; // Modifié ici
+    public function signin(InputAuthnDTO $user_dto, string $host) : string; // Modifié ici
 
-    public function enregister(InputUserDTO $utilisateur_dto, ?string $role = 'client'): array;
+    public function signup(InputUserDTO $user_dto, ?string $role = 'client'): array;
 }

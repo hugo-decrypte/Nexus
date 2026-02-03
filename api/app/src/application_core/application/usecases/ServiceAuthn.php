@@ -11,7 +11,7 @@ use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 
 class ServiceAuthn implements ServiceAuthnInterface {
 
-    private AuthnProviderInterface $utilisateurProvider;
+    private AuthnProviderInterface $userProvider;
     private AuthnRepositoryInterface $authnRepository;
     private string $secretKey;
 
@@ -21,10 +21,10 @@ class ServiceAuthn implements ServiceAuthnInterface {
         $this->secretKey = $jwtSecret;
     }
 
-    public function connecter(InputAuthnDTO $utilisateur_dto, string $host) : string {
+    public function signin(InputAuthnDTO $user_dto, string $host) : string {
 
-        // 1. On valide l'utilisateur
-        $utilisateur = $this->userProvider->connecter($utilisateur_dto);
+        // 1. On valide l'user
+        $user = $this->userProvider->signin($user_dto);
 
         // 2. On construit le payload
         $payload = [
@@ -32,10 +32,10 @@ class ServiceAuthn implements ServiceAuthnInterface {
             "aud" => $host,
             "iat" => time(),
             "exp" => time() + 3600,
-            "sub" => $utilisateur->id,
+            "sub" => $user->id,
             "data" => [
-                "email" => $utilisateur->email,
-                "role" => $utilisateur->role,
+                "email" => $user->email,
+                "role" => $user->role,
             ]
         ];
 
@@ -43,12 +43,12 @@ class ServiceAuthn implements ServiceAuthnInterface {
         return JWT::encode($payload, $this->secretKey, 'HS512');
     }
 
-    public function enregister(InputUserDTO $utilisateur_dto, ?string $role = "client"): array {
+    public function signup(InputUserDTO $user_dto, ?string $role = "client"): array {
         try {
-            $passwordhash = password_hash($utilisateur_dto->mot_de_passe, PASSWORD_BCRYPT);
-            $credential = new CredentialsDTO($utilisateur_dto->email, $passwordhash);
+            $passwordhash = password_hash($user_dto->mot_de_passe, PASSWORD_BCRYPT);
+            $credential = new CredentialsDTO($user_dto->nom, $user_dto->prenom, $user_dto->email, $passwordhash);
 
-            $this->authnRepository->sauvegarderUtilisateur($credential, $role);
+            $this->authnRepository->saveUser($credential, $role);
         } catch (\Exception $e) {
             return [
                 'status' => $e->getCode(),
@@ -59,7 +59,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         return [
             'status' => 201,
             'success' => true,
-            "message" => "Utilisateur ajouté avec succès."
+            "message" => "user ajouté avec succès."
         ];
     }
 }

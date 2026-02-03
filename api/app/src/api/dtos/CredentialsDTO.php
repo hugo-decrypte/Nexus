@@ -4,11 +4,15 @@ namespace api\dtos;
 
 class CredentialsDTO{
 
+    private string $nom;
+    private string $prenom;
     private string $email;
     private string $mot_de_passe;
 
-    public function __construct(string $email, string $mot_de_passe)
+    public function __construct(string $nom, string $prenom, string $email, string $mot_de_passe)
     {
+        $this->nom = $nom;
+        $this->prenom = $prenom;
         $this->email = $email;
         $this->mot_de_passe = $mot_de_passe;
     }
@@ -18,15 +22,5 @@ class CredentialsDTO{
             return $this->$name;
         }
         throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->mot_de_passe;
     }
 }

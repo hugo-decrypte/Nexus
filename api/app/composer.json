@@ -21,9 +21,9 @@
   },
   "autoload": {
     "psr-4" : {
-      "nexus\\api\\" : "/src/api",
-      "nexus\\core\\" : "/src/application_core",
-      "nexus\\infra\\" : "/src/infrastructure"
+      "api\\" : "./src/api",
+      "application_core\\" : "./src/application_core",
+      "infrastructure\\" : "./src/infrastructure"
     }
   }
 }

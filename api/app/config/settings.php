@@ -1,7 +1,6 @@
 <?php
 
 use Psr\Container\ContainerInterface;
-use nexus\api\actions\PraticiensAction;
 
 return [
     // settings
