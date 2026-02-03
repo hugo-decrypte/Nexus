@@ -65,6 +65,30 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         return $transactions;
     }
 
+    public function getTransactionsBetween(string $id_emetteur, string $id_recepteur): array
+    {
+        $stmt = $this->transaction_pdo->prepare(
+            "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
+             WHERE (emetteur_id = :e1 AND recepteur_id = :r1) OR (emetteur_id = :e2 AND recepteur_id = :r2)
+             ORDER BY date_creation DESC"
+        );
+        $stmt->execute([
+            'e1' => $id_emetteur, 'r1' => $id_recepteur,
+            'e2' => $id_recepteur, 'r2' => $id_emetteur,
+        ]);
+        $transactions = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $transactions[] = new Transaction(
+                id: $row['id'],
+                montant: (float) $row['montant'],
+                hash: $row['hash'],
+                emetteur_id: $row['emetteur_id'],
+                recepteur_id: $row['recepteur_id']
+            );
+        }
+        return $transactions;
+    }
+
     public function getLastTransactionHash(): ?string
     {
         $stmt = $this->transaction_pdo->query(

@@ -42,6 +42,12 @@ class ServiceTransaction implements ServiceTransactionInterface {
         return array_map(fn ($trans) => $this->toDTO($trans), $transactions);
     }
 
+    public function getTransactionsBetween(string $id_emetteur, string $id_recepteur): array
+    {
+        $transactions = $this->transaction_repository->getTransactionsBetween($id_emetteur, $id_recepteur);
+        return array_map(fn ($trans) => $this->toDTO($trans), $transactions);
+    }
+
     public function creerTransaction(string $emetteur_id, string $recepteur_id, float $montant): TransactionDTO
     {
         $trans = $this->transaction_repository->creerTransaction($emetteur_id, $recepteur_id, $montant);

@@ -5,6 +5,7 @@ use api\actions\CreateTransactionAction;
 use api\actions\EnregistrerAction;
 use api\actions\TransactionAction;
 use api\actions\TransactionsAction;
+use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
 use api\actions\DeleteUserAction;
@@ -30,6 +31,9 @@ return [
     },
     TransactionsAction::class => function (ContainerInterface $c) {
         return new TransactionsAction($c->get(ServiceTransactionInterface::class));
+    },
+    TransactionsBetweenAction::class => function (ContainerInterface $c) {
+        return new TransactionsBetweenAction($c->get(ServiceTransactionInterface::class));
     },
     UserByIdAction::class => function (ContainerInterface $c) {
         return new UserByIdAction($c->get(AuthnRepositoryInterface::class));
