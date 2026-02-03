@@ -11,6 +11,10 @@ use Slim\App;
 
 
 return function( App $app): App {
+    $app->get('/health', function ($request, $response) {
+        $response->getBody()->write(json_encode(['status' => 'ok']));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    });
     $app->get("/transactions/{id_user}", TransactionAction::class);
     $app->get("/transactions", TransactionsAction::class);
     $app->post("/signin", ConnexionAction::class)
