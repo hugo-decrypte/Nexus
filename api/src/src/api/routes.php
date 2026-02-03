@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use api\actions\AdminLogsAction;
 use api\actions\ConnexionAction;
 use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
@@ -17,6 +18,7 @@ use Slim\App;
 
 
 return function( App $app): App {
+    $app->get('/admin/logs', AdminLogsAction::class);
     $app->get('/health', function ($request, $response) {
         $response->getBody()->write(json_encode(['status' => 'ok']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);

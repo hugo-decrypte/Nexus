@@ -1,5 +1,6 @@
 <?php
 
+use api\actions\AdminLogsAction;
 use api\actions\ConnexionAction;
 use api\actions\CreateTransactionAction;
 use api\actions\EnregistrerAction;
@@ -17,6 +18,9 @@ use Psr\Container\ContainerInterface;
 
 return [
     // application
+    AdminLogsAction::class => function (ContainerInterface $c) {
+        return new AdminLogsAction($c->get('nexus.pdo'));
+    },
     ConnexionAction::class => function (ContainerInterface $c) {
         return new ConnexionAction($c->get(ServiceAuthnInterface::class));
     },
