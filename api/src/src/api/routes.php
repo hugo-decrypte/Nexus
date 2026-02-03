@@ -7,6 +7,7 @@ use api\actions\TransactionAction;
 use api\actions\TransactionsAction;
 use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
+use api\actions\UsersListAction;
 use api\middlewares\EnregistrerUtilisateurMiddleware;
 use api\middlewares\AuthnConnexionValidationMiddleware;
 use Slim\App;
@@ -17,6 +18,7 @@ return function( App $app): App {
         $response->getBody()->write(json_encode(['status' => 'ok']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     });
+    $app->get('/users', UsersListAction::class);
     $app->get('/users/{id_user}', UserByIdAction::class);
     $app->get('/users/{id_user}/solde', UserSoldeAction::class);
     $app->get("/transactions/{id_user}", TransactionAction::class);

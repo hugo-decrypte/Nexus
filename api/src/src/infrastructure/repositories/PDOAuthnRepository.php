@@ -60,6 +60,25 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         );
     }
 
+    public function obtenirTousLesUtilisateurs(): array
+    {
+        $stmt = $this->authn_pdo->query(
+            "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs ORDER BY nom, prenom"
+        );
+        $users = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $users[] = new Utilisateur(
+                id: $row['id'],
+                nom: $row['nom'],
+                prenom: $row['prenom'],
+                email: $row['email'],
+                mot_de_passe: $row['mot_de_passe'],
+                role: $row['role']
+            );
+        }
+        return $users;
+    }
+
     public function sauvegarderUtilisateur(CredentialsDTO $cred, ?string $role = 'client'): void
     {
         try {
