@@ -27,7 +27,7 @@ class DeleteUserAction
         }
 
         try {
-            $this->authnRepository->supprimerUtilisateur($id_user);
+            $this->authnRepository->deleteUser($id_user);
         } catch (NotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }

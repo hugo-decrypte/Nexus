@@ -19,7 +19,7 @@ class UsersListAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $users = $this->authnRepository->obtenirTousLesUtilisateurs();
+        $users = $this->authnRepository->getUsers();
         $body = array_map(function ($user) {
             return [
                 'id' => $user->id,

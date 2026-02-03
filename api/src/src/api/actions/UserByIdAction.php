@@ -27,7 +27,7 @@ class UserByIdAction
         }
 
         try {
-            $user = $this->authnRepository->obtenirUtilisateurParId($id_user);
+            $user = $this->authnRepository->getUserById($id_user);
         } catch (NotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }

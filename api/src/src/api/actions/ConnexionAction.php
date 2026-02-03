@@ -31,7 +31,7 @@ class ConnexionAction {
 
         // 3. On appelle le service
         try {
-            $token = $this->authnService->connecter($utilisateur_dto, $host);
+            $token = $this->authnService->signin($utilisateur_dto, $host);
 
             $responseData = ['token' => $token];
 

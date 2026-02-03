@@ -2,9 +2,13 @@
 namespace api\dtos;
 
 class InputUserDTO{
+    private string $nom;
+    private string $prenom;
     private string $email;
     private string $mot_de_passe;
     public function __construct(array $data){
+        $this->nom = $data['nom'];
+        $this->prenom = $data['prenom'];
         $this->email = $data['email'];
         $this->mot_de_passe = $data['mot_de_passe'];
     }

@@ -20,7 +20,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         $this->authn_pdo = $authn_pdo;
     }
 
-    public function obtenirUtilisateur(string $email): Utilisateur
+    public function getUserByEmail(string $email): Utilisateur
     {
         $stmt = $this->authn_pdo->prepare(
             "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE email = :email LIMIT 1"
@@ -40,7 +40,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         );
     }
 
-    public function obtenirUtilisateurParId(string $id): Utilisateur
+    public function getUserById(string $id): Utilisateur
     {
         $stmt = $this->authn_pdo->prepare(
             "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE id = :id LIMIT 1"
@@ -60,7 +60,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         );
     }
 
-    public function obtenirTousLesUtilisateurs(): array
+    public function getUsers(): array
     {
         $stmt = $this->authn_pdo->query(
             "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs ORDER BY nom, prenom"
@@ -79,7 +79,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         return $users;
     }
 
-    public function supprimerUtilisateur(string $id): void
+    public function deleteUser(string $id): void
     {
         $stmt = $this->authn_pdo->prepare("DELETE FROM utilisateurs WHERE id = :id");
         $stmt->execute(['id' => $id]);
@@ -88,7 +88,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         }
     }
 
-    public function sauvegarderUtilisateur(CredentialsDTO $cred, ?string $role = 'client'): void
+    public function saveUser(CredentialsDTO $cred, ?string $role = 'client'): void
     {
         try {
             $id = Uuid::uuid4()->toString();
