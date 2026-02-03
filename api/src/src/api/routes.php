@@ -35,6 +35,8 @@ return function( App $app): App {
     $app->post("/transactions", CreateTransactionAction::class);
     $app->post("/signin", ConnexionAction::class)
         ->add(AuthnConnexionValidationMiddleware::class);
+    $app->post('/auth/login', ConnexionAction::class)
+        ->add(AuthnConnexionValidationMiddleware::class);
     $app->post('/register', EnregistrerAction::class)
         ->add(new EnregistrerUtilisateurMiddleware());
     $app->post('/users', EnregistrerAction::class)
