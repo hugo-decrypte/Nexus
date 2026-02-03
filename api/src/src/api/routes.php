@@ -20,6 +20,7 @@ use Slim\App;
 return function( App $app): App {
     $app->get('/admin/logs', AdminLogsAction::class);
     $app->get('/admin/accounts', UsersListAction::class);
+    $app->get('/admin/transactions', TransactionsAction::class);
     $app->get('/health', function ($request, $response) {
         $response->getBody()->write(json_encode(['status' => 'ok']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
