@@ -24,11 +24,11 @@ class AuthnProvider implements AuthnProviderInterface {
         $user = null;
 
         try {
-            $user = $this->authRepository->getUser($user_dto->email);
+            $user = $this->authRepository->getUserByEmail($user_dto->email);
         } catch (\Exception $e) {
         }
 
-        if (!$user || !password_verify($user_dto->password, $user->password)) {
+        if (!$user || !password_verify($user_dto->mot_de_passe, $user->mot_de_passe)) {
             throw new ConnexionException("Identifiants incorrects.");
         }
 

@@ -12,8 +12,8 @@ use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
+use api\middlewares\AuthnSigninValidationMiddleware;
 use api\middlewares\EnregistrerUtilisateurMiddleware;
-use api\middlewares\AuthnConnexionValidationMiddleware;
 use Slim\App;
 
 
@@ -45,7 +45,9 @@ return function( App $app): App {
 
     $app->post("/transactions", CreateTransactionAction::class);
     $app->post('/auth/login', ConnexionAction::class)
-        ->add(AuthnConnexionValidationMiddleware::class);
+        ->add(AuthnSigninValidationMiddleware::class);
+
+
     $app->post('/auth/register', EnregistrerAction::class)
         ->add(new EnregistrerUtilisateurMiddleware());
     $app->post('/users', EnregistrerAction::class)
