@@ -37,4 +37,23 @@ class ServiceTransaction implements ServiceTransactionInterface {
             recepteur_id: $trans->recepteur_id
         );
     }
+
+    public function getTransactions(): array
+    {
+        try {
+            $transactions = $this->transaction_repository->getTransactions();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+        return array_map(function ($trans) {
+            return new TransactionDTO(
+                id: $trans->id,
+                montant: $trans->montant,
+                hash: $trans->hash,
+                emetteur_id: $trans->emetteur_id,
+                recepteur_id: $trans->recepteur_id
+            );
+        }, $transactions);
+    }
 }

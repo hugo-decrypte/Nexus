@@ -49,4 +49,31 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             recepteur_id: $array['recepteur_id']
         );
     }
+
+    public function getTransactions(): array
+    {
+        try {
+            $query = $this->transaction_pdo->query(
+                "SELECT transactions.id, transactions.emetteur_id, transactions.recepteur_id, transactions.montant, transactions.hash
+                        FROM transactions");
+        } catch (HttpInternalServerErrorException $e) {
+            //500
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.");
+        } catch(\Throwable $e) {
+            throw new \Exception("Erreur lors de la reception de la transaction.");
+        }
+
+
+        $transactions = [];
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $transactions[] = new Transaction(
+                id: $row['id'],
+                montant: $row['montant'],
+                hash: $row['hash'],
+                emetteur_id: $row['emetteur_id'],
+                recepteur_id: $row['recepteur_id']
+            );
+        }
+        return $transactions;
+    }
 }
