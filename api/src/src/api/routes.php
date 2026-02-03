@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use api\actions\ConnexionAction;
+use api\actions\DeleteUserAction;
 use api\actions\EnregistrerAction;
 use api\actions\TransactionAction;
 use api\actions\TransactionsAction;
@@ -21,6 +22,7 @@ return function( App $app): App {
     $app->get('/users', UsersListAction::class);
     $app->get('/users/{id_user}', UserByIdAction::class);
     $app->get('/users/{id_user}/solde', UserSoldeAction::class);
+    $app->delete('/users/{id_user}', DeleteUserAction::class);
     $app->get("/transactions/{id_user}", TransactionAction::class);
     $app->get("/transactions", TransactionsAction::class);
     $app->post("/signin", ConnexionAction::class)

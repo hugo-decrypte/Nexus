@@ -9,5 +9,6 @@ interface AuthnRepositoryInterface {
     public function obtenirUtilisateur(string $email): Utilisateur;
     public function obtenirUtilisateurParId(string $id): Utilisateur;
     public function obtenirTousLesUtilisateurs(): array;
+    public function supprimerUtilisateur(string $id): void;
     public function sauvegarderUtilisateur(CredentialsDTO $credential, ?string $role = "client"): void;
 }

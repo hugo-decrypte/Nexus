@@ -6,6 +6,7 @@ use api\actions\TransactionAction;
 use api\actions\TransactionsAction;
 use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
+use api\actions\DeleteUserAction;
 use api\actions\UsersListAction;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
@@ -34,6 +35,9 @@ return [
     },
     UsersListAction::class => function (ContainerInterface $c) {
         return new UsersListAction($c->get(AuthnRepositoryInterface::class));
+    },
+    DeleteUserAction::class => function (ContainerInterface $c) {
+        return new DeleteUserAction($c->get(AuthnRepositoryInterface::class));
     },
 ];
 

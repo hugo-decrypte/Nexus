@@ -79,6 +79,15 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         return $users;
     }
 
+    public function supprimerUtilisateur(string $id): void
+    {
+        $stmt = $this->authn_pdo->prepare("DELETE FROM utilisateurs WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        if ($stmt->rowCount() === 0) {
+            throw new NotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.");
+        }
+    }
+
     public function sauvegarderUtilisateur(CredentialsDTO $cred, ?string $role = 'client'): void
     {
         try {
