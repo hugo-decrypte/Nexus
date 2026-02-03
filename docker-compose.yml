@@ -3,6 +3,18 @@ networks:
     driver: bridge
 
 services:
+  # frontend Vue.js (build Vite servi par nginx)
+  web.nexus:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - '5173:80'
+    networks:
+      - nexus.net
+    depends_on:
+      - api.nexus
+
   # service api.toubeelib : api pour la prise de rdv
   #
   api.nexus:
