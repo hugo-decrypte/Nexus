@@ -5,6 +5,7 @@ use api\actions\EnregistrerAction;
 use api\actions\TransactionAction;
 use api\actions\TransactionsAction;
 use api\actions\UserByIdAction;
+use api\actions\UserSoldeAction;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
@@ -26,6 +27,9 @@ return [
     },
     UserByIdAction::class => function (ContainerInterface $c) {
         return new UserByIdAction($c->get(AuthnRepositoryInterface::class));
+    },
+    UserSoldeAction::class => function (ContainerInterface $c) {
+        return new UserSoldeAction($c->get(ServiceTransactionInterface::class));
     },
 ];
 
