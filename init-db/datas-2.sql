@@ -3,9 +3,9 @@
 -- =========================
 INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role)
 VALUES
-('11111111-1111-1111-1111-111111111111', 'Dupont', 'Jean', 'jean.dupont@test.com', 'password123', 'client'),
-('22222222-2222-2222-2222-222222222222', 'Martin', 'Alice', 'alice.martin@test.com', 'password123', 'commercant'),
-('33333333-3333-3333-3333-333333333333', 'Admin', 'Super', 'admin@test.com', 'adminpass', 'admin');
+('a6fbb748-d840-4a8f-90bb-5f74f3425988', 'Dupont', 'Jean', 'jean.dupont@mail.com', '$2a$10$xztcHWAdFuDIl79VqLqVreXIwss7FpwGjlQircBo931SqJQmHBAte', 'client'),
+('26c23c74-1296-45b5-aab8-a73606fb16d7', 'Martin', 'Alice', 'alice.martin@mail.com', '$2a$10$xztcHWAdFuDIl79VqLqVredG.PgH34himoHS4/JJ1djIR/5NBMh0i', 'commercant'),
+('6e83face-1464-4b60-a8f8-41e7a2550b68', 'Admin', 'Super', 'admin@mail.com', '$2a$10$xztcHWAdFuDIl79VqLqVrelQNpUqyxnFTLrGucetCY.uOv4shCNsm', 'admin');
 
 -- =========================
 -- TRANSACTIONS
@@ -13,18 +13,18 @@ VALUES
 INSERT INTO transactions (id, emetteur_id, recepteur_id, montant, hash)
 VALUES
 (
-  'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-  '11111111-1111-1111-1111-111111111111',
-  '22222222-2222-2222-2222-222222222222',
+  'b24daee3-8bba-4ed7-ac18-55d07e1faee3',
+  'a6fbb748-d840-4a8f-90bb-5f74f3425988',
+  '26c23c74-1296-45b5-aab8-a73606fb16d7',
   49.99,
-  'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  '9a8b64bb1668aae447964e503998fe5e9686c4101556a33edd13d826aa0b69e3'
 ),
 (
-  'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-  '11111111-1111-1111-1111-111111111111',
-  '22222222-2222-2222-2222-222222222222',
+  'caf91a0f-9f2b-4f29-8430-fce7183ebc86',
+  'a6fbb748-d840-4a8f-90bb-5f74f3425988',
+  '26c23c74-1296-45b5-aab8-a73606fb16d7',
   120.00,
-  'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+  '1f18df802162364679d7ea5019a68cc3e4ced6242ad247202b7912146c587222'
 );
 
 -- =========================
@@ -33,20 +33,20 @@ VALUES
 INSERT INTO logs (id, acteur_id, action_type, details)
 VALUES
 (
-  'cccccccc-cccc-cccc-cccc-cccccccccccc',
-  '11111111-1111-1111-1111-111111111111',
+  '5456e189-741f-4c1d-b165-d339eccc7529',
+  'a6fbb748-d840-4a8f-90bb-5f74f3425988',
   'CREATION_TRANSACTION',
   '{"transaction_id":"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa","montant":49.99}'
 ),
 (
-  'dddddddd-dddd-dddd-dddd-dddddddddddd',
-  '22222222-2222-2222-2222-222222222222',
+  'f2aa6bf1-a140-4ebd-9417-e6aa9549569b',
+  '26c23c74-1296-45b5-aab8-a73606fb16d7',
   'RECEPTION_PAIEMENT',
   '{"transaction_id":"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"}'
 ),
 (
-  'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
-  '33333333-3333-3333-3333-333333333333',
+  '8e2fa852-3c42-4043-ac65-56bc4e5e956d',
+  '6e83face-1464-4b60-a8f8-41e7a2550b68',
   'CONNEXION_ADMIN',
   '{"ip":"127.0.0.1"}'
 );
