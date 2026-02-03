@@ -4,7 +4,7 @@ use api\actions\AdminLogsAction;
 use api\actions\ConnexionAction;
 use api\actions\CreateTransactionAction;
 use api\actions\EnregistrerAction;
-use api\actions\TransactionAction;
+    use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
@@ -27,8 +27,8 @@ return [
     EnregistrerAction::class => function (ContainerInterface $c) {
         return new EnregistrerAction($c->get(ServiceAuthnInterface::class));
     },
-    TransactionAction::class => function (ContainerInterface $c) {
-        return new TransactionAction($c->get(ServiceTransactionInterface::class));
+    TransactionByIdAction::class => function (ContainerInterface $c) {
+        return new TransactionByIdAction($c->get(ServiceTransactionInterface::class));
     },
     CreateTransactionAction::class => function (ContainerInterface $c) {
         return new CreateTransactionAction($c->get(ServiceTransactionInterface::class));

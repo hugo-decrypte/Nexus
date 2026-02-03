@@ -5,7 +5,7 @@ use application_core\application\usecases\interfaces\ServiceTransactionInterface
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class TransactionAction {
+class TransactionByIdAction {
     private ServiceTransactionInterface $serviceTransaction;
 
     public function __construct(ServiceTransactionInterface $serviceTransaction) {
