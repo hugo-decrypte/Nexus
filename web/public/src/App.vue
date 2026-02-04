@@ -25,8 +25,22 @@
 
       <div class="user">
         <span class="logout" @click="handleLogout">Se déconnecter</span>
-        <div class="avatar">
-          <span class="material-icons avatar-icon" aria-label="Compte">person</span>
+        <div class="avatar-dropdown" ref="avatarDropdownRef">
+          <button
+            type="button"
+            class="avatar avatar-btn"
+            aria-haspopup="true"
+            :aria-expanded="userMenuOpen"
+            @click="userMenuOpen = !userMenuOpen"
+          >
+            <span class="material-icons avatar-icon" aria-label="Compte">person</span>
+          </button>
+          <Transition name="dropdown">
+            <div v-show="userMenuOpen" class="avatar-menu" role="menu">
+              <RouterLink to="/account" class="avatar-menu-item" role="menuitem" @click="userMenuOpen = false">Account</RouterLink>
+              <RouterLink to="/settings" class="avatar-menu-item" role="menuitem" @click="userMenuOpen = false">Settings</RouterLink>
+            </div>
+          </Transition>
         </div>
       </div>
     </header>
@@ -38,13 +52,30 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, RouterLink, RouterView } from 'vue-router'
 import { logout } from './services/auth.js'
 
 const router = useRouter()
+const userMenuOpen = ref(false)
+const avatarDropdownRef = ref(null)
 
 function handleLogout() {
   logout()
   router.push('/login')
 }
+
+function closeMenuOnClickOutside(event) {
+  if (avatarDropdownRef.value && !avatarDropdownRef.value.contains(event.target)) {
+    userMenuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', closeMenuOnClickOutside)
+})
+onUnmounted(() => {
+  document.removeEventListener('click', closeMenuOnClickOutside)
+})
 </script>
+

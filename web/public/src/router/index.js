@@ -4,6 +4,8 @@ import HomeView from '../views/HomeView.vue'
 import HistoriqueView from '../views/HistoriqueView.vue'
 import RechargementView from '../views/RechargementView.vue'
 import EnvoiePOView from '../views/EnvoiePOView.vue'
+import AccountView from '../views/AccountView.vue'
+import SettingsView from '../views/SettingsView.vue'
 import Login from '../views/Login.vue'
 
 /** true = connexion obligatoire pour accéder aux pages, false = accès libre à toutes les pages */
@@ -17,6 +19,8 @@ const router = createRouter({
     { path: '/historique', name: 'historique', component: HistoriqueView },
     { path: '/rechargement', name: 'rechargement', component: RechargementView },
     { path: '/envoiePO', name: 'envoiePO', component: EnvoiePOView },
+    { path: '/account', name: 'account', component: AccountView },
+    { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/', redirect: '/home' },
   ],
 })
