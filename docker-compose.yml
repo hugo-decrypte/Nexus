@@ -24,7 +24,7 @@ services:
     ports:
       - '6080:80'
     volumes:
-      - ./api/src:/var/php
+      - ./api/app:/var/php
     working_dir: /var/php
     networks:
       - nexus.net

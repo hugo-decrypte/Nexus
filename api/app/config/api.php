@@ -4,7 +4,7 @@ use api\actions\AdminLogsAction;
 use api\actions\ConnexionAction;
 use api\actions\CreateTransactionAction;
 use api\actions\EnregistrerAction;
-    use api\actions\TransactionByIdAction;
+use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
