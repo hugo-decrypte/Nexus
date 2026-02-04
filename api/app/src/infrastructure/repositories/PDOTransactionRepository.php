@@ -22,25 +22,37 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
 
     public function calculSolde(string $id_user): float
     {
-        $stmt = $this->transaction_pdo->prepare(
-            "SELECT COALESCE(SUM(CASE WHEN recepteur_id = :id THEN montant ELSE -montant END), 0) AS solde
+        try {
+            $stmt = $this->transaction_pdo->prepare(
+                "SELECT COALESCE(SUM(CASE WHEN recepteur_id = :id THEN montant ELSE -montant END), 0) AS solde
              FROM transactions WHERE emetteur_id = :id2 OR recepteur_id = :id3"
-        );
-        $stmt->execute(['id' => $id_user, 'id2' => $id_user, 'id3' => $id_user]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            );
+            $stmt->execute(['id' => $id_user, 'id2' => $id_user, 'id3' => $id_user]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération du hash de la dernière transaction.", 400);
+        }
         return (float) ($row['solde'] ?? 0);
     }
 
     public function getTransaction(string $id_user): Transaction
     {
-        $stmt = $this->transaction_pdo->prepare(
-            "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
+        try {
+            $stmt = $this->transaction_pdo->prepare(
+                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
              WHERE emetteur_id = :id OR recepteur_id = :id2 ORDER BY date_creation DESC LIMIT 1"
-        );
-        $stmt->execute(['id' => $id_user, 'id2' => $id_user]);
-        $array = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$array) {
-            throw new EntityNotFoundException("transaction introuvable.", "transaction");
+            );
+            $stmt->execute(['id' => $id_user, 'id2' => $id_user]);
+            $array = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$array) {
+                throw new EntityNotFoundException("transaction introuvable.", "transaction");
+            }
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération du hash de la dernière transaction.", 400);
         }
         return new Transaction(
             id: $array['id'],
@@ -53,52 +65,70 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
 
     public function getTransactions(): array
     {
-        $stmt = $this->transaction_pdo->query(
-            "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions ORDER BY date_creation DESC"
-        );
-        $transactions = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $transactions[] = new Transaction(
-                id: $row['id'],
-                montant: (float) $row['montant'],
-                hash: $row['hash'],
-                emetteur_id: $row['emetteur_id'],
-                recepteur_id: $row['recepteur_id']
+        try {
+            $stmt = $this->transaction_pdo->query(
+                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions ORDER BY date_creation DESC"
             );
+            $transactions = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $transactions[] = new Transaction(
+                    id: $row['id'],
+                    montant: (float)$row['montant'],
+                    hash: $row['hash'],
+                    emetteur_id: $row['emetteur_id'],
+                    recepteur_id: $row['recepteur_id']
+                );
+            }
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération des transactions.", 400);
         }
         return $transactions;
     }
 
     public function getTransactionsBetween(string $id_emetteur, string $id_recepteur): array
     {
-        $stmt = $this->transaction_pdo->prepare(
-            "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
+        try {
+            $stmt = $this->transaction_pdo->prepare(
+                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
              WHERE (emetteur_id = :e1 AND recepteur_id = :r1) OR (emetteur_id = :e2 AND recepteur_id = :r2)
              ORDER BY date_creation DESC"
-        );
-        $stmt->execute([
-            'e1' => $id_emetteur, 'r1' => $id_recepteur,
-            'e2' => $id_recepteur, 'r2' => $id_emetteur,
-        ]);
-        $transactions = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $transactions[] = new Transaction(
-                id: $row['id'],
-                montant: (float) $row['montant'],
-                hash: $row['hash'],
-                emetteur_id: $row['emetteur_id'],
-                recepteur_id: $row['recepteur_id']
             );
+            $stmt->execute([
+                'e1' => $id_emetteur, 'r1' => $id_recepteur,
+                'e2' => $id_recepteur, 'r2' => $id_emetteur,
+            ]);
+            $transactions = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $transactions[] = new Transaction(
+                    id: $row['id'],
+                    montant: (float)$row['montant'],
+                    hash: $row['hash'],
+                    emetteur_id: $row['emetteur_id'],
+                    recepteur_id: $row['recepteur_id']
+                );
+            }
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération des transactions entre les utilisateurs.", 400);
         }
         return $transactions;
     }
 
     public function getLastTransactionHash(): ?string
     {
-        $stmt = $this->transaction_pdo->query(
-            "SELECT hash FROM transactions ORDER BY date_creation DESC LIMIT 1"
-        );
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->transaction_pdo->query(
+                "SELECT hash FROM transactions ORDER BY date_creation DESC LIMIT 1"
+            );
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération du hash de la dernière transaction.", 400);
+        }
         return $row ? $row['hash'] : null;
     }
 
