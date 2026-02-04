@@ -20,7 +20,7 @@ return [
     },
 
     TransactionRepositoryInterface::class => function (ContainerInterface $c) {
-        return new PDOTransactionRepository($c->get("nexus.pdo"));
+        return new PDOTransactionRepository($c->get("nexus.pdo"), $c->get(AuthnRepositoryInterface::class));
     },
     AuthnProviderInterface::class => function (ContainerInterface $c) {
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
