@@ -96,8 +96,13 @@ body {
   user-select: none;
 }
 
-.dashboard {
+main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard {
   padding: 20px;
 }
 
