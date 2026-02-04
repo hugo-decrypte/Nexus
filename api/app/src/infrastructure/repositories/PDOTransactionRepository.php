@@ -4,16 +4,20 @@ namespace infrastructure\repositories;
 
 use application_core\domain\entities\transaction\Transaction;
 use application_core\exceptions\EntityNotFoundException;
+use application_core\exceptions\NotEnoughMoneyException;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
 use PDO;
 use Ramsey\Uuid\Uuid;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class PDOTransactionRepository implements TransactionRepositoryInterface {
 
     private PDO $transaction_pdo;
+    private PDOAuthnRepository $authn_repository;
 
-    public function __construct(PDO $transaction_pdo) {
+    public function __construct(PDO $transaction_pdo, PDOAuthnRepository $authn_repository) {
         $this->transaction_pdo = $transaction_pdo;
+        $this->authn_repository = $authn_repository;
     }
 
     public function calculSolde(string $id_user): float
@@ -104,16 +108,31 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         $newHash = hash('sha256', $prevHash . '|' . $emetteur_id . '|' . $recepteur_id . '|' . $montant);
         $id = Uuid::uuid4()->toString();
 
-        $stmt = $this->transaction_pdo->prepare(
-            "INSERT INTO transactions (id, emetteur_id, recepteur_id, montant, hash) VALUES (:id, :emetteur_id, :recepteur_id, :montant, :hash)"
-        );
-        $stmt->execute([
-            'id' => $id,
-            'emetteur_id' => $emetteur_id,
-            'recepteur_id' => $recepteur_id,
-            'montant' => $montant,
-            'hash' => $newHash,
-        ]);
+        $solde_emetteur = $this->calculSolde($emetteur_id);
+        if ($solde_emetteur < $montant) {
+            throw new NotEnoughMoneyException("L'emetteur n'a pas assez d'argent.");
+        }
+
+        try {
+            $this->authn_repository->getUserById($emetteur_id);
+            $this->authn_repository->getUserById($recepteur_id);
+            $stmt = $this->transaction_pdo->prepare(
+                "INSERT INTO transactions (id, emetteur_id, recepteur_id, montant, hash) VALUES (:id, :emetteur_id, :recepteur_id, :montant, :hash)"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'emetteur_id' => $emetteur_id,
+                'recepteur_id' => $recepteur_id,
+                'montant' => $montant,
+                'hash' => $newHash,
+            ]);
+        } catch (HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e, 'utilisateur');
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de l'ajout de la transaction'.", 400);
+        }
 
         return new Transaction(
             id: $id,

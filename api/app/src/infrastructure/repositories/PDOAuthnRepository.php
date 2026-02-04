@@ -4,12 +4,10 @@ namespace infrastructure\repositories;
 
 use api\dtos\CredentialsDTO;
 use application_core\domain\entities\utilisateur\Utilisateur;
-use DI\NotFoundException;
-use Exception;
+use application_core\exceptions\EntityNotFoundException;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use PDO;
 use Ramsey\Uuid\Uuid;
-use Slim\Exception\HttpInternalServerErrorException;
 
 class PDOAuthnRepository implements AuthnRepositoryInterface {
 
@@ -28,7 +26,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         $stmt->execute(['email' => $email]);
         $res = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$res) {
-            throw new NotFoundException("L'utilisateur ayant pour email " . $email . " n'existe pas.");
+            throw new EntityNotFoundException("L'utilisateur ayant pour email " . $email . " n'existe pas.", 'utilisateur');
         }
         return new Utilisateur(
             id: $res['id'],
@@ -48,7 +46,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         $stmt->execute(['id' => $id]);
         $res = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$res) {
-            throw new NotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.");
+            throw new EntityNotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.", 'utilisateur');
         }
         return new Utilisateur(
             id: $res['id'],
@@ -84,7 +82,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         $stmt = $this->authn_pdo->prepare("DELETE FROM utilisateurs WHERE id = :id");
         $stmt->execute(['id' => $id]);
         if ($stmt->rowCount() === 0) {
-            throw new NotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.");
+            throw new EntityNotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.", 'utilisateur');
         }
     }
 
