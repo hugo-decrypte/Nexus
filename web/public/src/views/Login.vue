@@ -7,11 +7,11 @@
         <form class="login-form" @submit.prevent="onSubmit">
           <div class="input-wrap">
             <input
-              v-model="identifiant"
-              type="text"
+              v-model="email"
+              type="email"
               class="login-input"
-              placeholder="Identifiant"
-              autocomplete="username"
+              placeholder="Email"
+              autocomplete="email"
             />
           </div>
           <div class="input-wrap">
@@ -23,6 +23,10 @@
               autocomplete="current-password"
             />
           </div>
+          <p v-if="error" class="login-error">{{ error }}</p>
+          <button type="submit" class="btn btn-submit" :disabled="loading">
+            {{ loading ? 'Connexion...' : 'Se connecter' }}
+          </button>
         </form>
       </div>
 
@@ -53,14 +57,27 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { login } from '../services/auth.js'
 import '../css/login.css'
 
 const router = useRouter()
-const identifiant = ref('')
+const email = ref('')
 const motDePasse = ref('')
+const error = ref('')
+const loading = ref(false)
 
-function onSubmit() {
-  // TODO: appel API auth/login
-  router.push('/home')
+async function onSubmit() {
+  error.value = ''
+  loading.value = true
+
+  const result = await login(email.value, motDePasse.value)
+
+  loading.value = false
+
+  if (result.success) {
+    router.push('/home')
+  } else {
+    error.value = result.error
+  }
 }
 </script>

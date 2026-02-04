@@ -24,7 +24,7 @@
       </nav>
 
       <div class="user">
-        <span class="logout">Se déconnecter</span>
+        <span class="logout" @click="handleLogout">Se déconnecter</span>
         <div class="avatar">
           <span class="material-icons avatar-icon" aria-label="Compte">person</span>
         </div>
@@ -38,5 +38,13 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { useRouter, RouterLink, RouterView } from 'vue-router'
+import { logout } from './services/auth.js'
+
+const router = useRouter()
+
+function handleLogout() {
+  logout()
+  router.push('/login')
+}
 </script>
