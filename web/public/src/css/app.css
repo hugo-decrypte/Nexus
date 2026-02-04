@@ -3,7 +3,6 @@
   --color-bg: #ffffff;
   --color-text: #ffffff;
   --color-navbar: #2b2b2b;
-  --color-navbar-mobile: #000000;
   --color-menu-bottom: #333333;
   --color-accent: #e67e22;
   --color-avatar: #ff6964;
@@ -112,7 +111,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: var(--color-navbar-mobile);
+    background: var(--color-navbar);
   }
 
   .logo {
