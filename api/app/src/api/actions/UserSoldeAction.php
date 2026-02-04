@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace api\actions;
 
+use _PHPStan_b22655c3f\Nette\Neon\Exception;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,11 +26,15 @@ class UserSoldeAction
             throw new HttpBadRequestException($request, 'id_user requis.');
         }
 
-        $solde = $this->serviceTransaction->calculSolde($id_user);
+        try {
+            $solde = $this->serviceTransaction->calculSolde($id_user);
 
-        $response->getBody()->write(json_encode(['solde' => $solde]));
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(200);
+            $response->getBody()->write(json_encode(['solde' => $solde]));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(200);
+        } catch(\Exception $e){
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
     }
 }

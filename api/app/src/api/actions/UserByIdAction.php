@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace api\actions;
 
+use _PHPStan_b22655c3f\Nette\Neon\Exception;
 use DI\NotFoundException;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -28,8 +29,10 @@ class UserByIdAction
 
         try {
             $user = $this->authnRepository->getUserById($id_user);
-        } catch (NotFoundException $e) {
+        } catch (HttpNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
         }
 
         $body = [

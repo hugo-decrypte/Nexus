@@ -26,10 +26,14 @@ class TransactionsBetweenAction
             throw new HttpBadRequestException($request, 'id_emetteur et id_recepteur requis.');
         }
 
-        $transactions = $this->serviceTransaction->getTransactionsBetween($id_emetteur, $id_recepteur);
-        $response->getBody()->write(json_encode($transactions));
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(200);
+        try {
+            $transactions = $this->serviceTransaction->getTransactionsBetween($id_emetteur, $id_recepteur);
+            $response->getBody()->write(json_encode($transactions));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(200);
+        } catch(\Exception $e){
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 }
