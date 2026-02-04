@@ -16,7 +16,11 @@ class ServiceTransaction implements ServiceTransactionInterface {
 
     public function calculSolde(string $id_user): float
     {
-        return $this->transaction_repository->calculSolde($id_user);
+        try {
+            return $this->transaction_repository->calculSolde($id_user);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 
     public function getTransaction(string $id_user): TransactionDTO
@@ -26,7 +30,7 @@ class ServiceTransaction implements ServiceTransactionInterface {
         } catch (EntityNotFoundException $e) {
             throw new EntityNotFoundException($e->getMessage(), $e->getEntity());
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
         return $this->toDTO($trans);
     }
@@ -36,7 +40,7 @@ class ServiceTransaction implements ServiceTransactionInterface {
         try {
             $transactions = $this->transaction_repository->getTransactions();
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
 
         return array_map(fn ($trans) => $this->toDTO($trans), $transactions);
@@ -44,13 +48,23 @@ class ServiceTransaction implements ServiceTransactionInterface {
 
     public function getTransactionsBetween(string $id_emetteur, string $id_recepteur): array
     {
-        $transactions = $this->transaction_repository->getTransactionsBetween($id_emetteur, $id_recepteur);
+        try {
+            $transactions = $this->transaction_repository->getTransactionsBetween($id_emetteur, $id_recepteur);
+        } catch (\Exception $e) {
+            throw new \Exception("probleme lors de la récupération des transactions.", $e->getCode());
+        }
         return array_map(fn ($trans) => $this->toDTO($trans), $transactions);
     }
 
     public function creerTransaction(string $emetteur_id, string $recepteur_id, float $montant): TransactionDTO
     {
-        $trans = $this->transaction_repository->creerTransaction($emetteur_id, $recepteur_id, $montant);
+        try {
+            $trans = $this->transaction_repository->creerTransaction($emetteur_id, $recepteur_id, $montant);
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." non trouvé", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception("probleme lors de la création de transaction.", $e->getCode());
+        }
         return $this->toDTO($trans);
     }
 
