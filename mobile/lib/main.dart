@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/presentation/screens/home/home_screen.dart';
+import 'package:untitled/presentation/screens/auth/screens/auth_screen.dart';
+
 void main() {
   runApp(const NexusApp());
 }
@@ -22,7 +23,7 @@ class NexusApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',
       ),
-      home: const HomeScreen(),
+      home: const AuthScreen(),
     );
   }
 }
