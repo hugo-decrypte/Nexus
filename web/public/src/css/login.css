@@ -107,7 +107,7 @@
 .login-page .btn-facebook,
 .login-page .btn-google {
   width: 80px;
-  height: 48px;
+  height: 40px;
   padding: 0;
   border-radius: 8px;
 }
@@ -141,9 +141,11 @@
   background-clip: text;
 }
 
-@media (max-width: 600px) {
+/* Responsive
+@media screen and (max-width: 768px) {
   .login-page .login-container {
     flex-direction: column;
     gap: 40px;
   }
 }
+*/
