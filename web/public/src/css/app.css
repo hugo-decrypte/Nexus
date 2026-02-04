@@ -1,3 +1,14 @@
+/* ========== Couleurs custom (variables CSS) ========== */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #ffffff;
+  --color-navbar: #2b2b2b;
+  --color-navbar-mobile: #000000;
+  --color-menu-bottom: #333333;
+  --color-accent: #e67e22;
+  --color-avatar: #ff6964;
+}
+
 /* Base */
 * {
   margin: 0;
@@ -7,7 +18,7 @@
 }
 
 body {
-  background-color: white;
+  background-color: var(--color-bg);
 }
 
 .app {
@@ -18,8 +29,8 @@ body {
 
 .navbar {
   height: 55px;
-  background-color: #2b2b2b;
-  color: white;
+  background-color: var(--color-navbar);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -42,7 +53,7 @@ body {
 }
 
 .menu a {
-  color: white;
+  color: var(--color-text);
   text-decoration: none;
   font-size: 15px;
 }
@@ -72,7 +83,7 @@ body {
 .avatar {
   width: 35px;
   height: 35px;
-  background-color: #ff6964;
+  background-color: var(--color-avatar);
   border-radius: 50%;
   display: flex;
 }
@@ -101,7 +112,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: black;
+    background: var(--color-navbar-mobile);
   }
 
   .logo {
@@ -117,7 +128,7 @@ body {
 
   .logout {
     font-size: 13px;
-    color: white;
+    color: var(--color-text);
   }
 
   .menu-item-ordinateur {
@@ -130,7 +141,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #333;
+    background: var(--color-menu-bottom);
     padding: 5px 8px 20px;
     justify-content: space-around;
     gap: 4px;
@@ -138,7 +149,7 @@ body {
   }
 
   .menu .menu-item {
-    color: white;
+    color: var(--color-text);
     text-decoration: none;
     font-size: 12px;
     padding: 8px 12px;
@@ -164,17 +175,17 @@ body {
 
   .menu .menu-item.router-link-active .menu-icon,
   .menu .menu-item.router-link-exact-active .menu-icon {
-    background-color: #e67e22;
+    background-color: var(--color-accent);
   }
 
   .menu .menu-item:hover .menu-icon {
-    background-color: #e67e22;
+    background-color: var(--color-accent);
     transform: scale(1.10);
   }
   /* pour oim : mettre les logos en blancs et finir le carré entourer en orange */
   .menu .menu-item.router-link-active:hover .menu-icon,
   .menu .menu-item.router-link-exact-active:hover .menu-icon {
-    background-color: #e67e22;
+    background-color: var(--color-accent);
   }
 
   .dashboard {
