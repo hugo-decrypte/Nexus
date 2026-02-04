@@ -80,11 +80,20 @@ body {
 }
 
 .avatar {
-  width: 35px;
-  height: 35px;
-  background-color: var(--color-avatar);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background-color: var(--color-avatar);
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-icon {
+  font-size: 24px;
+  color: var(--color-text);
+  line-height: 1;
+  user-select: none;
 }
 
 .dashboard {
@@ -160,31 +169,33 @@ body {
     gap: 4px;
   }
 
-  /* Icônes visibles uniquement sur mobile, carré orange sur la page active */
+  /* Icônes visibles uniquement sur mobile : fond color-avatar, icône blanche */
   .menu .menu-icon {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 60px;
     height: 32px;
-    object-fit: contain;
     padding: 7px;
-    background-color: none;
     border-radius: 16px;
+    font-size: 24px;
+    color: var(--color-text);
     transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
   .menu .menu-item.router-link-active .menu-icon,
   .menu .menu-item.router-link-exact-active .menu-icon {
-    background-color: var(--color-accent);
+    background-color: var(--color-avatar);
   }
 
   .menu .menu-item:hover .menu-icon {
-    background-color: var(--color-accent);
+    background-color: var(--color-avatar);
     transform: scale(1.10);
   }
-  /* pour oim : mettre les logos en blancs et finir le carré entourer en orange */
+
   .menu .menu-item.router-link-active:hover .menu-icon,
   .menu .menu-item.router-link-exact-active:hover .menu-icon {
-    background-color: var(--color-accent);
+    background-color: var(--color-avatar);
   }
 
   .dashboard {

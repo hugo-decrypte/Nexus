@@ -7,25 +7,27 @@
 
       <nav class="menu">
         <RouterLink to="/home" class="menu-item">
-          <img class="menu-icon" src="../img/Acceuil_logo.png" alt="" aria-hidden="true" />
+          <span class="menu-icon material-icons" aria-hidden="true">sync_alt</span>
           <span class="menu-label">Accueil</span>
         </RouterLink>
         <RouterLink to="/envoiePO" class="menu-item menu-item-ordinateur">
           <span class="menu-label">Envoyer des PO</span>
         </RouterLink>
         <RouterLink to="/rechargement" class="menu-item">
-          <img class="menu-icon" src="../img/Rechargement_logo.png" alt="" aria-hidden="true" />
+          <span class="menu-icon material-icons" aria-hidden="true">add_circle</span>
           <span class="menu-label">Rechargement</span>
         </RouterLink>
         <RouterLink to="/historique" class="menu-item">
-          <img class="menu-icon" src="../img/Historique_logo.png" alt="" aria-hidden="true" />
+          <span class="menu-icon material-icons" aria-hidden="true">schedule</span>
           <span class="menu-label">Historique</span>
         </RouterLink>
       </nav>
 
       <div class="user">
         <span class="logout">Se déconnecter</span>
-        <div class="avatar"></div>
+        <div class="avatar">
+          <span class="material-icons avatar-icon" aria-label="Compte">person</span>
+        </div>
       </div>
     </header>
 
