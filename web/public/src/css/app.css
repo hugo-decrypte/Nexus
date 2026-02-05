@@ -58,7 +58,7 @@ body {
 }
 
 .menu .menu-label {
-  font-size: 25px;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -80,7 +80,7 @@ body {
 }
 
 .logout {
-  font-size: 25px;
+  font-size: 14px;
   cursor: pointer;
 }
 
