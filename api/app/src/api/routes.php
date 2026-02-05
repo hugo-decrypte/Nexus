@@ -2,36 +2,68 @@
 declare(strict_types=1);
 
 use api\actions\AdminLogsAction;
-use api\actions\ConnexionAction;
+use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
-use api\actions\EnregistrerAction;
+use api\actions\RegisterAction;
 use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
-use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
+use api\actions\UserSoldeAction;
 use api\middlewares\AuthnSigninValidationMiddleware;
+use api\middlewares\authz\AuthzAdminMiddleware;
+use api\middlewares\authz\AuthzClientMiddleware;
+use api\middlewares\authz\AuthzCommercantMiddleware;
+use api\middlewares\authz\AuthzCreateTransactionMiddleware;
+use api\middlewares\authz\AuthzGetTransactionMiddleware;
+use api\middlewares\authz\AuthzUserMiddleware;
+use api\middlewares\authz\AuthzUserRessourceAccessMiddleware;
+use api\middlewares\CreateTransactionMiddleware;
 use api\middlewares\EnregistrerUtilisateurMiddleware;
+use api\middlewares\JwtAuthMiddleware;
 use Slim\App;
 
 
 return function( App $app): App {
-    $app->get('/admin/logs', AdminLogsAction::class);
-    $app->get('/admin/accounts', UsersListAction::class);
-    $app->get('/admin/transactions', TransactionsAction::class);
+    $app->get('/admin/logs', AdminLogsAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
+    $app->get('/admin/accounts', UsersListAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
+    $app->get('/admin/transactions', TransactionsAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
     $app->get('/health', function ($request, $response) {
         $response->getBody()->write(json_encode(['status' => 'ok']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     });
-    $app->get('/users', UsersListAction::class);
-    $app->get('/users/{id_user}', UserByIdAction::class);
-    $app->get('/users/{id_user}/solde', UserSoldeAction::class);
-    $app->delete('/users/{id_user}', DeleteUserAction::class);
-    $app->get("/transactions/{id_emetteur}/{id_recepteur}", TransactionsBetweenAction::class);
-    $app->get("/transactions/{id_user}", TransactionByIdAction::class);
-    $app->get("/transactions", TransactionsAction::class);
+    $app->get('/users', UsersListAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
+    $app->get('/users/{id_user}', UserByIdAction::class)
+        ->add(new AuthzUserRessourceAccessMiddleware())
+        ->add(JwtAuthMiddleware::class);
+
+    $app->get('/users/{id_user}/solde', UserSoldeAction::class)
+        ->add(new AuthzUserRessourceAccessMiddleware())
+        ->add(JwtAuthMiddleware::class);
+
+    $app->delete('/users/{id_user}', DeleteUserAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
+
+    $app->get("/transactions/{id_emetteur}/{id_recepteur}", TransactionsBetweenAction::class)
+        ->add(new AuthzGetTransactionMiddleware())
+        ->add(JwtAuthMiddleware::class);
+    $app->get("/transactions/{id_user}", TransactionByIdAction::class)
+        ->add(new AuthzUserRessourceAccessMiddleware())
+        ->add(JwtAuthMiddleware::class);
+    $app->get("/transactions", TransactionsAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
 
 //    FONCTIONNALITES ETENDUES
 //    $app->get("/card/{id_card}", CarteByIdAction::class);
@@ -43,14 +75,18 @@ return function( App $app): App {
 //    $app->get("/invoice/{id_invoice}", GenerateInvoiceAction::class);
 
 
-    $app->post("/transactions", CreateTransactionAction::class);
-    $app->post('/auth/login', ConnexionAction::class)
-        ->add(AuthnSigninValidationMiddleware::class);
+    $app->post("/transactions", CreateTransactionAction::class)
+        ->add(new AuthzCreateTransactionMiddleware())
+        ->add(new CreateTransactionMiddleware())
+        ->add(JwtAuthMiddleware::class);;
+    $app->post('/auth/login', SigninAction::class)
+        ->add(AuthnSigninValidationMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
 
 
-    $app->post('/auth/register', EnregistrerAction::class)
+    $app->post('/auth/register', RegisterAction::class)
         ->add(new EnregistrerUtilisateurMiddleware());
-    $app->post('/users', EnregistrerAction::class)
+    $app->post('/users', RegisterAction::class)
         ->add(new EnregistrerUtilisateurMiddleware());
 
     return $app;
