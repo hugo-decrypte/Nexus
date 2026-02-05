@@ -39,8 +39,8 @@
             </button>
             <Transition name="dropdown">
               <div v-show="userMenuOpen" class="avatar-menu" role="menu">
-                <RouterLink to="/account" class="avatar-menu-item" role="menuitem" @click="userMenuOpen = false">Account</RouterLink>
-                <RouterLink to="/settings" class="avatar-menu-item" role="menuitem" @click="userMenuOpen = false">Settings</RouterLink>
+                <RouterLink to="/account" class="avatar-menu-item" role="menuitem" @click="userMenuOpen = false">Mon compte</RouterLink>
+                <RouterLink to="/settings" class="avatar-menu-item" role="menuitem" @click="userMenuOpen = false">Paramètres</RouterLink>
                 <button type="button" class="avatar-menu-item avatar-menu-item-btn" role="menuitem" @click="handleMenuLogout">Se déconnecter</button>
               </div>
             </Transition>
