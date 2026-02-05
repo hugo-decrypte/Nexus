@@ -59,20 +59,39 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router'
-import { logout, isAuthenticated } from './services/auth.js'
+import { logout, isAuthenticated, getUser } from './services/auth.js'
+import { getProfile } from './services/account.js'
 
 const router = useRouter()
 const route = useRoute()
 const userMenuOpen = ref(false)
 const avatarDropdownRef = ref(null)
 const isLoggedIn = ref(isAuthenticated())
+const userDisplayName = ref('')
 
-const userDisplayName = computed(() => 'Prénom Nom')
+async function loadUserDisplayName() {
+  const user = getUser()
+  if (!user?.id) return
+  const profile = await getProfile(user.id)
+  if (profile?.prenom || profile?.nom) {
+    userDisplayName.value = [profile.prenom, profile.nom].filter(Boolean).join(' ').trim()
+  } else if (profile?.email) {
+    userDisplayName.value = profile.email
+  } else {
+    userDisplayName.value = 'Prénom Nom'
+  }
+}
 
 watch(() => route.path, () => {
   isLoggedIn.value = isAuthenticated()
+  if (isLoggedIn.value) loadUserDisplayName()
+})
+
+watch(isLoggedIn, (loggedIn) => {
+  if (loggedIn) loadUserDisplayName()
+  else userDisplayName.value = ''
 })
 
 function handleLogout() {
@@ -94,6 +113,7 @@ function closeMenuOnClickOutside(event) {
 
 onMounted(() => {
   document.addEventListener('click', closeMenuOnClickOutside)
+  if (isLoggedIn.value) loadUserDisplayName()
 })
 onUnmounted(() => {
   document.removeEventListener('click', closeMenuOnClickOutside)
