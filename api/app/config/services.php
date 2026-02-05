@@ -1,7 +1,11 @@
 <?php
 
 
+use api\middlewares\authz\AuthzAdminMiddleware;
+use api\middlewares\authz\AuthzClientMiddleware;
+use api\middlewares\authz\AuthzCommercantMiddleware;
 use application_core\application\usecases\AuthnProvider;
+use application_core\application\usecases\AuthzUserService;
 use application_core\application\usecases\interfaces\AuthnProviderInterface;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
@@ -18,16 +22,26 @@ return [
     AuthnRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOAuthnRepository($c->get("nexus.pdo"));
     },
-
     TransactionRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOTransactionRepository($c->get("nexus.pdo"), $c->get(AuthnRepositoryInterface::class));
     },
     AuthnProviderInterface::class => function (ContainerInterface $c) {
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
     },
-
     ServiceTransactionInterface::class => function (ContainerInterface $c) {
         return new ServiceTransaction($c->get(TransactionRepositoryInterface::class));
+    },
+    AuthzUserService::class => function (ContainerInterface $c) {
+        return new AuthzUserService();
+    },
+    AuthzAdminMiddleware::class => function ($c) {
+        return new AuthzAdminMiddleware($c->get(AuthzUserService::class));
+    },
+    AuthzCommercantMiddleware::class => function ($c) {
+        return new AuthzCommercantMiddleware($c->get(AuthzUserService::class));
+    },
+    AuthzClientMiddleware::class => function ($c) {
+        return new AuthzClientMiddleware($c->get(AuthzUserService::class));
     },
     ServiceAuthnInterface::class => function (ContainerInterface $c) {
         return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);

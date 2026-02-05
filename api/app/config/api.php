@@ -53,5 +53,8 @@ return [
     DeleteUserAction::class => function (ContainerInterface $c) {
         return new DeleteUserAction($c->get(AuthnRepositoryInterface::class));
     },
+    JwtAuthMiddleware::class => function (ContainerInterface $c) {
+        return new JwtAuthMiddleware(parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
+    },
 ];
 
