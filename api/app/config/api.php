@@ -1,9 +1,9 @@
 <?php
 
 use api\actions\AdminLogsAction;
-use api\actions\ConnexionAction;
+use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
-use api\actions\EnregistrerAction;
+use api\actions\RegisterAction;
 use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
@@ -11,6 +11,8 @@ use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
 use api\actions\DeleteUserAction;
 use api\actions\UsersListAction;
+use api\middlewares\authz\AuthzUserRessourceAccessMiddleware;
+use api\middlewares\JwtAuthMiddleware;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
@@ -21,11 +23,11 @@ return [
     AdminLogsAction::class => function (ContainerInterface $c) {
         return new AdminLogsAction($c->get('nexus.pdo'));
     },
-    ConnexionAction::class => function (ContainerInterface $c) {
-        return new ConnexionAction($c->get(ServiceAuthnInterface::class));
+    SigninAction::class => function (ContainerInterface $c) {
+        return new SigninAction($c->get(ServiceAuthnInterface::class));
     },
-    EnregistrerAction::class => function (ContainerInterface $c) {
-        return new EnregistrerAction($c->get(ServiceAuthnInterface::class));
+    RegisterAction::class => function (ContainerInterface $c) {
+        return new RegisterAction($c->get(ServiceAuthnInterface::class));
     },
     TransactionByIdAction::class => function (ContainerInterface $c) {
         return new TransactionByIdAction($c->get(ServiceTransactionInterface::class));

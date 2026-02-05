@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 use api\actions\AdminLogsAction;
-use api\actions\ConnexionAction;
+use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
-use api\actions\EnregistrerAction;
+use api\actions\RegisterAction;
 use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
