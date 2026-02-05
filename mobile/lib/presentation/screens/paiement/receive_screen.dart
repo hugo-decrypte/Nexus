@@ -12,25 +12,6 @@ class ReceiveScreen extends StatelessWidget {
       appBar: const NexusAppBar(showBackButton: true),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Icon(Icons.arrow_back, size: 20, color: Colors.black87),
-                const SizedBox(width: 8),
-                const Text(
-                  'Retour page accueil',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          const SizedBox(height: 20),
-          
           // QR Code Scanner Placeholder
           Expanded(
             child: Center(
