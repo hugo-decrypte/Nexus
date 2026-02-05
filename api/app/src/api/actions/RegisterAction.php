@@ -6,7 +6,7 @@ use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class EnregistrerAction {
+class RegisterAction {
     private ServiceAuthnInterface $serviceAuthn;
     public function __construct(ServiceAuthnInterface $serviceAuthn){
         $this->serviceAuthn = $serviceAuthn;
