@@ -4,10 +4,7 @@
     <section class="balance-card">
       <p class="card-owner-name">NEXUS</p>
       <div class="balance-card-left">
-        <div class="user-name-row">
-          <p class="user-name">{{ userFullName }}</p>
-          <span class="material-symbols-outlined card-icon" aria-hidden="true">credit_card</span>
-        </div>
+        <p class="user-name">{{ userFullName }}</p>
         <p class="account-number">{{ maskedAccountNumber }}</p>
       </div>
       <div class="balance-card-right">
