@@ -1,0 +1,148 @@
+.envoie-po-view {
+  min-height: 100%;
+  padding: 16px;
+  padding-bottom: 100px;
+}
+
+.envoie-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  background: none;
+}
+
+.envoie-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 0.95rem;
+  background: none;
+}
+
+.envoie-back-icon {
+  font-size: 22px;
+}
+
+.envoie-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.envoie-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.envoie-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.envoie-card-title-optional {
+  color: #999;
+  font-weight: 500;
+}
+
+.envoie-input-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.envoie-input {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  font-size: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #f8f8f8;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.envoie-input::placeholder {
+  color: #aaa;
+}
+
+.envoie-input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: #999;
+  pointer-events: none;
+}
+
+.envoie-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.envoie-btn .material-icons {
+  font-size: 24px;
+}
+
+.envoie-btn-qr {
+  background: #e85d5a;
+}
+
+.envoie-btn-qr:hover {
+  background: #d64d4a;
+}
+
+.envoie-montant-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.envoie-montant-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.envoie-po-badge {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.envoie-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 14px;
+  font-size: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.envoie-textarea::placeholder {
+  color: #aaa;
+}
