@@ -4,10 +4,12 @@ import HomeView from '../views/HomeView.vue'
 import HistoriqueView from '../views/HistoriqueView.vue'
 import RechargementView from '../views/RechargementView.vue'
 import EnvoiePOView from '../views/EnvoiePOView.vue'
+import AccountView from '../views/AccountView.vue'
+import SettingsView from '../views/SettingsView.vue'
 import Login from '../views/Login.vue'
 
 /** true = connexion obligatoire pour accéder aux pages, false = accès libre à toutes les pages */
-const AUTH_REQUIRED = false
+const AUTH_REQUIRED = true
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +19,8 @@ const router = createRouter({
     { path: '/historique', name: 'historique', component: HistoriqueView },
     { path: '/rechargement', name: 'rechargement', component: RechargementView },
     { path: '/envoiePO', name: 'envoiePO', component: EnvoiePOView },
+    { path: '/account', name: 'account', component: AccountView },
+    { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/', redirect: '/home' },
   ],
 })
@@ -28,11 +32,19 @@ router.beforeEach((to, from, next) => {
   }
 
   const isPublic = to.meta.public === true
+  const authenticated = isAuthenticated()
 
-  if (!isPublic && !isAuthenticated()) {
-    next('/login')
-  } else if (to.path === '/login' && isAuthenticated()) {
-    next('/home')
+  if (isPublic) {
+    if (to.path === '/login' && authenticated) {
+      next({ path: '/home', replace: true })
+    } else {
+      next()
+    }
+    return
+  }
+
+  if (!authenticated) {
+    next({ path: '/login', replace: true })
   } else {
     next()
   }

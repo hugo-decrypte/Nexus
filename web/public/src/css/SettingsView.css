@@ -1,0 +1,110 @@
+.settings-view {
+  width: 95%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.settings-view .page-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.settings-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+.settings-card:last-of-type {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.section-desc {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0 20px 0;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.settings-row-switch {
+  margin-top: 8px;
+}
+
+.settings-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #444;
+  min-width: 140px;
+}
+
+.form-input {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-select {
+  max-width: 220px;
+  border-radius: 0;
+  cursor: pointer;
+  background: #fff;
+}
+
+.form-select:focus {
+  border-color: #000091;
+}
+
+/* Interrupteur (toggle) */
+.switch {
+  width: 48px;
+  height: 26px;
+  border: none;
+  border-radius: 13px;
+  background: #ccc;
+  cursor: pointer;
+  padding: 2px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.switch-on {
+  background: #000091;
+}
+
+.switch-knob {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.switch-on .switch-knob {
+  transform: translateX(22px);
+}
+
+.account-success {
+  color: #2e7d32;
+  font-size: 0.9rem;
+  margin-top: 16px;
+}
