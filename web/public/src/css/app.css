@@ -26,6 +26,13 @@ body {
   flex-direction: column;
 }
 
+.loading-fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+.loading-fade-leave-to {
+  opacity: 0;
+}
+
 .navbar {
   height: 65px;
   background-color: var(--color-navbar);
