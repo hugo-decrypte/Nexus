@@ -34,23 +34,6 @@ class _SendScreenState extends State<SendScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back button with text
-              Row(
-                children: [
-                  Icon(Icons.arrow_back, size: 20, color: Colors.black87),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Retour page accueil',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
               // Recipient Section
               Container(
                 padding: const EdgeInsets.all(16),
