@@ -25,7 +25,7 @@ class NexusAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: const Text(
         'NEXUS',
         style: TextStyle(
-          color: Color(0xFFFF6B6B),
+          color: Color(0xFFFF6B7C),
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
@@ -34,7 +34,7 @@ class NexusAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16),
           child: CircleAvatar(
-            backgroundColor: const Color(0xFFFF6B6B),
+            backgroundColor: const Color(0xFFFF6B7C),
             radius: 18,
             child: Icon(
               Icons.person,

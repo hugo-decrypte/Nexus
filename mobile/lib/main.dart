@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/presentation/screens/auth/screens/auth_screen.dart';
+import 'package:untitled/presentation/screens/splash/splash_screen.dart';
 
 void main() {
   runApp(const NexusApp());
@@ -23,7 +23,8 @@ class NexusApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',
       ),
-      home: const AuthScreen(),
+      //Démarre par le splash puis redirige vers AuthScreen ou HomeScreen selon le statut de connexion
+      home: const SplashScreen(),
     );
   }
 }

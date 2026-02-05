@@ -14,7 +14,7 @@ class NexusBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: const Color(0xFF3C3C3C),
-      selectedItemColor: const Color(0xFFFF6B6B),
+      selectedItemColor: const Color(0xFFFF6B7C),
       unselectedItemColor: Colors.white70,
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,

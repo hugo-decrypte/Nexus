@@ -3,8 +3,10 @@ import 'package:untitled/presentation/widgets/base/nexus_app_bar.dart';
 import 'package:untitled/presentation/widgets/base/nexus_bottom_nav_bar.dart';
 
 // écrans de paiement
+import '../historique/historique_screen.dart';
 import '../paiement/receive_screen.dart';
 import '../paiement/send_screen.dart';
+import '../rechargement/recharge_screen.dart';
 
 
 /// Écran principal de l’application (Accueil)
@@ -241,8 +243,26 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar: const NexusBottomNavBar(currentIndex: 0)
-    );
+      bottomNavigationBar: NexusBottomNavBar(
+        currentIndex: 0,
+        onTap: (index) {
+          if (index == 0) return;
+
+          if (index == 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const RechargeScreen()),
+            );
+          }
+
+          if (index == 2) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HistoriqueScreen()),
+            );
+          }
+        },
+      ),    );
   }
 }
 
@@ -270,10 +290,10 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFE5E5),
+          color: const Color(0xFFFCD8DA),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: const Color(0xFFFFCCCC),
+            color: const Color(0xFFFFA6B0),
             width: 1,
           ),
         ),
