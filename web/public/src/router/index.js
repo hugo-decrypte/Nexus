@@ -9,7 +9,7 @@ import SettingsView from '../views/SettingsView.vue'
 import Login from '../views/Login.vue'
 
 /** true = connexion obligatoire pour accéder aux pages, false = accès libre à toutes les pages */
-const AUTH_REQUIRED = false
+const AUTH_REQUIRED = true
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,11 +32,19 @@ router.beforeEach((to, from, next) => {
   }
 
   const isPublic = to.meta.public === true
+  const authenticated = isAuthenticated()
 
-  if (!isPublic && !isAuthenticated()) {
-    next('/login')
-  } else if (to.path === '/login' && isAuthenticated()) {
-    next('/home')
+  if (isPublic) {
+    if (to.path === '/login' && authenticated) {
+      next({ path: '/home', replace: true })
+    } else {
+      next()
+    }
+    return
+  }
+
+  if (!authenticated) {
+    next({ path: '/login', replace: true })
   } else {
     next()
   }

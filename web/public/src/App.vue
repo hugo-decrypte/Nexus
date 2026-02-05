@@ -24,8 +24,9 @@
       </nav>
 
       <div class="user">
-        <span class="logout" @click="handleLogout">Se déconnecter</span>
-        <div class="avatar-dropdown" ref="avatarDropdownRef">
+        <RouterLink v-if="!isLoggedIn" to="/login" class="logout link">Se connecter</RouterLink>
+        <span v-else class="logout" @click="handleLogout">Se déconnecter</span>
+        <div v-if="isLoggedIn" class="avatar-dropdown" ref="avatarDropdownRef">
           <button
             type="button"
             class="avatar avatar-btn"
@@ -42,6 +43,9 @@
             </div>
           </Transition>
         </div>
+        <div v-else class="avatar">
+          <span class="material-icons avatar-icon" aria-label="Compte">person</span>
+        </div>
       </div>
     </header>
 
@@ -52,16 +56,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter, RouterLink, RouterView } from 'vue-router'
-import { logout } from './services/auth.js'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router'
+import { logout, isAuthenticated } from './services/auth.js'
 
 const router = useRouter()
+const route = useRoute()
 const userMenuOpen = ref(false)
 const avatarDropdownRef = ref(null)
+const isLoggedIn = ref(isAuthenticated())
+
+watch(() => route.path, () => {
+  isLoggedIn.value = isAuthenticated()
+})
 
 function handleLogout() {
   logout()
+  isLoggedIn.value = false
   router.push('/login')
 }
 

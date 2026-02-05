@@ -84,6 +84,11 @@ body {
   cursor: pointer;
 }
 
+.user .logout.link {
+  color: inherit;
+  text-decoration: none;
+}
+
 .avatar {
   width: 45px;
   height: 45px;
