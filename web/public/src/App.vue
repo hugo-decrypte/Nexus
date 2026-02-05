@@ -1,5 +1,8 @@
 <template>
   <div class="app">
+    <Transition name="loading-fade">
+      <LoadingScreen v-if="showLoading" />
+    </Transition>
     <header class="navbar">
       <RouterLink to="/home" class="logo-link">
         <img class="logo" src="../img/logo.png" alt="NEXUS" />
@@ -63,6 +66,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router'
 import { logout, isAuthenticated, getUser } from './services/auth.js'
 import { getProfile } from './services/account.js'
+import LoadingScreen from './components/LoadingScreen.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -70,6 +74,9 @@ const userMenuOpen = ref(false)
 const avatarDropdownRef = ref(null)
 const isLoggedIn = ref(isAuthenticated())
 const userDisplayName = ref('')
+
+const isMobile = ref(typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches)
+const showLoading = ref(isMobile.value)
 
 async function loadUserDisplayName() {
   const user = getUser()
@@ -114,6 +121,11 @@ function closeMenuOnClickOutside(event) {
 onMounted(() => {
   document.addEventListener('click', closeMenuOnClickOutside)
   if (isLoggedIn.value) loadUserDisplayName()
+  if (isMobile.value) {
+    const timer = setTimeout(() => { showLoading.value = false }, 3000)
+  } else {
+    showLoading.value = false
+  }
 })
 onUnmounted(() => {
   document.removeEventListener('click', closeMenuOnClickOutside)
