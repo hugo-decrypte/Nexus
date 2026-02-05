@@ -2,7 +2,9 @@
 
 namespace application_core\application\usecases;
 
+use api\dtos\InputTransactionDTO;
 use api\dtos\TransactionDTO;
+use api\middlewares\CreateTransactionMiddleware;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use application_core\exceptions\EntityNotFoundException;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
@@ -56,10 +58,10 @@ class ServiceTransaction implements ServiceTransactionInterface {
         return array_map(fn ($trans) => $this->toDTO($trans), $transactions);
     }
 
-    public function creerTransaction(string $emetteur_id, string $recepteur_id, float $montant): TransactionDTO
+    public function creerTransaction(InputTransactionDTO $transaction_dto): TransactionDTO
     {
         try {
-            $trans = $this->transaction_repository->creerTransaction($emetteur_id, $recepteur_id, $montant);
+            $trans = $this->transaction_repository->creerTransaction($transaction_dto->id_emetteur, $transaction_dto->id_recepteur, $transaction_dto->montant);
         } catch (EntityNotFoundException $e) {
             throw new EntityNotFoundException($e->getEntity()." non trouvé", $e->getEntity());
         } catch (\Exception $e) {
