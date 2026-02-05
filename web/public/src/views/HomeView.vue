@@ -16,6 +16,18 @@
       </div>
     </section>
 
+    <!-- Actions PO (mobile) -->
+    <section class="po-actions">
+      <RouterLink to="/envoiePO" class="po-action-card">
+        <span class="material-icons po-action-icon">qr_code_2</span>
+        <span class="po-action-label">Envoyer des PO</span>
+      </RouterLink>
+      <RouterLink to="/rechargement" class="po-action-card">
+        <span class="material-icons po-action-icon">photo_camera</span>
+        <span class="po-action-label">Recevoir des PO</span>
+      </RouterLink>
+    </section>
+
     <!-- Transactions récentes -->
     <section class="transactions-section">
       <div class="transactions-header">
