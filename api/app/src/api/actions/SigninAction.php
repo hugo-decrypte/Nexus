@@ -31,9 +31,12 @@ class SigninAction {
 
         // 3. On appelle le service
         try {
-            $token = $this->authnService->signin($utilisateur_dto, $host);
+            [$userId, $token] = $this->authnService->signin($utilisateur_dto, $host);
 
-            $responseData = ['token' => $token];
+            $responseData = [
+                'id'    => $userId,
+                'token' => $token
+            ];
 
             $response->getBody()->write(json_encode($responseData));
             return $response

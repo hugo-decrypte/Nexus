@@ -14,7 +14,7 @@ interface ServiceAuthnInterface {
      * @param string $host Le nom d'hôte (ex: "api.mondomaine.com")
      * @return string Le token JWT
      */
-    public function signin(InputAuthnDTO $user_dto, string $host) : string; // Modifié ici
+    public function signin(InputAuthnDTO $user_dto, string $host) : array;
 
     public function signup(InputUserDTO $user_dto, ?string $role = 'client'): array;
     public function getUserById(string $user_id): UserDTO;

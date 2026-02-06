@@ -23,7 +23,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         $this->secretKey = $jwtSecret;
     }
 
-    public function signin(InputAuthnDTO $user_dto, string $host) : string {
+    public function signin(InputAuthnDTO $user_dto, string $host) : array {
 
         // 1. On valide l'user
         try {
@@ -46,7 +46,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         ];
 
         // 3. On encode et on return
-        return JWT::encode($payload, $this->secretKey, 'HS512');
+        return [$user->id,JWT::encode($payload, $this->secretKey, 'HS512')];
     }
 
     public function signup(InputUserDTO $user_dto, ?string $role = "client"): array {
