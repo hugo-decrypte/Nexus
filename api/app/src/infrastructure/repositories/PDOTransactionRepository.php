@@ -36,31 +36,36 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         }
         return (float) ($row['solde'] ?? 0);
     }
-
-    public function getTransaction(string $id_user): Transaction
+    public function getTransaction(string $id_user): array
     {
         try {
             $stmt = $this->transaction_pdo->prepare(
-                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
-             WHERE emetteur_id = :id OR recepteur_id = :id2 ORDER BY date_creation DESC LIMIT 1"
+                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions WHERE emetteur_id = :id OR recepteur_id = :id2 ORDER BY date_creation DESC"
             );
+
             $stmt->execute(['id' => $id_user, 'id2' => $id_user]);
-            $array = $stmt->fetch(PDO::FETCH_ASSOC);
+            $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             if (!$array) {
-                throw new EntityNotFoundException("transaction introuvable.", "transaction");
+                throw new EntityNotFoundException("Aucune transaction trouvée pour cet utilisateur.", "transaction");
             }
+            return array_map(function(array $row) {
+                return new Transaction(
+                    id: $row['id'],
+                    montant: (float) $row['montant'],
+                    hash: $row['hash'],
+                    emetteur_id: $row['emetteur_id'],
+                    recepteur_id: $row['recepteur_id']
+                );
+            }, $array);
+
+        } catch (EntityNotFoundException $e) {
+            throw $e;
         } catch(HttpInternalServerErrorException) {
-            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+            throw new \Exception("Erreur lors de l'exécution de la requête SQL.", 500);
         } catch(\Throwable) {
-            throw new \Exception("Erreur lors de la récupération du hash de la dernière transaction.", 400);
+            throw new \Exception("Erreur lors de la récupération des transactions de l'utilisateur.", 400);
         }
-        return new Transaction(
-            id: $array['id'],
-            montant: (float) $array['montant'],
-            hash: $array['hash'],
-            emetteur_id: $array['emetteur_id'],
-            recepteur_id: $array['recepteur_id']
-        );
     }
 
     public function getTransactions(): array
@@ -139,7 +144,12 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         $id = Uuid::uuid4()->toString();
 
         $solde_emetteur = $this->calculSolde($emetteur_id);
-        if ($solde_emetteur < $montant) {
+        /*try {
+            $role_emetteur = $this->authn_repository->getUserById($emetteur_id)->role;
+        }catch(\Exception $e){
+            throw new
+        }*/
+        if ($solde_emetteur < $montant /*&& $role_emetteur != "admin"*/) {
             throw new NotEnoughMoneyException("L'emetteur n'a pas assez d'argent.");
         }
 

@@ -25,16 +25,19 @@ class ServiceTransaction implements ServiceTransactionInterface {
         }
     }
 
-    public function getTransaction(string $id_user): TransactionDTO
+    public function getTransaction(string $id_user): array
     {
         try {
-            $trans = $this->transaction_repository->getTransaction($id_user);
+            $transactions = $this->transaction_repository->getTransaction($id_user);
+            return array_map(function($transaction) {
+                return $this->toDTO($transaction);
+            }, $transactions);
+
         } catch (EntityNotFoundException $e) {
-            throw new EntityNotFoundException($e->getMessage(), $e->getEntity());
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), $e->getCode());
+            throw $e;
+        } catch (\Throwable $e) {
+            throw new \Exception("Erreur lors du traitement des transactions : " . $e->getMessage(), 500);
         }
-        return $this->toDTO($trans);
     }
 
     public function getTransactions(): array
