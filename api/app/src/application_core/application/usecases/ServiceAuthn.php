@@ -1,7 +1,6 @@
 <?php
 namespace application_core\application\usecases;
 
-use _PHPStan_b22655c3f\Nette\Neon\Exception;
 use api\dtos\CredentialsDTO;
 use api\dtos\InputAuthnDTO;
 use api\dtos\InputUserDTO;
@@ -30,7 +29,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         try {
             $user = $this->userProvider->signin($user_dto);
         } catch(\Exception $e){
-            throw new Exception($e->getMessage(), $e->getCode());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
 
         // 2. On construit le payload
@@ -42,7 +41,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
             "sub" => $user->id,
             "data" => [
                 "email" => $user->email,
-                "role" => $user->role,
+                "role" => $user->role
             ]
         ];
 

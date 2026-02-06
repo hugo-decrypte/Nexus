@@ -12,7 +12,6 @@ use Slim\Exception\HttpInternalServerErrorException;
 
 class PDOAuthnRepository implements AuthnRepositoryInterface {
 
-
     private PDO $authn_pdo;
 
     public function __construct(PDO $authn_pdo) {

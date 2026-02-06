@@ -20,21 +20,14 @@ class CreateTransactionAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $body = $request->getParsedBody();
-        if (!is_array($body)) {
-            throw new HttpBadRequestException($request, 'Body JSON invalide.');
-        }
+        $transaction_dto = $request->getAttribute('user_dto') ?? null;
 
-        $emetteur_id = $body['emetteur_id'] ?? $body['id_emetteur'] ?? null;
-        $recepteur_id = $body['recepteur_id'] ?? $body['id_recepteur'] ?? null;
-        $montant = isset($body['montant']) ? (float) $body['montant'] : null;
-
-        if (empty($emetteur_id) || empty($recepteur_id) || $montant === null || $montant <= 0) {
-            throw new HttpBadRequestException($request, 'emetteur_id, recepteur_id et montant (positif) requis.');
+        if(is_null($transaction_dto)) {
+            throw new \Exception("Erreur récupération DTO de création d'un utilisateur");
         }
 
         try {
-            $transaction = $this->serviceTransaction->creerTransaction($emetteur_id, $recepteur_id, $montant);
+            $transaction = $this->serviceTransaction->creerTransaction($transaction_dto);
         } catch (\InvalidArgumentException $e) {
             throw new HttpBadRequestException($request, $e->getMessage());
         } catch (\Exception $e) {
