@@ -82,8 +82,7 @@ return function( App $app): App {
         ->add(new CreateTransactionMiddleware())
         ->add(JwtAuthMiddleware::class);;
     $app->post('/auth/login', SigninAction::class)
-        ->add(AuthnSigninValidationMiddleware::class)
-        ->add(JwtAuthMiddleware::class);
+        ->add(AuthnSigninValidationMiddleware::class);
 
 
     $app->post('/auth/register', RegisterAction::class)
