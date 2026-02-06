@@ -14,7 +14,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
-  //Connexion/Inscription
+  //tab Connexion/Inscription
   late TabController _tabController;
 
   final _loginFormKey = GlobalKey<FormState>();
@@ -82,13 +82,10 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     });
 
     try {
-      final response = await AuthService.login(
+      await AuthService.login(
         email: _loginEmailController.text.trim(),
         password: _loginPasswordController.text,
       );
-
-      // ✅ Sauvegarder le token
-      final token = response['token'];
 
       if (!mounted) return;
 
@@ -148,7 +145,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       _loginEmailController.text = _registerEmailController.text;
 
     } catch (e) {
-      // ✅ Récupération des vraies erreurs du backend
       if (mounted) {
         setState(() {
           _registerError = e.toString().replaceAll('Exception: ', '');
@@ -403,13 +399,14 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
             // Prenom field
             CustomTextField(
               controller: _registerPrenomController,
-              label: 'Prenom',
-              hintText: 'Prenom',
+              label: 'Prénom',
+              hintText: 'Prénom',
               prefixIcon: Icons.person_2_outlined,
               validator: FormValidators.validateName,
             ),
 
             const SizedBox(height: 20),
+
             // Name field
             CustomTextField(
               controller: _registerNameController,
@@ -419,11 +416,15 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               validator: FormValidators.validateName,
             ),
 
+            const SizedBox(height: 20),
+
+            // Email field
             CustomTextField(
               controller: _registerEmailController,
               label: 'Email',
               hintText: 'email@mail.com',
               prefixIcon: Icons.email,
+              keyboardType: TextInputType.emailAddress,
               validator: FormValidators.validateEmail,
             ),
 
