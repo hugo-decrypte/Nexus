@@ -6,12 +6,13 @@ use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
 use api\actions\RegisterAction;
+use api\actions\LogsListAction;
 use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
-use api\actions\UsersListAction;
 use api\actions\UserSoldeAction;
+use api\actions\UsersListAction;
 use api\middlewares\AuthnSigninValidationMiddleware;
 use api\middlewares\authz\AuthzAdminMiddleware;
 use api\middlewares\authz\AuthzClientMiddleware;
@@ -64,6 +65,7 @@ return function( App $app): App {
     $app->get("/transactions", TransactionsAction::class)
         ->add(AuthzAdminMiddleware::class)
         ->add(JwtAuthMiddleware::class);
+    $app->get("/logs", LogsListAction::class);
 
 //    FONCTIONNALITES ETENDUES
 //    $app->get("/card/{id_card}", CarteByIdAction::class);

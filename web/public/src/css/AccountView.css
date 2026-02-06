@@ -1,121 +1,118 @@
 .account-view {
-  width: 95%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.account-view .page-title {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 24px;
+  min-height: 100%;
+  padding: 24px 20px;
 }
 
 .account-card {
+  max-width: 520px;
+  margin: 0 auto;
   background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  margin-bottom: 24px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 28px 24px 32px;
 }
 
-.account-card-password {
-  margin-bottom: 0;
-}
-
-.section-title {
-  font-size: 1.1rem;
+.account-page-title {
+  font-size: 1.25rem;
   font-weight: 700;
   color: #333;
-  margin: 0 0 8px 0;
+  margin: 0 0 24px 0;
 }
 
-.section-desc {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0 0 20px 0;
-}
-
-.account-form {
-  margin-top: 16px;
-}
-
-.form-row {
+.account-field,
+.account-password-section {
   margin-bottom: 16px;
 }
 
-.form-label {
+.account-label {
   display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #444;
-  margin-bottom: 6px;
-}
-
-.form-value {
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: #333;
+  margin-bottom: 8px;
 }
 
-.account-info-list .form-row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.account-info-list .form-label {
-  min-width: 100px;
-  margin-bottom: 0;
-}
-
-.form-input {
+.account-input {
   width: 100%;
-  max-width: 400px;
   padding: 10px 12px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #e0e0e0;
   border-radius: 6px;
+  background: #fff;
+  color: #333;
   outline: none;
+  box-sizing: border-box;
 }
 
-.form-input:focus {
-  border-color: #000091;
-  box-shadow: 0 0 0 2px rgba(0, 0, 91, 0.15);
+.account-input::placeholder {
+  color: #aaa;
+}
+
+.account-input-readonly {
+  color: #666;
+  background: #fafafa;
+  cursor: default;
+}
+
+.account-input:focus:not(.account-input-readonly) {
+  border-color: #ff726a;
+  box-shadow: 0 0 0 1px rgba(255, 114, 106, 0.2);
+}
+
+.account-separator {
+  border: none;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 20px 0;
 }
 
 .account-error {
   color: #c62828;
   font-size: 0.9rem;
-  margin: 12px 0;
+  margin: 12px 0 0 0;
 }
 
 .account-success {
   color: #2e7d32;
   font-size: 0.9rem;
-  margin: 12px 0;
+  margin: 12px 0 0 0;
 }
 
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 0.95rem;
+.account-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.account-btn-submit {
+  padding: 12px 28px;
+  font-size: 1rem;
   font-weight: 600;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
   font-family: inherit;
+  color: #ff726a;
+  background: #fff;
+  border: 1px solid #ff726a;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
-.btn:disabled {
+.account-btn-submit:hover:not(:disabled) {
+  background: #fff5f4;
+}
+
+.account-btn-submit:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background: #000091;
-  color: #fff;
-  margin-top: 8px;
-}
+@media (max-width: 600px) {
+  .account-view {
+    padding: 16px 12px;
+  }
 
-.btn-primary:hover:not(:disabled) {
-  background: #00007a;
+  .account-card {
+    padding: 22px 18px 28px;
+  }
 }

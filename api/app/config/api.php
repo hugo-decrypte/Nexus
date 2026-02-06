@@ -4,6 +4,7 @@ use api\actions\AdminLogsAction;
 use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
 use api\actions\RegisterAction;
+use api\actions\LogsListAction;
 use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
@@ -14,6 +15,7 @@ use api\actions\UsersListAction;
 use api\middlewares\authz\AuthzUserRessourceAccessMiddleware;
 use api\middlewares\JwtAuthMiddleware;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
+use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use Psr\Container\ContainerInterface;
@@ -42,16 +44,19 @@ return [
         return new TransactionsBetweenAction($c->get(ServiceTransactionInterface::class));
     },
     UserByIdAction::class => function (ContainerInterface $c) {
-        return new UserByIdAction($c->get(AuthnRepositoryInterface::class));
+        return new UserByIdAction($c->get(ServiceAuthnInterface::class));
     },
     UserSoldeAction::class => function (ContainerInterface $c) {
         return new UserSoldeAction($c->get(ServiceTransactionInterface::class));
     },
     UsersListAction::class => function (ContainerInterface $c) {
-        return new UsersListAction($c->get(AuthnRepositoryInterface::class));
+        return new UsersListAction($c->get(ServiceAuthnInterface::class));
     },
     DeleteUserAction::class => function (ContainerInterface $c) {
-        return new DeleteUserAction($c->get(AuthnRepositoryInterface::class));
+        return new DeleteUserAction($c->get(ServiceAuthnInterface::class));
+    },
+    LogsListAction::class =>function(ContainerInterface $c) {
+        return new LogsListAction($c->get(ServiceLogInterface::class));
     },
     JwtAuthMiddleware::class => function (ContainerInterface $c) {
         return new JwtAuthMiddleware(parse_ini_file($c->get('db.config'))["JWT_SECRET"]);

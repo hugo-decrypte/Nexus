@@ -4,34 +4,33 @@ declare(strict_types=1);
 
 namespace api\actions;
 
-use application_core\application\usecases\interfaces\ServiceAuthnInterface;
-use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
+use application_core\application\usecases\interfaces\ServiceLogInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UsersListAction
+class LogsListAction
 {
-    private ServiceAuthnInterface $authnService;
+    private ServiceLogInterface $logService;
 
-    public function __construct(ServiceAuthnInterface $authnService)
+    public function __construct(ServiceLogInterface $logService)
     {
-        $this->authnService = $authnService;
+        $this->logService = $logService;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         try {
-            $users = $this->authnService->getUsers();
-            $body = array_map(function ($user) {
+            $logs = $this->logService->getLogs();
+            $body = array_map(function ($log) {
                 return [
-                    'id' => $user->id,
-                    'nom' => $user->nom,
-                    'prenom' => $user->prenom,
-                    'email' => $user->email,
-                    'role' => $user->role,
+                    'id' => $log->id,
+                    'created_at' => $log->created_at,
+                    'acteur_id' => $log->acteur_id,
+                    'action_type' => $log->action_type,
+                    'details' => $log->details
                 ];
-            }, $users);
+            }, $logs);
 
             $response->getBody()->write(json_encode($body));
             return $response
