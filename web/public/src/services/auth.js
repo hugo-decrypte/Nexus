@@ -1,9 +1,12 @@
 const TOKEN_KEY = 'nexus_token'
 
-// connexion
+// Connexion : appelle POST /api/auth/login (ou /auth/login si proxy enlève /api)
 export async function login(email, motDePasse) {
+  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+  const url = `${apiBase}/api/auth/login`
+
   try {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -14,9 +17,25 @@ export async function login(email, motDePasse) {
       }),
     })
 
-    const data = await response.json()
+    const contentType = response.headers.get('Content-Type') || ''
+    let data = {}
+    if (contentType.includes('application/json')) {
+      try {
+        data = await response.json()
+      } catch {
+        return { success: false, error: 'Réponse du serveur invalide' }
+      }
+    } else if (!response.ok) {
+      return { success: false, error: 'Erreur du serveur (vérifier que l’API est démarrée)' }
+    }
 
     if (response.ok && data.token) {
+      if (data.id) {
+        const user = { id: data.id, email: data.email, role: data.role }
+        try {
+          localStorage.setItem('nexus_user', JSON.stringify(user))
+        } catch {}
+      }
       localStorage.setItem(TOKEN_KEY, data.token)
       return { success: true }
     }
@@ -24,6 +43,10 @@ export async function login(email, motDePasse) {
     return { success: false, error: data.error || 'Identifiants incorrects' }
   } catch (err) {
     console.error('Erreur de connexion:', err)
+    const message = err.message || ''
+    if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
+      return { success: false, error: 'Impossible de joindre le serveur. Vérifiez que l’API est démarrée (ex. port 6080).' }
+    }
     return { success: false, error: 'Erreur de connexion au serveur' }
   }
 }
