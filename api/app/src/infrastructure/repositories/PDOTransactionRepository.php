@@ -144,12 +144,12 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         $id = Uuid::uuid4()->toString();
 
         $solde_emetteur = $this->calculSolde($emetteur_id);
-        /*try {
+        try {
             $role_emetteur = $this->authn_repository->getUserById($emetteur_id)->role;
         }catch(\Exception $e){
-            throw new
-        }*/
-        if ($solde_emetteur < $montant /*&& $role_emetteur != "admin"*/) {
+            throw new $e;
+        }
+        if ($solde_emetteur < $montant && $role_emetteur != "admin") {
             throw new NotEnoughMoneyException("L'emetteur n'a pas assez d'argent.");
         }
 

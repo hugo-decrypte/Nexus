@@ -20,7 +20,7 @@ class CreateTransactionAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $transaction_dto = $request->getAttribute('user_dto') ?? null;
+        $transaction_dto = $request->getAttribute('transaction_dto') ?? null;
 
         if(is_null($transaction_dto)) {
             throw new \Exception("Erreur récupération DTO de création d'un utilisateur");
