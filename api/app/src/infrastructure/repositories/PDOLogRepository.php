@@ -23,7 +23,7 @@ class PDOLogRepository implements LogRepositoryInterface{
     {
         try {
             $stmt = $this->log_pdo->prepare(
-                "SELECT id, acteur_id, action_type, details, created_at FROM logs 
+                "SELECT id, acteur_id, action_type, details, date_creation FROM logs 
              WHERE acteur_id = :id ORDER BY created_at DESC"
             );
             $stmt->execute(['id' => $id_user]);
@@ -40,7 +40,7 @@ class PDOLogRepository implements LogRepositoryInterface{
                     action_type: $row['action_type'],
                     acteur_id: (int) $row['acteur_id'],
                     details: is_string($row['details']) ? json_decode($row['details'], true) : $row['details'],
-                    created_at: $row['created_at']
+                    created_at: $row['date_creation']
                 );
             }, $array);
 
@@ -57,7 +57,7 @@ class PDOLogRepository implements LogRepositoryInterface{
     {
         try {
             $stmt = $this->log_pdo->prepare(
-                "SELECT id, acteur_id, action_type, details, created_at FROM logs
+                "SELECT id, acteur_id, action_type, details, date_creation FROM logs
              WHERE id = :id  ORDER BY date_creation"
             );
             $stmt->execute(['id' => $id,]);
@@ -75,7 +75,7 @@ class PDOLogRepository implements LogRepositoryInterface{
             acteur_id: (float) $array['acteur_id'],
             action_type: $array['action_type'],
             details: is_string($array['details']) ? json_decode($array['details'], true) : $array['details'],
-            created_at: $array['created_at']
+            created_at: $array['date_creation']
         );
     }
 
@@ -83,7 +83,7 @@ class PDOLogRepository implements LogRepositoryInterface{
     {
         try {
             $stmt = $this->log_pdo->prepare(
-                "SELECT id, acteur_id, action_type, details, created_at FROM logs"
+                "SELECT id, acteur_id, action_type, details, date_creation FROM logs"
             );
             $stmt->execute();
 
@@ -99,7 +99,7 @@ class PDOLogRepository implements LogRepositoryInterface{
                     action_type: $row['action_type'],
                     acteur_id: (int) $row['acteur_id'],
                     details: is_string($row['details']) ? json_decode($row['details'], true) : $row['details'],
-                    created_at: $row['created_at']
+                    created_at: $row['date_creation']
                 );
             }, $array);
 

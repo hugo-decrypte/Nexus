@@ -11,6 +11,7 @@ use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use application_core\application\usecases\ServiceAuthn;
+use application_core\application\usecases\ServiceLog;
 use application_core\application\usecases\ServiceTransaction;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use infrastructure\repositories\interfaces\LogRepositoryInterface;
@@ -29,7 +30,7 @@ return [
         return new PDOTransactionRepository($c->get("nexus.pdo"), $c->get(AuthnRepositoryInterface::class));
     },
     LogRepositoryInterface::class => function (ContainerInterface $c){
-        return new PDOLogRepository($c->get("nexus_pdo"));
+        return new PDOLogRepository($c->get("nexus.pdo"));
     },
     AuthnProviderInterface::class => function (ContainerInterface $c) {
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
@@ -53,7 +54,7 @@ return [
         return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
     },
     ServiceLogInterface::class => function (ContainerInterface $c) {
-        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class));
+        return new ServiceLog($c->get(LogRepositoryInterface::class));
     },
 
 
