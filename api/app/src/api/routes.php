@@ -6,6 +6,7 @@ use api\actions\ConnexionAction;
 use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
 use api\actions\EnregistrerAction;
+use api\actions\LogsListAction;
 use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
@@ -32,6 +33,7 @@ return function( App $app): App {
     $app->get("/transactions/{id_emetteur}/{id_recepteur}", TransactionsBetweenAction::class);
     $app->get("/transactions/{id_user}", TransactionByIdAction::class);
     $app->get("/transactions", TransactionsAction::class);
+    $app->get("/logs", LogsListAction::class);
 
 //    FONCTIONNALITES ETENDUES
 //    $app->get("/card/{id_card}", CarteByIdAction::class);
