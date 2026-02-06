@@ -3,7 +3,7 @@ import 'package:untitled/presentation/widgets/base/nexus_app_bar.dart';
 import 'package:untitled/presentation/widgets/base/nexus_bottom_nav_bar.dart';
 
 // écrans de paiement
-import '../historique/historique_screen.dart';
+import '../historique/screen/historique_screen.dart';
 import '../paiement/receive_screen.dart';
 import '../paiement/send_screen.dart';
 import '../rechargement/recharge_screen.dart';
@@ -262,7 +262,8 @@ class HomeScreen extends StatelessWidget {
             );
           }
         },
-      ),    );
+      ),
+    );
   }
 }
 
