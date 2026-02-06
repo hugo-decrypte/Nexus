@@ -1,59 +1,77 @@
 <template>
   <div class="account-view">
-    <h1 class="page-title">Mon compte</h1>
-
     <section class="account-card">
-      <h2 class="section-title">Informations personnelles</h2>
-      <p v-if="loadError" class="account-error">{{ loadError }}</p>
-      <div v-else class="account-info-list">
-        <div class="form-row">
-          <span class="form-label">Prénom</span>
-          <span class="form-value">{{ form.prenom || '—' }}</span>
-        </div>
-        <div class="form-row">
-          <span class="form-label">Nom</span>
-          <span class="form-value">{{ form.nom || '—' }}</span>
-        </div>
-        <div class="form-row">
-          <span class="form-label">Email</span>
-          <span class="form-value">{{ form.email || '—' }}</span>
-        </div>
-      </div>
-    </section>
+      <h1 class="account-page-title">Mon compte</h1>
 
-    <section class="account-card account-card-password">
-      <h2 class="section-title">Modifier le mot de passe</h2>
-      <p class="section-desc">Entrez votre mot de passe actuel puis le nouveau.</p>
-      <form class="account-form" @submit.prevent="changePassword">
-        <div class="form-row">
-          <label class="form-label" for="current-password">Mot de passe actuel</label>
+      <p v-if="loadError" class="account-error">{{ loadError }}</p>
+
+      <template v-else>
+        <div class="account-field">
+          <label class="account-label">Nom</label>
+          <input
+            type="text"
+            :value="form.nom"
+            class="account-input account-input-readonly"
+            readonly
+            tabindex="-1"
+            aria-readonly="true"
+          />
+        </div>
+        <hr class="account-separator" />
+        <div class="account-field">
+          <label class="account-label">Prenom</label>
+          <input
+            type="text"
+            :value="form.prenom"
+            class="account-input account-input-readonly"
+            readonly
+            tabindex="-1"
+            aria-readonly="true"
+          />
+        </div>
+        <hr class="account-separator" />
+        <div class="account-field">
+          <label class="account-label">Email</label>
+          <input
+            type="email"
+            :value="form.email"
+            class="account-input account-input-readonly"
+            readonly
+            tabindex="-1"
+            aria-readonly="true"
+          />
+        </div>
+        <hr class="account-separator" />
+
+        <div class="account-password-section">
+          <label class="account-label" for="current-password">Mot de passe actuel</label>
           <input
             id="current-password"
             v-model="passwordForm.mot_de_passe_actuel"
             type="password"
-            class="form-input"
+            class="account-input"
             placeholder="Mot de passe actuel"
             autocomplete="current-password"
           />
         </div>
-        <div class="form-row">
-          <label class="form-label" for="new-password">Nouveau mot de passe</label>
+        <div class="account-field">
+          <label class="account-label" for="new-password">Nouveau mot de passe</label>
           <input
             id="new-password"
             v-model="passwordForm.nouveau_mot_de_passe"
             type="password"
-            class="form-input"
+            class="account-input"
             placeholder="Nouveau mot de passe"
             autocomplete="new-password"
           />
         </div>
-        <div class="form-row">
-          <label class="form-label" for="confirm-password">Confirmer le nouveau mot de passe</label>
+        <div class="account-field">
+          <label class="account-label" for="confirm-password">Confirmer le nouveau mot de passe</label>
           <input
             id="confirm-password"
             v-model="passwordForm.confirm"
             type="password"
-            class="form-input"
+            class="account-input"
             placeholder="Confirmer"
             autocomplete="new-password"
           />
@@ -61,10 +79,17 @@
         <p v-if="passwordMessage" :class="passwordSuccess ? 'account-success' : 'account-error'">
           {{ passwordMessage }}
         </p>
-        <button type="submit" class="btn btn-primary" :disabled="passwordLoading">
-          {{ passwordLoading ? 'Envoi...' : 'Changer le mot de passe' }}
-        </button>
-      </form>
+        <div class="account-btn-wrap">
+          <button
+            type="button"
+            class="account-btn-submit"
+            :disabled="passwordLoading"
+            @click="changePassword"
+          >
+            {{ passwordLoading ? 'Envoi...' : 'Valider les modifications' }}
+          </button>
+        </div>
+      </template>
     </section>
   </div>
 </template>

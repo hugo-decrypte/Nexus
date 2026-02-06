@@ -30,8 +30,8 @@ class CorsMiddleware {
             'http://localhost:8080',
         ];
 
-        //En développement, on autorise tous les localhost
-        if (preg_match('/^http:\/\/localhost(:\d+)?$/', $origin)) {
+        // En développement, on autorise localhost et 127.0.0.1 (avec ou sans port)
+        if (preg_match('/^https?:\/\/localhost(:\d+)?$/', $origin) || preg_match('/^https?:\/\/127\.0\.0\.1(:\d+)?$/', $origin)) {
             $allowedOrigin = $origin;
         } elseif (in_array($origin, $allowedOrigins)) {
             $allowedOrigin = $origin;

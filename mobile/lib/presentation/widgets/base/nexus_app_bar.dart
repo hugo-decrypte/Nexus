@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../screens/auth/screens/auth_screen.dart';
+import '../../screens/auth/services/auth_service.dart';
+
 class NexusAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final VoidCallback? onBackPressed;
@@ -31,6 +34,23 @@ class NexusAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
+        IconButton(
+          icon: const Icon(Icons.logout_sharp, color: Color(0xFFFF6B7C)),
+          onPressed: () async {
+            //Déconnexion
+            await AuthService.logout();
+
+            if (!context.mounted) return;
+
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AuthScreen(),
+              ),
+            );
+          },
+        ),
+
         Padding(
           padding: const EdgeInsets.only(right: 16),
           child: CircleAvatar(

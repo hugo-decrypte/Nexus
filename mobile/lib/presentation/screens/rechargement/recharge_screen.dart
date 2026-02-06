@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled/presentation/widgets/base/nexus_app_bar.dart';
 
 import '../../widgets/base/nexus_bottom_nav_bar.dart';
-import '../historique/historique_screen.dart';
+import '../historique/screen/historique_screen.dart';
 import '../home/home_screen.dart';
 
 class RechargeScreen extends StatelessWidget {

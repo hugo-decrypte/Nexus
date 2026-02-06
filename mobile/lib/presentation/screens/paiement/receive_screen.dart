@@ -88,7 +88,7 @@ class ReceiveScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        
+
                         // Camera icon in center
                         Center(
                           child: Icon(
@@ -100,9 +100,9 @@ class ReceiveScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 20),
-                  
+
                   const Text(
                     'Scannez le QR Code',
                     style: TextStyle(
@@ -115,7 +115,7 @@ class ReceiveScreen extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Scan Button
           Padding(
             padding: const EdgeInsets.all(24),
