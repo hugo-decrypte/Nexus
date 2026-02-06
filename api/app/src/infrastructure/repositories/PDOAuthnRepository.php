@@ -57,6 +57,8 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             if (!$res) {
                 throw new EntityNotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.", 'utilisateur');
             }
+        } catch(EntityNotFoundException $e) {
+            throw $e;
         } catch(HttpInternalServerErrorException) {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\Throwable) {
@@ -89,6 +91,11 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
                     role: $row['role']
                 );
             }
+            if(!$users){
+                throw new EntityNotFoundException("Aucun utilisateurs trouvé", 'utilisateur');
+            }
+        } catch(EntityNotFoundException $e) {
+            throw $e;
         } catch(HttpInternalServerErrorException) {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\Throwable) {
@@ -105,6 +112,8 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             if ($stmt->rowCount() === 0) {
                 throw new EntityNotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.", 'utilisateur');
             }
+        } catch(EntityNotFoundException $e) {
+            throw $e;
         } catch(HttpInternalServerErrorException) {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\Throwable) {

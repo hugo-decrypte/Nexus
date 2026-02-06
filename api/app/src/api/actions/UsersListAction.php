@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace api\actions;
 
+use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -11,17 +12,17 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class UsersListAction
 {
-    private AuthnRepositoryInterface $authnRepository;
+    private ServiceAuthnInterface $authnService;
 
-    public function __construct(AuthnRepositoryInterface $authnRepository)
+    public function __construct(ServiceAuthnInterface $authnService)
     {
-        $this->authnRepository = $authnRepository;
+        $this->authnService = $authnService;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         try {
-            $users = $this->authnRepository->getUsers();
+            $users = $this->authnService->getUsers();
             $body = array_map(function ($user) {
                 return [
                     'id' => $user->id,

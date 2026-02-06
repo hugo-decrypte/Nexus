@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace api\actions;
 
 use _PHPStan_b22655c3f\Nette\Neon\Exception;
+use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use DI\NotFoundException;
-use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
 class UserByIdAction
 {
-    private AuthnRepositoryInterface $authnRepository;
+    private ServiceAuthnInterface $authnService;
 
-    public function __construct(AuthnRepositoryInterface $authnRepository)
+    public function __construct(ServiceAuthnInterface $authnService)
     {
-        $this->authnRepository = $authnRepository;
+        $this->authnService = $authnService;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -28,7 +28,7 @@ class UserByIdAction
         }
 
         try {
-            $user = $this->authnRepository->getUserById($id_user);
+            $user = $this->authnService->getUserById($id_user);
         } catch (HttpNotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         } catch (\Exception $e) {

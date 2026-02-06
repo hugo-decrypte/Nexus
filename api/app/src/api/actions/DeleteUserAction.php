@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace api\actions;
 
+use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use DI\NotFoundException;
-use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
 class DeleteUserAction
 {
-    private AuthnRepositoryInterface $authnRepository;
+    private ServiceAuthnInterface $authnService;
 
-    public function __construct(AuthnRepositoryInterface $authnRepository)
+    public function __construct(ServiceAuthnInterface $authnService)
     {
-        $this->authnRepository = $authnRepository;
+        $this->authnService = $authnService;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -27,7 +27,7 @@ class DeleteUserAction
         }
 
         try {
-            $this->authnRepository->deleteUser($id_user);
+            $this->authnService->deleteUser($id_user);
         } catch (NotFoundException $e) {
             throw new HttpNotFoundException($request, $e->getMessage());
         }
