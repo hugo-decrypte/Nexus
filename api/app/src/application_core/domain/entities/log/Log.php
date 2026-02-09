@@ -8,7 +8,7 @@ class Log
 {
     private string $id;
     private string $created_at;
-    private ?int $acteur_id;
+    private string $acteur_id;
     private string $action_type;
     private ?array $details;
 
@@ -16,7 +16,7 @@ class Log
         string $id,
         string $action_type,
         string $created_at,
-        ?int $acteur_id = null,
+        string $acteur_id,
         ?array $details = null
     ) {
         $this->id = $id;
@@ -24,11 +24,6 @@ class Log
         $this->created_at = $created_at;
         $this->acteur_id = $acteur_id;
         $this->details = $details;
-    }
-
-    public static function create(string $id, string $action_type, ?int $acteur_id = null, ?array $details = null): self
-    {
-        return new self($id, $action_type, date('Y-m-d H:i:s'), $acteur_id, $details);
     }
 
     /**

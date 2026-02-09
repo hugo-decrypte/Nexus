@@ -9,7 +9,7 @@ class LogDTO
     public function __construct(
         public string $id,
         public string $created_at,
-        public ?int $acteur_id,
+        public string $acteur_id,
         public string $action_type,
         public ?array $details
     ) {}
