@@ -72,3 +72,21 @@ export async function updatePassword(userId, { mot_de_passe_actuel, nouveau_mot_
     return { success: false, error: 'Erreur de connexion au serveur' }
   }
 }
+
+/**
+ * Récupère le solde de l'utilisateur
+ * @param {string} userId
+ * @returns {Promise<{solde: number}|null>}
+ */
+export async function getSolde(userId) {
+  try {
+    const response = await fetch(`/api/users/${userId}/solde`, {
+      headers: authHeaders(),
+    })
+    if (!response.ok) return null
+    return await response.json()
+  } catch (err) {
+    console.error('Erreur chargement solde:', err)
+    return null
+  }
+}

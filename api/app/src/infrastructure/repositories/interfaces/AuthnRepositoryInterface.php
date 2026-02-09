@@ -11,4 +11,6 @@ interface AuthnRepositoryInterface {
     public function getUsers(): array;
     public function deleteUser(string $id): void;
     public function saveUser(CredentialsDTO $cred, ?string $role = "client"): void;
+    public function updateUser(string $id, string $nom, string $prenom, string $email): void;
+    public function updatePassword(string $id, string $hashedPassword): void;
 }

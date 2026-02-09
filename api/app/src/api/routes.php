@@ -13,6 +13,8 @@ use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
+use api\actions\UpdateUserAction;
+use api\actions\UpdatePasswordAction;
 use api\middlewares\AuthnSigninValidationMiddleware;
 use api\middlewares\authz\AuthzAdminMiddleware;
 use api\middlewares\authz\AuthzClientMiddleware;
@@ -49,6 +51,14 @@ return function( App $app): App {
         ->add(JwtAuthMiddleware::class);
 
     $app->get('/users/{id_user}/solde', UserSoldeAction::class)
+        ->add(new AuthzUserRessourceAccessMiddleware())
+        ->add(JwtAuthMiddleware::class);
+
+    $app->put('/users/{id_user}', UpdateUserAction::class)
+        ->add(new AuthzUserRessourceAccessMiddleware())
+        ->add(JwtAuthMiddleware::class);
+
+    $app->put('/users/{id_user}/password', UpdatePasswordAction::class)
         ->add(new AuthzUserRessourceAccessMiddleware())
         ->add(JwtAuthMiddleware::class);
 
