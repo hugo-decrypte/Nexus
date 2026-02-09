@@ -1,0 +1,502 @@
+.rechargement-view {
+  width: 95%;
+  max-width: none;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 24px;
+  overflow-x: hidden;
+}
+
+.recharge-card {
+  background: linear-gradient(135deg, #e85d5a 0%, #d64d4a 100%);
+  border-radius: 12px;
+  padding: 75px 28px;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.recharge-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -5%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.recharge-card-left {
+  flex: 1;
+}
+
+.recharge-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.recharge-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.recharge-card-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-po-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.balance-display {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 32px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.balance-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.balance-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.balance-amount {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.balance-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e85d5a;
+}
+
+.balance-po-badge {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.preset-amounts-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow-x: hidden;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 24px 0;
+}
+
+.preset-amounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.preset-amount-card {
+  background: #f8f8f8;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.preset-amount-card:hover {
+  background: #fff;
+  border-color: #e85d5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232, 93, 90, 0.2);
+}
+
+.preset-amount-card.active {
+  background: linear-gradient(135deg, #e85d5a 0%, #d64d4a 100%);
+  border-color: #d64d4a;
+  color: #fff;
+}
+
+.preset-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.preset-po-badge {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.preset-amount-card.active .preset-po-badge {
+  filter: brightness(0) invert(1);
+}
+
+.custom-amount-wrapper {
+  padding-top: 24px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.custom-amount-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.custom-amount-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8f8f8;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 4px 16px;
+  transition: all 0.2s;
+}
+
+.custom-amount-input-wrapper:focus-within {
+  border-color: #e85d5a;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(232, 93, 90, 0.1);
+}
+
+.custom-amount-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  outline: none;
+  padding: 12px 0;
+}
+
+.custom-amount-input::placeholder {
+  color: #bbb;
+  font-weight: 400;
+}
+
+.custom-amount-input::-webkit-inner-spin-button,
+.custom-amount-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.custom-amount-input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.custom-po-badge {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.payment-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow-x: hidden;
+}
+
+.order-summary {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.summary-row:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-label {
+  font-size: 0.95rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.summary-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.summary-po-badge {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.total-row {
+  padding-top: 16px;
+}
+
+.summary-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #e85d5a;
+}
+
+.payment-methods {
+  margin-bottom: 24px;
+}
+
+.payment-methods-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.payment-method-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #f8f8f8;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+}
+
+.payment-icon {
+  font-size: 2rem;
+  color: #666;
+}
+
+.payment-method-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-pay {
+  width: 100%;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, #e85d5a 0%, #d64d4a 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(232, 93, 90, 0.3);
+}
+
+.btn-pay:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(232, 93, 90, 0.4);
+}
+
+.btn-pay:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-pay:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.payment-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 16px 0 0 0;
+}
+
+.info-icon {
+  font-size: 1rem;
+  color: #4ade80;
+}
+
+@media screen and (max-width: 768px) {
+  .rechargement-view {
+    width: 100%;
+    padding: 0;
+    gap: 16px;
+    overflow-x: hidden;
+  }
+
+  .recharge-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 20px;
+    gap: 16px;
+  }
+
+  .recharge-card::before {
+    right: -20%;
+    width: 150px;
+    height: 150px;
+  }
+
+  .recharge-title {
+    font-size: 1.4rem;
+  }
+
+  .recharge-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .recharge-card-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .header-po-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .balance-display {
+    padding: 20px 16px;
+  }
+
+  .balance-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .balance-value {
+    font-size: 1.5rem;
+  }
+
+  .balance-po-badge {
+    width: 40px;
+    height: 40px;
+  }
+
+  .preset-amounts-section,
+  .payment-section {
+    padding: 24px 16px;
+  }
+
+  .preset-amounts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .preset-amount-card {
+    padding: 16px 12px;
+  }
+
+  .preset-value {
+    font-size: 1.25rem;
+  }
+
+  .preset-po-badge {
+    width: 30px;
+    height: 30px;
+  }
+
+  .custom-amount-input {
+    font-size: 1rem;
+  }
+
+  .custom-po-badge {
+    width: 32px;
+    height: 32px;
+  }
+
+  .summary-value {
+    font-size: 1rem;
+  }
+
+  .summary-po-badge {
+    width: 24px;
+    height: 24px;
+  }
+
+  .summary-total {
+    font-size: 1.25rem;
+  }
+
+  .btn-pay {
+    font-size: 1rem;
+    padding: 14px 24px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .recharge-card {
+    padding: 50px 24px;
+  }
+
+  .recharge-title {
+    font-size: 1.5rem;
+  }
+
+  .preset-amounts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
