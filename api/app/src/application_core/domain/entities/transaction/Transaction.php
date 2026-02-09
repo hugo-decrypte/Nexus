@@ -12,6 +12,7 @@ class Transaction
     private ?string $recepteur_id;
     private float $montant;
     private string $hash;
+    private ?string $description;
 
     public function __construct(
         string $id,
@@ -19,7 +20,8 @@ class Transaction
         string $hash,
         string $created_at,
         ?string $emetteur_id = null,
-        ?string $recepteur_id = null
+        ?string $recepteur_id = null,
+        ?string $description = null
     ) {
         $this->id = $id;
         $this->montant = $montant;
@@ -27,6 +29,7 @@ class Transaction
         $this->created_at = $created_at;
         $this->emetteur_id = $emetteur_id;
         $this->recepteur_id = $recepteur_id;
+        $this->description = $description;
     }
 
     /**

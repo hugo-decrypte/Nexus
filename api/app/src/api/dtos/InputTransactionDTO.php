@@ -5,10 +5,12 @@ class InputTransactionDTO{
     private string $id_emetteur;
     private string $id_recepteur;
     private string $montant;
+    private ?string $description;
     public function __construct(array $data){
         $this->id_emetteur = $data['id_emetteur'];
         $this->id_recepteur = $data['id_recepteur'];
         $this->montant = $data['montant'];
+        $this->description = $data['description'] ?? null;
     }
 
     public function __get(string $name){

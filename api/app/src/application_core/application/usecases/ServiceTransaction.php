@@ -67,7 +67,7 @@ class ServiceTransaction implements ServiceTransactionInterface {
     public function creerTransaction(InputTransactionDTO $transaction_dto): TransactionDTO
     {
         try {
-            $trans = $this->transaction_repository->creerTransaction($transaction_dto->id_emetteur, $transaction_dto->id_recepteur, $transaction_dto->montant);
+            $trans = $this->transaction_repository->creerTransaction($transaction_dto->id_emetteur, $transaction_dto->id_recepteur, $transaction_dto->montant, $transaction_dto->description);
             $this->serviceLog->creationLogTransaction($transaction_dto->id_emetteur, $trans->id, $transaction_dto->montant);
             $this->serviceLog->creationLogReceptionTransaction($transaction_dto->id_recepteur, $trans->id);
         } catch (EntityNotFoundException $e) {
@@ -85,7 +85,8 @@ class ServiceTransaction implements ServiceTransactionInterface {
             montant: $trans->montant,
             hash: $trans->hash,
             emetteur_id: $trans->emetteur_id,
-            recepteur_id: $trans->recepteur_id
+            recepteur_id: $trans->recepteur_id,
+            description: $trans->description
         );
     }
 }

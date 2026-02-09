@@ -22,6 +22,7 @@ CREATE TABLE transactions (
       recepteur_id UUID NULL,
       montant DECIMAL(10,2) NOT NULL,
       hash CHAR(64) NOT NULL UNIQUE,
+      description VARCHAR(255) NULL,
       FOREIGN KEY (emetteur_id) REFERENCES utilisateurs(id) ON DELETE SET NULL,
       FOREIGN KEY (recepteur_id) REFERENCES utilisateurs(id) ON DELETE SET NULL
 );

@@ -28,6 +28,7 @@ class CreateTransactionMiddleware {
             v::key('id_emetteur', v::stringType()->notEmpty())
                 ->key('id_recepteur', v::stringType()->notEmpty())
                 ->key('montant', v::floatType()->notEmpty())
+                ->key('description', v::optional(v::stringType()))
                 ->assert($data);
 
         } catch (NestedValidationException $e) {
