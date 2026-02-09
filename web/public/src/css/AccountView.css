@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: 24px;
   padding-bottom: 24px;
+  overflow-x: hidden;
 }
 
 /* ========== MODE VISUALISATION ========== */
@@ -14,6 +15,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow-x: hidden;
 }
 
 .profile-header {
@@ -68,7 +70,7 @@
   content: '';
   position: absolute;
   top: -50%;
-  right: -10%;
+  right: -5%;
   width: 200px;
   height: 200px;
   background: rgba(255, 255, 255, 0.08);
@@ -122,6 +124,7 @@
   border-radius: 12px;
   padding: 20px 24px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow-x: hidden;
 }
 
 .cards-section-title {
@@ -154,6 +157,7 @@
   border-radius: 12px;
   padding: 32px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  overflow-x: hidden;
 }
 
 .edit-field {
@@ -288,6 +292,7 @@
     width: 100%;
     padding: 0;
     gap: 16px;
+    overflow-x: hidden;
   }
 
   /* En-tête responsive */
@@ -312,6 +317,13 @@
     align-items: flex-start;
     padding: 24px 20px;
     min-height: 200px;
+    overflow: hidden;
+  }
+
+  .profile-card-pink::before {
+    right: -20%;
+    width: 150px;
+    height: 150px;
   }
 
   .profile-card-left {
