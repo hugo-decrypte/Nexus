@@ -40,7 +40,7 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
     {
         try {
             $stmt = $this->transaction_pdo->prepare(
-                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions WHERE emetteur_id = :id OR recepteur_id = :id2 ORDER BY date_creation DESC"
+                "SELECT id, emetteur_id, recepteur_id, montant, hash, date_creation FROM transactions WHERE emetteur_id = :id OR recepteur_id = :id2 ORDER BY date_creation DESC"
             );
 
             $stmt->execute(['id' => $id_user, 'id2' => $id_user]);
@@ -55,7 +55,8 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
                     montant: (float) $row['montant'],
                     hash: $row['hash'],
                     emetteur_id: $row['emetteur_id'],
-                    recepteur_id: $row['recepteur_id']
+                    recepteur_id: $row['recepteur_id'],
+                    created_at: $row['date_creation']
                 );
             }, $array);
 
@@ -72,7 +73,7 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
     {
         try {
             $stmt = $this->transaction_pdo->query(
-                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions ORDER BY date_creation DESC"
+                "SELECT id, emetteur_id, recepteur_id, montant, hash, date_creation FROM transactions ORDER BY date_creation DESC"
             );
             $transactions = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -81,7 +82,8 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
                     montant: (float)$row['montant'],
                     hash: $row['hash'],
                     emetteur_id: $row['emetteur_id'],
-                    recepteur_id: $row['recepteur_id']
+                    recepteur_id: $row['recepteur_id'],
+                    created_at: $row['date_creation']
                 );
             }
         } catch(HttpInternalServerErrorException) {
@@ -96,7 +98,7 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
     {
         try {
             $stmt = $this->transaction_pdo->prepare(
-                "SELECT id, emetteur_id, recepteur_id, montant, hash FROM transactions
+                "SELECT id, emetteur_id, recepteur_id, montant, hash, date_creation FROM transactions
              WHERE (emetteur_id = :e1 AND recepteur_id = :r1) OR (emetteur_id = :e2 AND recepteur_id = :r2)
              ORDER BY date_creation DESC"
             );
@@ -111,7 +113,8 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
                     montant: (float)$row['montant'],
                     hash: $row['hash'],
                     emetteur_id: $row['emetteur_id'],
-                    recepteur_id: $row['recepteur_id']
+                    recepteur_id: $row['recepteur_id'],
+                    created_at: $row['date_creation']
                 );
             }
         } catch(HttpInternalServerErrorException) {
@@ -179,7 +182,8 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             montant: $montant,
             hash: $newHash,
             emetteur_id: $emetteur_id,
-            recepteur_id: $recepteur_id
+            recepteur_id: $recepteur_id,
+            created_at: date('Y-m-d H:i:s')
         );
     }
 }

@@ -39,7 +39,7 @@ class PDOLogRepository implements LogRepositoryInterface{
                 return new Log(
                     id: $row['id'],
                     action_type: $row['action_type'],
-                    acteur_id: (int) $row['acteur_id'],
+                    acteur_id: $row['acteur_id'],
                     details: is_string($row['details']) ? json_decode($row['details'], true) : $row['details'],
                     created_at: $row['date_creation']
                 );
@@ -73,7 +73,7 @@ class PDOLogRepository implements LogRepositoryInterface{
         }
         return new Log(
             id: $array['id'],
-            acteur_id: (float) $array['acteur_id'],
+            acteur_id: $array['acteur_id'],
             action_type: $array['action_type'],
             details: is_string($array['details']) ? json_decode($array['details'], true) : $array['details'],
             created_at: $array['date_creation']
@@ -98,7 +98,7 @@ class PDOLogRepository implements LogRepositoryInterface{
                 return new Log(
                     id: $row['id'],
                     action_type: $row['action_type'],
-                    acteur_id: (int) $row['acteur_id'],
+                    acteur_id: $row['acteur_id'],
                     details: is_string($row['details']) ? json_decode($row['details'], true) : $row['details'],
                     created_at: $row['date_creation']
                 );

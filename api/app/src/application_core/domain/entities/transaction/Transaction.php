@@ -17,13 +17,14 @@ class Transaction
         string $id,
         float $montant,
         string $hash,
+        string $created_at,
         ?string $emetteur_id = null,
         ?string $recepteur_id = null
     ) {
         $this->id = $id;
         $this->montant = $montant;
         $this->hash = $hash;
-        $this->created_at = date('Y-m-d H:i:s');
+        $this->created_at = $created_at;
         $this->emetteur_id = $emetteur_id;
         $this->recepteur_id = $recepteur_id;
     }
