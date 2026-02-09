@@ -70,6 +70,20 @@ class ServiceLog implements ServiceLogInterface {
             throw new \Exception($e->getMessage(), $e->getCode());
         }
     }
+    public function creationLogInscription (string $acteur_id): void{
+        try {
+            $this->log_repository->creationLogConnection($acteur_id);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+    }
+    public function creationLogModifPassword (string $acteur_id): void{
+        try {
+            $this->log_repository->creationLogModifPassword($acteur_id);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+    }
     private function toDTO($log): LogDTO
     {
         return new LogDTO(

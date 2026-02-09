@@ -172,4 +172,44 @@ class PDOLogRepository implements LogRepositoryInterface{
             throw new \Exception("Erreur lors de l'enregistrement du log de la connexion d'un utilisateur : " . $e->getMessage(), 400);
         }
     }
+    public function creationLogInscription(string $acteur_id): void{
+        try {
+            $id = Uuid::uuid4()->toString();
+            $details = json_encode(array('acteur_id' => $acteur_id));
+
+            $stmt = $this->log_pdo->prepare(
+                "INSERT INTO logs (id, acteur_id, action_type, details) VALUES (:id, :acteur_id, :action_type, :details)"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'acteur_id' => $acteur_id,
+                'action_type' => "INSCRIPTION",
+                'details' => $details,
+            ]);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de l'enregistrement du log de l'inscription d'un utilisateur : " . $e->getMessage(), 400);
+        }
+    }
+    public function creationLogModifPassword (string $acteur_id): void{
+        try {
+            $id = Uuid::uuid4()->toString();
+            $details = json_encode(array('acteur_id' => $acteur_id));
+
+            $stmt = $this->log_pdo->prepare(
+                "INSERT INTO logs (id, acteur_id, action_type, details) VALUES (:id, :acteur_id, :action_type, :details)"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'acteur_id' => $acteur_id,
+                'action_type' => "MODIF_MDP",
+                'details' => $details,
+            ]);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de l'enregistrement du log de modification d'un mot de passe d'un utilisateur : " . $e->getMessage(), 400);
+        }
+    }
 }

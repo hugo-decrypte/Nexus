@@ -18,6 +18,7 @@ interface ServiceAuthnInterface {
 
     public function signup(InputUserDTO $user_dto, ?string $role = 'client'): array;
     public function getUserById(string $user_id): UserDTO;
+    public function getUserByEmail(string $email): UserDTO;
     public function getUsers(): array;
     public function deleteUser($id_user): void;
 }

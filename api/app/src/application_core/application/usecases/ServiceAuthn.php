@@ -82,7 +82,15 @@ class ServiceAuthn implements ServiceAuthnInterface {
             throw new \Exception("Probleme lors de la récupération de l'utilisateur.", $e->getCode());
         }
     }
-
+    public function getUserByEmail(string $email): UserDTO{
+        try {
+            return $this->toDTO($this->authnRepository->getUserByEmail($email));
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." non trouvé", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception("Probleme lors de la récupération de l'utilisateur.", $e->getCode());
+        }
+    }
     public function getUsers(): array{
         try {
             $users = $this->authnRepository->getUsers();
@@ -147,6 +155,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
 
             // Mettre à jour le mot de passe
             $this->authnRepository->updatePassword($id_user, $hashedPassword);
+            $this->serviceLog->creationLogModifPassword($id_user);
 
             return [
                 'status' => 200,

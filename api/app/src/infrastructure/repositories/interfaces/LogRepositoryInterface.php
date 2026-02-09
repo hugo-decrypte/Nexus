@@ -11,4 +11,6 @@ interface LogRepositoryInterface{
     public function creationLogTransaction (string $acteur_id,string $id_transaction, int $montant): void;
     public function creationLogReceptionTransaction (string $acteur_id,string $id_transaction): void;
     public function creationLogConnection (string $acteur_id): void;
+    public function creationLogInscription(string $acteur_id): void;
+    public function creationLogModifPassword (string $acteur_id): void;
 }
