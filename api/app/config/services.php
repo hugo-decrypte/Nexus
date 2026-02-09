@@ -32,11 +32,14 @@ return [
     LogRepositoryInterface::class => function (ContainerInterface $c){
         return new PDOLogRepository($c->get("nexus.pdo"));
     },
+    ServiceLogInterface::class => function (ContainerInterface $c) {
+        return new ServiceLog($c->get(LogRepositoryInterface::class));
+    },
     AuthnProviderInterface::class => function (ContainerInterface $c) {
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
     },
     ServiceTransactionInterface::class => function (ContainerInterface $c) {
-        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class));
+        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(ServiceLogInterface::class));
     },
     AuthzUserService::class => function (ContainerInterface $c) {
         return new AuthzUserService();
@@ -53,9 +56,7 @@ return [
     ServiceAuthnInterface::class => function (ContainerInterface $c) {
         return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
     },
-    ServiceLogInterface::class => function (ContainerInterface $c) {
-        return new ServiceLog($c->get(LogRepositoryInterface::class));
-    },
+
 
 
 ];
