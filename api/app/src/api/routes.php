@@ -75,7 +75,9 @@ return function( App $app): App {
     $app->get("/transactions", TransactionsAction::class)
         ->add(AuthzAdminMiddleware::class)
         ->add(JwtAuthMiddleware::class);
-    $app->get("/logs", LogsListAction::class);
+    $app->get("/logs", LogsListAction::class)
+        ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);;
 
 //    FONCTIONNALITES ETENDUES
 //    $app->get("/card/{id_card}", CarteByIdAction::class);
