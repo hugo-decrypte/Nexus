@@ -7,6 +7,7 @@ use api\dtos\InputUserDTO;
 use api\dtos\UserDTO;
 use application_core\application\usecases\interfaces\AuthnProviderInterface;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
+use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\exceptions\EntityNotFoundException;
 use Firebase\JWT\JWT;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
@@ -15,11 +16,13 @@ class ServiceAuthn implements ServiceAuthnInterface {
 
     private AuthnProviderInterface $userProvider;
     private AuthnRepositoryInterface $authnRepository;
+    private ServiceLogInterface $serviceLog;
     private string $secretKey;
 
-    public function __construct(AuthnProviderInterface $provider, AuthnRepositoryInterface $authnRepository, $jwtSecret) {
+    public function __construct(AuthnProviderInterface $provider, AuthnRepositoryInterface $authnRepository, ServiceLogInterface $serviceLog, $jwtSecret) {
         $this->userProvider = $provider;
         $this->authnRepository = $authnRepository;
+        $this->serviceLog = $serviceLog;
         $this->secretKey = $jwtSecret;
     }
 
@@ -28,6 +31,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         // 1. On valide l'user
         try {
             $user = $this->userProvider->signin($user_dto);
+            $this->serviceLog->creationLogConnection($user->id);
         } catch(\Exception $e){
             throw new \Exception($e->getMessage(), $e->getCode());
         }
