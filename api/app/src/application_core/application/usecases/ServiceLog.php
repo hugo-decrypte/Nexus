@@ -48,6 +48,21 @@ class ServiceLog implements ServiceLogInterface {
 
         return array_map(fn ($log) => $this->toDTO($log), $logs);
     }
+
+    public function creationLogTransaction(string $acteur_id,string $id_transaction, int $montant){
+        try {
+            $this->log_repository->creationLogTransaction($acteur_id, $id_transaction, $montant);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+    }
+    public function creationLogReceptionTransaction (string $acteur_id,string $id_transaction){
+        try {
+            $this->log_repository->creationLogReceptionTransaction($acteur_id, $id_transaction);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+    }
     private function toDTO($log): LogDTO
     {
         return new LogDTO(

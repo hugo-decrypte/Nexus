@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS utilisateurs;
 
 CREATE TYPE user_role AS ENUM ('client', 'commercant', 'admin');
+CREATE TYPE action_type as ENUM ('CREATION_TRANSACTION', 'RECEPTION_PAIEMENT', 'CONNEXION', 'INSCRIPTION', 'MODIF_MDP');
 
 CREATE TABLE utilisateurs (
       id UUID PRIMARY KEY,
@@ -28,7 +29,7 @@ CREATE TABLE transactions (
 CREATE TABLE logs (
       id UUID PRIMARY KEY,
       acteur_id UUID,
-      action_type VARCHAR(100) NOT NULL,
+      action_type action_type,
       details JSON,
       date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (acteur_id) REFERENCES utilisateurs(id)

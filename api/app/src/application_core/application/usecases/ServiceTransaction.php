@@ -5,15 +5,18 @@ namespace application_core\application\usecases;
 use api\dtos\InputTransactionDTO;
 use api\dtos\TransactionDTO;
 use api\middlewares\CreateTransactionMiddleware;
+use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use application_core\exceptions\EntityNotFoundException;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
 
 class ServiceTransaction implements ServiceTransactionInterface {
     private TransactionRepositoryInterface $transaction_repository;
+    private ServiceLogInterface $serviceLog;
 
-    public function __construct(TransactionRepositoryInterface $transaction_repository) {
+    public function __construct(TransactionRepositoryInterface $transaction_repository, ServiceLogInterface $serviceLog) {
         $this->transaction_repository = $transaction_repository;
+        $this->serviceLog = $serviceLog;
     }
 
     public function calculSolde(string $id_user): float
@@ -65,10 +68,12 @@ class ServiceTransaction implements ServiceTransactionInterface {
     {
         try {
             $trans = $this->transaction_repository->creerTransaction($transaction_dto->id_emetteur, $transaction_dto->id_recepteur, $transaction_dto->montant);
+            $this->serviceLog->creationLogTransaction($transaction_dto->id_emetteur, $trans->id, $transaction_dto->montant);
+            $this->serviceLog->creationLogReceptionTransaction($transaction_dto->id_recepteur, $trans->id);
         } catch (EntityNotFoundException $e) {
             throw new EntityNotFoundException($e->getEntity()." non trouvé", $e->getEntity());
         } catch (\Exception $e) {
-            throw new \Exception("probleme lors de la création de transaction.", $e->getCode());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
         return $this->toDTO($trans);
     }

@@ -44,8 +44,20 @@ VALUES
   '{"transaction_id":"b24daee3-8bba-4ed7-ac18-55d07e1faee3"}'
 ),
 (
+  'd139157a-0870-425b-bfce-672feaff15bc',
+  '4aa909fa-2f38-4800-a4a7-f2d1f53f977e',
+  'CREATION_TRANSACTION',
+  '{"transaction_id":"b24daee3-8bba-4ed7-ac18-55d07e1faee3","montant":120.00}'
+),
+(
+  '820b6ed9-aa03-4935-8348-f2cf93f819b5',
+  '1981ce62-42cb-4500-bafe-b95d916f935d',
+  'RECEPTION_PAIEMENT',
+  '{"transaction_id":"b24daee3-8bba-4ed7-ac18-55d07e1faee3"}'
+),
+(
   '8e2fa852-3c42-4043-ac65-56bc4e5e956d',
   '4aa909fa-2f38-4800-a4a7-f2d1f53f977e',
-  'CONNEXION_ADMIN',
-  '{"ip":"127.0.0.1"}'
+  'CONNEXION',
+  '{"acteur_id":"4aa909fa-2f38-4800-a4a7-f2d1f53f977e"}'
 );

@@ -6,6 +6,7 @@ use application_core\domain\entities\log\Log;
 use application_core\exceptions\EntityNotFoundException;
 use infrastructure\repositories\interfaces\LogRepositoryInterface;
 use PDO;
+use Ramsey\Uuid\Uuid;
 use Slim\Exception\HttpInternalServerErrorException;
 
 class PDOLogRepository implements LogRepositoryInterface{
@@ -109,6 +110,46 @@ class PDOLogRepository implements LogRepositoryInterface{
             throw new \Exception("Erreur SQL : " . $e->getMessage(), 500);
         } catch (\Throwable $t) {
             throw new \Exception("Erreur lors de la récupération des logs.", 400);
+        }
+    }
+    public function creationLogTransaction (string $acteur_id,string $id_transaction, int $montant){
+        try {
+            $id = Uuid::uuid4()->toString();
+            $details = json_encode(array('transaction_id' => $id_transaction, 'montant' => $montant));
+
+            $stmt = $this->log_pdo->prepare(
+                "INSERT INTO logs (id, acteur_id, action_type, details) VALUES (:id, :acteur_id, :action_type, :details)"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'acteur_id' => $acteur_id,
+                'action_type' => "CREATION_TRANSACTION",
+                'details' => $details,
+            ]);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de l'enregistrement du log de la transaction : " . $e->getMessage(), 400);
+        }
+    }
+    public function creationLogReceptionTransaction (string $acteur_id,string $id_transaction){
+        try {
+            $id = Uuid::uuid4()->toString();
+            $details = json_encode(array('transaction_id' => $id_transaction));
+
+            $stmt = $this->log_pdo->prepare(
+                "INSERT INTO logs (id, acteur_id, action_type, details) VALUES (:id, :acteur_id, :action_type, :details)"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'acteur_id' => $acteur_id,
+                'action_type' => "RECEPTION_PAIEMENT",
+                'details' => $details,
+            ]);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de l'enregistrement du log de la reception de la transaction : " . $e->getMessage(), 400);
         }
     }
 }
