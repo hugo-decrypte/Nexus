@@ -6,9 +6,6 @@
         <h1 class="recharge-title">Acheter des PO</h1>
         <p class="recharge-subtitle">Rechargez votre compte en PO</p>
       </div>
-      <div class="recharge-card-right">
-        <img src="/img/PO.png" alt="PO" class="header-po-icon" />
-      </div>
     </section>
 
     <!-- Solde actuel -->
