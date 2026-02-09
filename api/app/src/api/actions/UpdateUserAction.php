@@ -37,6 +37,11 @@ class UpdateUserAction
             throw new HttpBadRequestException($request, 'Les champs nom, prenom et email sont requis.');
         }
 
+        $email = filter_var(trim($email), FILTER_SANITIZE_EMAIL);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new \Exception("Email invalide");
+        }
+
         // Appeler le service pour mettre à jour l'utilisateur
         $result = $this->authnService->updateUser($id_user, $nom, $prenom, $email);
 
