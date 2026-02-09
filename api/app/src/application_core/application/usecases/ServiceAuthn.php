@@ -101,6 +101,69 @@ class ServiceAuthn implements ServiceAuthnInterface {
         }
     }
 
+    public function updateUser(string $id_user, string $nom, string $prenom, string $email): array {
+        try {
+            $this->authnRepository->updateUser($id_user, $nom, $prenom, $email);
+            return [
+                'status' => 200,
+                'success' => true,
+                "message" => "Utilisateur mis à jour avec succès."
+            ];
+        } catch (EntityNotFoundException $e) {
+            return [
+                'status' => 404,
+                'success' => false,
+                "message" => $e->getMessage()
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => $e->getCode() ?: 500,
+                'success' => false,
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    public function updatePassword(string $id_user, string $currentPassword, string $newPassword): array {
+        try {
+            // Récupérer l'utilisateur pour vérifier le mot de passe actuel
+            $user = $this->authnRepository->getUserById($id_user);
+
+            // Vérifier que le mot de passe actuel est correct
+            if (!password_verify($currentPassword, $user->mot_de_passe)) {
+                return [
+                    'status' => 401,
+                    'success' => false,
+                    "message" => "Le mot de passe actuel est incorrect."
+                ];
+            }
+
+            // Hasher le nouveau mot de passe
+            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+
+            // Mettre à jour le mot de passe
+            $this->authnRepository->updatePassword($id_user, $hashedPassword);
+
+            return [
+                'status' => 200,
+                'success' => true,
+                "message" => "Mot de passe mis à jour avec succès."
+            ];
+        } catch (EntityNotFoundException $e) {
+            return [
+                'status' => 404,
+                'success' => false,
+                "message" => $e->getMessage()
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => $e->getCode() ?: 500,
+                'success' => false,
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
     private function toDTO($user): UserDTO
     {
         return new UserDTO([

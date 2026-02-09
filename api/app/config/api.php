@@ -12,6 +12,8 @@ use api\actions\UserByIdAction;
 use api\actions\UserSoldeAction;
 use api\actions\DeleteUserAction;
 use api\actions\UsersListAction;
+use api\actions\UpdateUserAction;
+use api\actions\UpdatePasswordAction;
 use api\middlewares\authz\AuthzUserRessourceAccessMiddleware;
 use api\middlewares\JwtAuthMiddleware;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
@@ -54,6 +56,12 @@ return [
     },
     DeleteUserAction::class => function (ContainerInterface $c) {
         return new DeleteUserAction($c->get(ServiceAuthnInterface::class));
+    },
+    UpdateUserAction::class => function (ContainerInterface $c) {
+        return new UpdateUserAction($c->get(ServiceAuthnInterface::class));
+    },
+    UpdatePasswordAction::class => function (ContainerInterface $c) {
+        return new UpdatePasswordAction($c->get(ServiceAuthnInterface::class));
     },
     LogsListAction::class =>function(ContainerInterface $c) {
         return new LogsListAction($c->get(ServiceLogInterface::class));

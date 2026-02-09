@@ -143,4 +143,52 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             throw new \Exception("Erreur lors de l'enregistrement de l'utilisateur : " . $e->getMessage(), 400);
         }
     }
+
+    public function updateUser(string $id, string $nom, string $prenom, string $email): void
+    {
+        try {
+            $stmt = $this->authn_pdo->prepare(
+                "UPDATE utilisateurs SET nom = :nom, prenom = :prenom, email = :email WHERE id = :id"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'nom' => $nom,
+                'prenom' => $prenom,
+                'email' => $email
+            ]);
+
+            if ($stmt->rowCount() === 0) {
+                throw new EntityNotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.", 'utilisateur');
+            }
+        } catch(EntityNotFoundException $e) {
+            throw $e;
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage(), 400);
+        }
+    }
+
+    public function updatePassword(string $id, string $hashedPassword): void
+    {
+        try {
+            $stmt = $this->authn_pdo->prepare(
+                "UPDATE utilisateurs SET mot_de_passe = :mdp WHERE id = :id"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'mdp' => $hashedPassword
+            ]);
+
+            if ($stmt->rowCount() === 0) {
+                throw new EntityNotFoundException("L'utilisateur ayant pour id " . $id . " n'existe pas.", 'utilisateur');
+            }
+        } catch(EntityNotFoundException $e) {
+            throw $e;
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de la mise à jour du mot de passe : " . $e->getMessage(), 400);
+        }
+    }
 }
