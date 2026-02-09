@@ -123,6 +123,9 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
     public function saveUser(CredentialsDTO $cred, ?string $role = 'client'): void
     {
         try {
+            if(!$this->getUserByEmail($cred->email)){
+                throw new \Exception("Utilisateur avec cette email déjà existant",400);
+            }
             $id = Uuid::uuid4()->toString();
             // Le mot de passe est hashé dans le DTO
             $stmt = $this->authn_pdo->prepare(

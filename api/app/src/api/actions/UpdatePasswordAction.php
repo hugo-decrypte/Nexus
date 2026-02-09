@@ -36,8 +36,8 @@ class UpdatePasswordAction
             throw new HttpBadRequestException($request, 'Les champs mot_de_passe_actuel et nouveau_mot_de_passe sont requis.');
         }
 
-        if (strlen($newPassword) < 6) {
-            throw new HttpBadRequestException($request, 'Le nouveau mot de passe doit faire au moins 6 caractères.');
+        if (strlen($newPassword) < 8) {
+            throw new HttpBadRequestException($request, 'Le nouveau mot de passe doit faire au moins 8 caractères.');
         }
 
         // Appeler le service pour mettre à jour le mot de passe
