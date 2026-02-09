@@ -112,7 +112,7 @@ class PDOLogRepository implements LogRepositoryInterface{
             throw new \Exception("Erreur lors de la récupération des logs.", 400);
         }
     }
-    public function creationLogTransaction (string $acteur_id,string $id_transaction, int $montant){
+    public function creationLogTransaction (string $acteur_id,string $id_transaction, int $montant): void{
         try {
             $id = Uuid::uuid4()->toString();
             $details = json_encode(array('transaction_id' => $id_transaction, 'montant' => $montant));
@@ -132,7 +132,7 @@ class PDOLogRepository implements LogRepositoryInterface{
             throw new \Exception("Erreur lors de l'enregistrement du log de la transaction : " . $e->getMessage(), 400);
         }
     }
-    public function creationLogReceptionTransaction (string $acteur_id,string $id_transaction){
+    public function creationLogReceptionTransaction (string $acteur_id,string $id_transaction): void{
         try {
             $id = Uuid::uuid4()->toString();
             $details = json_encode(array('transaction_id' => $id_transaction));
@@ -150,6 +150,26 @@ class PDOLogRepository implements LogRepositoryInterface{
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de l'enregistrement du log de la reception de la transaction : " . $e->getMessage(), 400);
+        }
+    }
+    public function creationLogConnection (string $acteur_id): void{
+        try {
+            $id = Uuid::uuid4()->toString();
+            $details = json_encode(array('acteur_id' => $acteur_id));
+
+            $stmt = $this->log_pdo->prepare(
+                "INSERT INTO logs (id, acteur_id, action_type, details) VALUES (:id, :acteur_id, :action_type, :details)"
+            );
+            $stmt->execute([
+                'id' => $id,
+                'acteur_id' => $acteur_id,
+                'action_type' => "CONNEXION",
+                'details' => $details,
+            ]);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de l'enregistrement du log de la connexion d'un utilisateur : " . $e->getMessage(), 400);
         }
     }
 }
