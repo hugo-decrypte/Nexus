@@ -1,6 +1,5 @@
 <template>
   <div class="rechargement-view">
-    <!-- Carte rouge en-tête -->
     <section class="recharge-card">
       <div class="recharge-card-left">
         <h1 class="recharge-title">Acheter des PO</h1>
@@ -8,7 +7,6 @@
       </div>
     </section>
 
-    <!-- Solde actuel -->
     <section class="balance-display">
       <div class="balance-info">
         <span class="balance-label">Solde actuel</span>
@@ -19,7 +17,6 @@
       </div>
     </section>
 
-    <!-- Montants prédéfinis -->
     <section class="preset-amounts-section">
       <h2 class="section-title">Choisir un montant</h2>
 
@@ -56,7 +53,6 @@
       </div>
     </section>
 
-    <!-- Résumé et paiement -->
     <section class="payment-section">
       <h2 class="section-title">Résumé de la commande</h2>
 
@@ -102,18 +98,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { getSolde } from '../services/account.js'
+import { getToken, getUser } from '../services/auth.js'
 
-// Montants prédéfinis
-const presetAmounts = [10, 25, 50, 100, 200, 500]
+const presetAmounts = [100, 250, 500, 1000, 2500, 5000]
 
-// État
-const currentBalance = ref(15250) // TODO: récupérer depuis l'API
+const currentBalance = ref(0)
 const selectedAmount = ref(null)
 const customAmount = ref(null)
 const isProcessing = ref(false)
+const userId = ref(null)
 
-// Montant total sélectionné
 const totalAmount = computed(() => {
   if (customAmount.value && customAmount.value > 0) {
     return customAmount.value
@@ -140,24 +136,58 @@ function onCustomAmountInput() {
   }
 }
 
+onMounted(async () => {
+  const user = getUser()
+  if (user && user.id) {
+    userId.value = user.id
+    try {
+      const soldeData = await getSolde(user.id)
+      if (soldeData && soldeData.solde !== undefined) {
+        currentBalance.value = soldeData.solde
+      }
+    } catch (err) {
+      console.error('Erreur chargement solde:', err)
+    }
+  }
+})
+
 async function processPayment() {
-  if (totalAmount.value <= 0) return
+  if (totalAmount.value <= 0 || !userId.value) return
 
   isProcessing.value = true
 
-  // TODO: Intégration avec une API de paiement
-  // Simuler un délai de traitement
-  setTimeout(() => {
+  try {
+    const response = await fetch(`/api/users/${userId.value}/recharge`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({
+        montant: totalAmount.value,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.message || 'Erreur lors du paiement')
+    }
+
     alert(`Paiement de ${formatAmount(totalAmount.value)} € effectué avec succès!\nVous avez reçu ${formatAmount(totalAmount.value)} PO.`)
 
-    // Réinitialiser le formulaire
     selectedAmount.value = null
     customAmount.value = null
-    isProcessing.value = false
 
-    // TODO: Actualiser le solde depuis l'API
-    currentBalance.value += totalAmount.value
-  }, 2000)
+    const soldeData = await getSolde(userId.value)
+    if (soldeData && soldeData.solde !== undefined) {
+      currentBalance.value = soldeData.solde
+    }
+  } catch (error) {
+    console.error('Erreur paiement:', error)
+    alert(`Erreur lors du paiement: ${error.message}`)
+  } finally {
+    isProcessing.value = false
+  }
 }
 </script>
 

@@ -15,6 +15,7 @@ use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
 use api\actions\UpdateUserAction;
 use api\actions\UpdatePasswordAction;
+use api\actions\RechargeAction;
 use api\middlewares\AuthnSigninValidationMiddleware;
 use api\middlewares\authz\AuthzAdminMiddleware;
 use api\middlewares\authz\AuthzClientMiddleware;
@@ -59,6 +60,10 @@ return function( App $app): App {
         ->add(JwtAuthMiddleware::class);
 
     $app->put('/users/{id_user}/password', UpdatePasswordAction::class)
+        ->add(new AuthzUserRessourceAccessMiddleware())
+        ->add(JwtAuthMiddleware::class);
+
+    $app->post('/users/{id_user}/recharge', RechargeAction::class)
         ->add(new AuthzUserRessourceAccessMiddleware())
         ->add(JwtAuthMiddleware::class);
 
