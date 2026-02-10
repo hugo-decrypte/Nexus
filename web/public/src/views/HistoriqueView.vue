@@ -31,50 +31,46 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HistoriqueView',
-  data() {
-    return {
-      transactions: [
-        { id: '1', compte: '**** 1234', date: '28/01/2025', beneficiaire: 'Jean Dupont', description: 'Envoi PO', montant: '+ 500 PO' },
-        { id: '2', compte: '**** 1234', date: '25/01/2025', beneficiaire: 'Marie Martin', description: 'Reçu PO', montant: '- 200 PO' },
-      ],
+<script setup>
+import { ref, onMounted } from 'vue'
+import { getToken, getUser } from '../services/auth.js'
+
+const transactions = ref([
+  { id: '1', compte: '**** 1234', date: '28/01/2025', beneficiaire: 'Jean Dupont', description: 'Envoi PO', montant: '+ 500 PO' },
+  { id: '2', compte: '**** 1234', date: '25/01/2025', beneficiaire: 'Marie Martin', description: 'Reçu PO', montant: '- 200 PO' },
+])
+
+async function loadTransactions() {
+  try {
+    const token = getToken()
+    const user = getUser()
+    const userId = user?.id
+    if (!token || !userId) return
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
+    const res = await fetch(`${baseUrl}/api/transactions/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) return
+    const data = await res.json()
+    const list = Array.isArray(data) ? data : (data?.transactions ? data.transactions : [])
+    if (list.length) {
+      transactions.value = list.map((t) => ({
+        id: t.id,
+        compte: `**** ${String(t.emetteur_id || t.recepteur_id || '').slice(-4)}` || '—',
+        date: t.created_at ? new Date(t.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—',
+        beneficiaire: t.beneficiaire || '—',
+        description: t.description || 'Envoi / Réception PO',
+        montant: t.montant != null ? `${t.montant > 0 ? '+' : ''} ${t.montant} PO` : '—',
+      }))
     }
-  },
-  async mounted() {
-    await this.loadTransactions()
-  },
-  methods: {
-    async loadTransactions() {
-      try {
-        const token = localStorage.getItem('token')
-        const user = JSON.parse(localStorage.getItem('user') || '{}')
-        const userId = user?.id
-        if (!token || !userId) return
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
-        const res = await fetch(`${baseUrl}/api/transactions/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        if (!res.ok) return
-        const data = await res.json()
-        const list = Array.isArray(data) ? data : (data?.transactions ? data.transactions : [])
-        if (list.length) {
-          this.transactions = list.map((t) => ({
-            id: t.id,
-            compte: `**** ${String(t.emetteur_id || t.recepteur_id || '').slice(-4)}` || '—',
-            date: t.created_at ? new Date(t.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—',
-            beneficiaire: t.beneficiaire || '—',
-            description: t.description || 'Envoi / Réception PO',
-            montant: t.montant != null ? `${t.montant > 0 ? '+' : ''} ${t.montant} PO` : '—',
-          }))
-        }
-      } catch {
-        // garde les données de démo
-      }
-    },
-  },
+  } catch {
+    // garde les données de démo
+  }
 }
+
+onMounted(() => {
+  loadTransactions()
+})
 </script>
 
 <style src="../css/HistoriqueView.css" scoped></style>

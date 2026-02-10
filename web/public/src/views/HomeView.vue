@@ -63,46 +63,31 @@
   </div>
 </template>
 
-<script>
-import { RouterLink } from 'vue-router'
+<script setup>
+import { ref, computed } from 'vue'
 
-export default {
-  name: 'HomeView',
-  components: {
-    RouterLink,
+const userFullName = ref('Pluto Calm')
+const accountNumber = ref('9785')
+const balance = ref(15250)
+const recentTransactions = ref([
+  {
+    compte: '**** 1234',
+    date: '28/01/2025',
+    beneficiaire: 'Jean Dupont',
+    description: 'Envoi PO',
+    montant: '+ 500 PO',
   },
-  data() {
-    return {
-      userFullName: 'Pluto Calm',
-      accountNumber: '9785',
-      balance: 15250,
-      recentTransactions: [
-        {
-          compte: '**** 1234',
-          date: '28/01/2025',
-          beneficiaire: 'Jean Dupont',
-          description: 'Envoi PO',
-          montant: '+ 500 PO',
-        },
-        {
-          compte: '**** 1234',
-          date: '25/01/2025',
-          beneficiaire: 'Marie Martin',
-          description: 'Reçu PO',
-          montant: '- 200 PO',
-        },
-      ],
-    }
+  {
+    compte: '**** 1234',
+    date: '25/01/2025',
+    beneficiaire: 'Marie Martin',
+    description: 'Reçu PO',
+    montant: '- 200 PO',
   },
-  computed: {
-    maskedAccountNumber() {
-      return `N° **** ${this.accountNumber}`
-    },
-    formattedBalance() {
-      return this.balance.toLocaleString('fr-FR')
-    },
-  },
-}
+])
+
+const maskedAccountNumber = computed(() => `N° **** ${accountNumber.value}`)
+const formattedBalance = computed(() => balance.value.toLocaleString('fr-FR'))
 </script>
 
 <style src="../css/HomeView.css" scoped></style>
