@@ -10,6 +10,7 @@ class TransactionDTO{
         public ?string $emetteur_id = null,
         public ?string $recepteur_id = null,
         public ?string $description = null,
+        public ?string $created_at = null,
     ) {
         if ($this->montant <= 0) {
             throw new \InvalidArgumentException("Le montant doit être supérieur à zéro.");

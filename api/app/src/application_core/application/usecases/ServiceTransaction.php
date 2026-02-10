@@ -86,7 +86,8 @@ class ServiceTransaction implements ServiceTransactionInterface {
             hash: $trans->hash,
             emetteur_id: $trans->emetteur_id,
             recepteur_id: $trans->recepteur_id,
-            description: $trans->description
+            description: $trans->description,
+            created_at: $trans->created_at
         );
     }
 }

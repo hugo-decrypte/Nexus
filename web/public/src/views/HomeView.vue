@@ -63,46 +63,66 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { getProfile, getSolde } from '../services/account.js'
+import { getToken, getUser } from '../services/auth.js'
 
-export default {
-  name: 'HomeView',
-  components: {
-    RouterLink,
-  },
-  data() {
-    return {
-      userFullName: 'Pluto Calm',
-      accountNumber: '9785',
-      balance: 15250,
-      recentTransactions: [
-        {
-          compte: '**** 1234',
-          date: '28/01/2025',
-          beneficiaire: 'Jean Dupont',
-          description: 'Envoi PO',
-          montant: '+ 500 PO',
-        },
-        {
-          compte: '**** 1234',
-          date: '25/01/2025',
-          beneficiaire: 'Marie Martin',
-          description: 'Reçu PO',
-          montant: '- 200 PO',
-        },
-      ],
-    }
-  },
-  computed: {
-    maskedAccountNumber() {
-      return `N° **** ${this.accountNumber}`
-    },
-    formattedBalance() {
-      return this.balance.toLocaleString('fr-FR')
-    },
-  },
+const userFullName = ref('')
+const accountNumber = ref('')
+const balance = ref(0)
+const recentTransactions = ref([])
+
+const maskedAccountNumber = computed(() => `N° **** ${accountNumber.value}`)
+const formattedBalance = computed(() => balance.value.toLocaleString('fr-FR'))
+
+function formatDate(dateStr) {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleDateString('fr-FR')
 }
+
+onMounted(async () => {
+  const user = getUser()
+  if (!user || !user.id) return
+
+  const profile = await getProfile(user.id)
+  if (profile) {
+    userFullName.value = `${profile.prenom} ${profile.nom}`
+    accountNumber.value = user.id.slice(-4)
+  }
+
+  const soldeData = await getSolde(user.id)
+  if (soldeData && soldeData.solde !== undefined) {
+    balance.value = soldeData.solde
+  }
+
+  try {
+    const response = await fetch(`/api/transactions/${user.id}`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` },
+    })
+    if (response.ok) {
+      const transactions = await response.json()
+      recentTransactions.value = transactions.slice(0, 5).map(tx => {
+        const isReceived = tx.recepteur_id === user.id
+        return {
+          compte: `**** ${user.id.slice(-4)}`,
+          date: formatDate(tx.created_at),
+          beneficiaire: isReceived
+            ? `**** ${(tx.emetteur_id || '').slice(-4)}`
+            : `**** ${(tx.recepteur_id || '').slice(-4)}`,
+          description: tx.description || (isReceived ? 'Reçu PO' : 'Envoi PO'),
+          montant: isReceived
+            ? `+ ${tx.montant.toLocaleString('fr-FR')} PO`
+            : `- ${tx.montant.toLocaleString('fr-FR')} PO`,
+          isReceived,
+        }
+      })
+    }
+  } catch (err) {
+    console.error('Erreur chargement transactions:', err)
+  }
+})
 </script>
 
 <style src="../css/HomeView.css" scoped></style>
