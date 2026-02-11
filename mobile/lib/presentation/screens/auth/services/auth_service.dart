@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://localhost:6080';
+  static const String baseUrl = 'http://docketu.iutnc.univ-lorraine.fr:56050';
   static const String _tokenKey = 'auth_token';
   static const String _userIdKey = 'user_id';
   static const String _userEmailKey = 'user_email';

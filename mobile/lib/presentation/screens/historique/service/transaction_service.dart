@@ -4,7 +4,7 @@ import '../../../../domain/modeles/transaction.dart';
 import '../../auth/services/auth_service.dart';
 
 class TransactionService {
-  static const String baseUrl = 'http://localhost:6080';
+  static const String baseUrl = 'http://docketu.iutnc.univ-lorraine.fr:56050';
 
   // Modèle de transaction
   static Future<List<Transaction>> getTransactions(String userId) async {
