@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../auth/services/auth_service.dart';
 
 class PaymentService {
-  static const String baseUrl = ' http://docketu.iutnc.univ-lorraine.fr:56050';
+  static const String baseUrl = 'http://docketu.iutnc.univ-lorraine.fr:56050';
 
   /// Créer une transaction de paiement
   /// Le CLIENT (emetteur) paie le COMMERÇANT (recepteur)
