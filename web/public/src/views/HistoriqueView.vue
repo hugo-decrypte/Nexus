@@ -35,10 +35,7 @@
 import { ref, onMounted } from 'vue'
 import { getToken, getUser } from '../services/auth.js'
 
-const transactions = ref([
-  { id: '1', compte: '**** 1234', date: '28/01/2025', beneficiaire: 'Jean Dupont', description: 'Envoi PO', montant: '+ 500 PO' },
-  { id: '2', compte: '**** 1234', date: '25/01/2025', beneficiaire: 'Marie Martin', description: 'Reçu PO', montant: '- 200 PO' },
-])
+const transactions = ref([])
 
 async function loadTransactions() {
   try {

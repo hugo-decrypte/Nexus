@@ -90,3 +90,22 @@ export async function getSolde(userId) {
     return null
   }
 }
+
+/**
+ * Récupère les transactions de l'utilisateur (ordre anti-chronologique)
+ * @param {string} userId
+ * @returns {Promise<Array<{id, montant, emetteur_id, recepteur_id, description, created_at}>|null>}
+ */
+export async function getTransactions(userId) {
+  try {
+    const response = await fetch(`/api/transactions/${userId}`, {
+      headers: authHeaders(),
+    })
+    if (!response.ok) return null
+    const data = await response.json()
+    return Array.isArray(data) ? data : (data?.transactions ?? null)
+  } catch (err) {
+    console.error('Erreur chargement transactions:', err)
+    return null
+  }
+}

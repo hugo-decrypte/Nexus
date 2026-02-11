@@ -40,13 +40,13 @@
             <tr>
               <th>Compte</th>
               <th>Date</th>
-              <th>Bénificiaire</th>
+              <th>Bénéficiaire</th>
               <th>Description</th>
               <th>Montant</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(tx, index) in recentTransactions" :key="index">
+            <tr v-for="(tx, index) in recentTransactions" :key="tx.id || index">
               <td>{{ tx.compte }}</td>
               <td>{{ tx.date }}</td>
               <td>{{ tx.beneficiaire }}</td>
@@ -63,46 +63,56 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { getUser } from '../services/auth.js'
+import { getProfile, getSolde, getTransactions } from '../services/account.js'
 
-export default {
-  name: 'HomeView',
-  components: {
-    RouterLink,
-  },
-  data() {
-    return {
-      userFullName: 'Pluto Calm',
-      accountNumber: '9785',
-      balance: 15250,
-      recentTransactions: [
-        {
-          compte: '**** 1234',
-          date: '28/01/2025',
-          beneficiaire: 'Jean Dupont',
-          description: 'Envoi PO',
-          montant: '+ 500 PO',
-        },
-        {
-          compte: '**** 1234',
-          date: '25/01/2025',
-          beneficiaire: 'Marie Martin',
-          description: 'Reçu PO',
-          montant: '- 200 PO',
-        },
-      ],
-    }
-  },
-  computed: {
-    maskedAccountNumber() {
-      return `N° **** ${this.accountNumber}`
-    },
-    formattedBalance() {
-      return this.balance.toLocaleString('fr-FR')
-    },
-  },
-}
+const userFullName = ref('')
+const accountNumber = ref('')
+const balance = ref(0)
+const recentTransactions = ref([])
+
+const maskedAccountNumber = computed(() =>
+  accountNumber.value ? `N° **** ${accountNumber.value}` : ''
+)
+
+const formattedBalance = computed(() =>
+  new Intl.NumberFormat('fr-FR', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(balance.value)
+)
+
+onMounted(async () => {
+  const user = getUser()
+  if (!user?.id) return
+
+  const profile = await getProfile(user.id)
+  if (profile) {
+    userFullName.value = [profile.prenom, profile.nom].filter(Boolean).join(' ') || 'Utilisateur'
+  }
+
+  accountNumber.value = String(user.id).slice(-4)
+
+  const soldeData = await getSolde(user.id)
+  if (soldeData != null && typeof soldeData.solde !== 'undefined') {
+    balance.value = soldeData.solde
+  }
+
+  const transactionsList = await getTransactions(user.id)
+  if (transactionsList && transactionsList.length > 0) {
+    recentTransactions.value = transactionsList.slice(0, 10).map((t) => ({
+      id: t.id,
+      compte: `**** ${String(t.emetteur_id || t.recepteur_id || '').slice(-4)}` || '—',
+      date: t.created_at ? new Date(t.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—',
+      beneficiaire: t.beneficiaire || '—',
+      description: t.description || 'Envoi / Réception PO',
+      montant: t.montant != null ? `${t.montant > 0 ? '+' : ''} ${t.montant} PO` : '—',
+    }))
+  }
+})
 </script>
 
 <style src="../css/HomeView.css" scoped></style>
