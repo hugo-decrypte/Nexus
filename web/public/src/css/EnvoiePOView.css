@@ -53,14 +53,20 @@
   font-weight: 500;
 }
 
+.envoie-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
 .envoie-input-wrap {
   position: relative;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .envoie-input {
   width: 100%;
-  padding: 12px 40px 12px 14px;
+  padding: 12px 48px 12px 14px;
   font-size: 1rem;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
@@ -74,14 +80,51 @@
   color: #aaa;
 }
 
-.envoie-input-icon {
+.envoie-input-icon-btn {
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
+  padding: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.envoie-input-icon-btn:hover:not(:disabled) {
+  color: #e85d5a;
+}
+
+.envoie-input-icon-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.envoie-input-icon {
   font-size: 22px;
-  color: #999;
-  pointer-events: none;
+}
+
+.envoie-error {
+  color: #c62828;
+  font-size: 0.9rem;
+  margin: 8px 0 12px 0;
+}
+
+.envoie-success {
+  color: #2e7d32;
+  font-size: 0.9rem;
+  margin: 8px 0 12px 0;
+}
+
+.envoie-recipient-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 14px 0;
 }
 
 .envoie-btn {
@@ -122,6 +165,42 @@
   font-size: 2.25rem;
   font-weight: 700;
   color: #1a1a1a;
+}
+
+.envoie-montant-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fff;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.envoie-montant-input::placeholder {
+  color: #aaa;
+}
+
+.envoie-btn-valider-wrap {
+  margin-top: 8px;
+}
+
+.envoie-btn-valider {
+  background: #e85d5a;
+  color: #fff;
+}
+
+.envoie-btn-valider:hover:not(:disabled) {
+  background: #d64d4a;
+}
+
+.envoie-btn-valider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .envoie-po-badge {

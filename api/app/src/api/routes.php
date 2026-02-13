@@ -12,6 +12,7 @@ use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
+use api\actions\UserSearchByEmailAction;
 use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
 use api\actions\UpdateUserAction;
@@ -47,6 +48,8 @@ return function( App $app): App {
     });
     $app->get('/users', UsersListAction::class)
         ->add(AuthzAdminMiddleware::class)
+        ->add(JwtAuthMiddleware::class);
+    $app->get('/users/search', UserSearchByEmailAction::class)
         ->add(JwtAuthMiddleware::class);
     $app->get('/users/{id_user}', UserByIdAction::class)
         ->add(new AuthzUserRessourceAccessMiddleware())
