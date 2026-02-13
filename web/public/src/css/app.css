@@ -231,6 +231,11 @@ main {
     gap: 2px;
   }
 
+  .menu .menu-item.router-link-active,
+  .menu .menu-item.router-link-exact-active {
+    text-decoration: none !important;
+  }
+
   .menu .menu-label {
     font-size: 12px;
     font-weight: normal;
