@@ -13,7 +13,7 @@ class PaymentService {
   static Future<Map<String, dynamic>> createTransaction({
     required String clientId,      // ID du client qui paie
     required String commercantId,  // ID du commerçant qui reçoit
-    required int montant,
+    required double montant,
     String? message,
   }) async {
     try {

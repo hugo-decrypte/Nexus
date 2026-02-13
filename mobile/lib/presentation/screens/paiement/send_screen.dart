@@ -17,7 +17,7 @@ class _SendScreenState extends State<SendScreen> {
   MobileScannerController cameraController = MobileScannerController();
   bool _isProcessing = false;
   String? _currentUserId;
-  int? _currentSolde;
+  double? _currentSolde;
 
   @override
   void initState() {

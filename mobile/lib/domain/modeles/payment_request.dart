@@ -3,7 +3,7 @@ import 'dart:convert';
 /// Modèle de facture générée par un commerçant
 class PaymentRequest {
   final String commercantId;
-  final int montant;
+  final double montant;
   final String? message;
   final DateTime createdAt;
 
@@ -28,7 +28,7 @@ class PaymentRequest {
   factory PaymentRequest.fromJson(Map<String, dynamic> json) {
     return PaymentRequest(
       commercantId: json['commercant_id'] as String,
-      montant: json['montant'] as int,
+      montant: json['montant'] as double,
       message: json['message'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
