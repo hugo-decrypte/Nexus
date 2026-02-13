@@ -19,12 +19,6 @@ class PaymentService {
     try {
       final token = await AuthService.getToken();
 
-      print('💳 Création transaction (paiement):');
-      print('  👤 Client (paie): $clientId');
-      print('  🏪 Commerçant (reçoit): $commercantId');
-      print('  💰 Montant: $montant PO');
-      print('  📝 Message: $message');
-
       final response = await http.post(
         Uri.parse('$baseUrl/transactions'),
         headers: {
@@ -32,8 +26,8 @@ class PaymentService {
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
-          'emetteur_id': clientId,        // Client qui paie
-          'recepteur_id': commercantId,   // Commerçant qui reçoit
+          'id_emetteur': clientId,        // Client qui paie
+          'id_recepteur': commercantId,   // Commerçant qui reçoit
           'montant': montant,
           'description': message,
         }),
@@ -44,12 +38,8 @@ class PaymentService {
         },
       );
 
-      print('✅ Status: ${response.statusCode}');
-      print('📦 Response: ${response.body}');
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         final result = jsonDecode(response.body);
-        print('✉️ Email de confirmation envoyé au client');
         return result;
       } else if (response.statusCode == 400) {
         final error = jsonDecode(response.body);
@@ -63,7 +53,6 @@ class PaymentService {
         throw Exception(error['message'] ?? 'Erreur lors du paiement');
       }
     } catch (e) {
-      print('❌ Erreur paiement: $e');
       rethrow;
     }
   }
@@ -85,7 +74,6 @@ class PaymentService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('❌ Erreur vérification commerçant: $e');
       return false;
     }
   }
@@ -110,7 +98,6 @@ class PaymentService {
       }
       return null;
     } catch (e) {
-      print('❌ Erreur infos commerçant: $e');
       return null;
     }
   }

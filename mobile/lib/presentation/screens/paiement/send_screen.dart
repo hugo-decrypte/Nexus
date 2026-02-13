@@ -3,6 +3,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:untitled/presentation/screens/paiement/service/payment_service.dart';
 import '../../../domain/modeles/payment_request.dart';
 import '../auth/services/auth_service.dart';
+import '../auth/services/auth_service.dart';
 
 
 class SendScreen extends StatefulWidget {

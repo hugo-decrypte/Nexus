@@ -2,10 +2,10 @@ import 'dart:convert';
 
 /// Modèle de facture générée par un commerçant
 class PaymentRequest {
-  final String commercantId;    // ID du commerçant qui génère la facture
-  final int montant;            // Montant en PO
-  final String? message;        // Message optionnel (description)
-  final DateTime createdAt;     // Date de création
+  final String commercantId;
+  final int montant;
+  final String? message;
+  final DateTime createdAt;
 
   PaymentRequest({
     required this.commercantId,
