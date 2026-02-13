@@ -18,7 +18,7 @@ class PaymentRequest {
   Map<String, dynamic> toJson() {
     return {
       'commercant_id': commercantId,
-      'montant': montant,
+      'montant': montant,  // ✅ Sera toujours un double
       'message': message,
       'created_at': createdAt.toIso8601String(),
     };
@@ -26,9 +26,24 @@ class PaymentRequest {
 
   /// Créer depuis JSON (scan du QR Code)
   factory PaymentRequest.fromJson(Map<String, dynamic> json) {
+    //Gérer à la fois int et double pour le montant
+    // Car JSON peut encoder 150.0 comme 150 (int) si pas de décimales
+    final montantValue = json['montant'];
+    final double montant;
+
+    if (montantValue is int) {
+      montant = montantValue.toDouble();
+    } else if (montantValue is double) {
+      montant = montantValue;
+    } else if (montantValue is String) {
+      montant = double.parse(montantValue);
+    } else {
+      montant = double.parse(montantValue.toString());
+    }
+
     return PaymentRequest(
       commercantId: json['commercant_id'] as String,
-      montant: json['montant'] as double,
+      montant: montant,
       message: json['message'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
