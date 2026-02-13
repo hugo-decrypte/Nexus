@@ -6,6 +6,20 @@
   --color-menu-bottom: #333333;
   --color-accent: #e67e22;
   --color-avatar: #ff6964;
+  /* Thème clair : fond et contenu */
+  --color-page-bg: #ffffff;
+  --color-card-bg: #ffffff;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-border: #e0e0e0;
+}
+
+[data-theme="sombre"] {
+  --color-page-bg: #121212;
+  --color-card-bg: #2d2d2d;
+  --color-text-primary: #e8e8e8;
+  --color-text-secondary: #b0b0b0;
+  --color-border: #444444;
 }
 
 /* Base */
@@ -17,7 +31,9 @@
 }
 
 body {
-  background-color: var(--color-bg);
+  background-color: var(--color-page-bg);
+  color: var(--color-text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .app {
@@ -133,6 +149,8 @@ main {
 
 .dashboard {
   padding: 20px;
+  background-color: var(--color-page-bg);
+  transition: background-color 0.25s ease;
 }
 
 @media screen and (max-width: 768px) {
@@ -278,24 +296,27 @@ main {
   right: 0;
   margin-top: 8px;
   min-width: 140px;
-  background: #fff;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 6px 0;
   z-index: 1000;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .avatar-menu-item {
   display: block;
   padding: 10px 16px;
-  color: #333;
+  color: var(--color-text-primary);
   text-decoration: none;
   font-size: 14px;
   white-space: nowrap;
+  transition: color 0.25s ease, background 0.2s ease;
 }
 
 .avatar-menu-item:hover {
-  background: #f0f0f0;
+  background: var(--color-border);
 }
 
 .avatar-menu-item-btn {
@@ -306,11 +327,12 @@ main {
   text-align: left;
   font-family: inherit;
   font-size: 14px;
-  color: #333;
+  color: var(--color-text-primary);
+  transition: color 0.25s ease, background 0.2s ease;
 }
 
 .avatar-menu-item-btn:hover {
-  background: #f0f0f0;
+  background: var(--color-border);
 }
 
 .dropdown-enter-active,
@@ -321,4 +343,216 @@ main {
 .dropdown-leave-to {
   opacity: 0;
   transform: translateY(-4px);
+}
+
+/* ========== Thème sombre : vues et cartes ========== */
+[data-theme="sombre"] .account-view,
+[data-theme="sombre"] .historique-view,
+[data-theme="sombre"] .settings-view,
+[data-theme="sombre"] .home-view,
+[data-theme="sombre"] .envoie-po-view,
+[data-theme="sombre"] .rechargement-view,
+[data-theme="sombre"] .login-page,
+[data-theme="sombre"] .loading-screen {
+  background-color: var(--color-page-bg) !important;
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .account-card,
+[data-theme="sombre"] .historique-card,
+[data-theme="sombre"] .settings-card,
+[data-theme="sombre"] .envoie-card,
+[data-theme="sombre"] .recharge-card,
+[data-theme="sombre"] .balance-display,
+[data-theme="sombre"] .preset-amounts-section {
+  background-color: var(--color-card-bg) !important;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+
+[data-theme="sombre"] .home-view .transactions-section {
+  background-color: var(--color-card-bg) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .home-view .transactions-title,
+[data-theme="sombre"] .home-view .transactions-table th,
+[data-theme="sombre"] .home-view .transactions-table td,
+[data-theme="sombre"] .home-view .transactions-table .empty-row td {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="sombre"] .home-view .btn-voir-tout {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .home-view .btn-voir-tout:hover {
+  background: var(--color-border);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .home-view .transactions-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="sombre"] .home-view .transactions-table th,
+[data-theme="sombre"] .home-view .transactions-table td {
+  border-bottom-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .envoie-back,
+[data-theme="sombre"] .envoie-back .material-icons {
+  color: #fff !important;
+}
+
+[data-theme="sombre"] .settings-view .page-title,
+[data-theme="sombre"] .settings-view .section-title,
+[data-theme="sombre"] .historique-view .historique-title,
+[data-theme="sombre"] .account-view .account-page-title,
+[data-theme="sombre"] .rechargement-view .recharge-title,
+[data-theme="sombre"] .rechargement-view .section-title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .settings-view .section-desc,
+[data-theme="sombre"] .settings-view .settings-label {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="sombre"] .transactions-table th,
+[data-theme="sombre"] .transactions-table td {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .historique-table th,
+[data-theme="sombre"] .historique-table td {
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .form-input,
+[data-theme="sombre"] .form-select,
+[data-theme="sombre"] .account-input,
+[data-theme="sombre"] .envoie-input,
+[data-theme="sombre"] .envoie-textarea {
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .preset-amount-card:not(.active) {
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .btn-edit-outline {
+  background-color: var(--color-card-bg) !important;
+  color: #e85d5a;
+  border-color: #e85d5a;
+}
+
+[data-theme="sombre"] .btn-edit-outline:hover {
+  background-color: var(--color-border) !important;
+  color: #e85d5a;
+}
+
+[data-theme="sombre"] .account-view .profile-cards-section {
+  background-color: var(--color-card-bg) !important;
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .account-view .cards-section-title {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="sombre"] .account-view .cards-placeholder {
+  background-color: var(--color-border);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .account-view .cards-placeholder-text {
+  color: var(--color-text-secondary) !important;
+}
+
+[data-theme="sombre"] .historique-view .historique-card,
+[data-theme="sombre"] .historique-view .historique-table-wrapper {
+  background-color: var(--color-card-bg) !important;
+}
+
+[data-theme="sombre"] .historique-view .historique-card {
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .historique-view .historique-title,
+[data-theme="sombre"] .historique-view .historique-table th,
+[data-theme="sombre"] .historique-view .historique-table td,
+[data-theme="sombre"] .historique-view .historique-table tbody tr {
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .historique-view .historique-table tbody td {
+  background-color: var(--color-card-bg) !important;
+}
+
+[data-theme="sombre"] .historique-view .historique-table .empty-row td {
+  color: var(--color-text-secondary) !important;
+}
+
+/* Rechargement : résumé de la commande et montant personnalisé en fond sombre */
+[data-theme="sombre"] .rechargement-view .payment-section {
+  background-color: var(--color-card-bg) !important;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .rechargement-view .order-summary {
+  background-color: #1e1e1e !important;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="sombre"] .rechargement-view .summary-label,
+[data-theme="sombre"] .rechargement-view .summary-value,
+[data-theme="sombre"] .rechargement-view .summary-total,
+[data-theme="sombre"] .rechargement-view .payment-methods-label,
+[data-theme="sombre"] .rechargement-view .payment-method-name {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="sombre"] .rechargement-view .summary-row:not(:last-child) {
+  border-bottom-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .rechargement-view .payment-method-card {
+  background-color: var(--color-card-bg) !important;
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .rechargement-view .custom-amount-wrapper {
+  border-top-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .rechargement-view .custom-amount-label {
+  color: var(--color-text-secondary) !important;
+}
+
+[data-theme="sombre"] .rechargement-view .custom-amount-input-wrapper {
+  background-color: var(--color-card-bg) !important;
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .rechargement-view .custom-amount-input {
+  background-color: transparent !important;
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="sombre"] .rechargement-view .custom-amount-input::placeholder {
+  color: var(--color-text-secondary);
 }
