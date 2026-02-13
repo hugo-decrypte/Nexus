@@ -33,10 +33,6 @@
         <p v-else-if="recipient" class="envoie-recipient-name">
           {{ recipient.prenom }} {{ recipient.nom }}
         </p>
-        <button type="button" class="envoie-btn envoie-btn-qr" @click="rechercher">
-          <span class="material-icons">qr_code_2</span>
-          Générer un QrCode
-        </button>
       </section>
 
       <section class="envoie-card">

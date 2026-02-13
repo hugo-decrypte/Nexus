@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import HistoriqueView from '../views/HistoriqueView.vue'
 import RechargementView from '../views/RechargementView.vue'
 import EnvoiePOView from '../views/EnvoiePOView.vue'
+import RecevoirView from '../views/RecevoirView.vue'
 import AccountView from '../views/AccountView.vue'
 import SettingsView from '../views/SettingsView.vue'
 import Login from '../views/Login.vue'
@@ -19,6 +20,7 @@ const router = createRouter({
     { path: '/historique', name: 'historique', component: HistoriqueView },
     { path: '/rechargement', name: 'rechargement', component: RechargementView },
     { path: '/envoiePO', name: 'envoiePO', component: EnvoiePOView },
+    { path: '/recevoir', name: 'recevoir', component: RecevoirView },
     { path: '/account', name: 'account', component: AccountView },
     { path: '/settings', name: 'settings', component: SettingsView },
     { path: '/', redirect: '/home' },
