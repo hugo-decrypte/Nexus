@@ -168,7 +168,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
                 if (value == null || value.isEmpty) {
                   return 'Veuillez entrer un montant';
                 }
-                final montant = int.tryParse(value);
+                final montant = double.tryParse(value);
                 if (montant == null || montant <= 0) {
                   return 'Montant invalide';
                 }
