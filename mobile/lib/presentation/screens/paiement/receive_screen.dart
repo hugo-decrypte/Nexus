@@ -54,7 +54,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
       return;
     }
 
-    final montant = int.tryParse(_montantController.text) ?? 0;
+    final montant = double.tryParse(_montantController.text) ?? 0;
 
     setState(() {
       _paymentRequest = PaymentRequest(
@@ -168,7 +168,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
                 if (value == null || value.isEmpty) {
                   return 'Veuillez entrer un montant';
                 }
-                final montant = int.tryParse(value);
+                final montant = double.tryParse(value);
                 if (montant == null || montant <= 0) {
                   return 'Montant invalide';
                 }

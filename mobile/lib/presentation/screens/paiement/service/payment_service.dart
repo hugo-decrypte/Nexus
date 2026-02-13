@@ -13,7 +13,7 @@ class PaymentService {
   static Future<Map<String, dynamic>> createTransaction({
     required String clientId,      // ID du client qui paie
     required String commercantId,  // ID du commerçant qui reçoit
-    required int montant,
+    required double montant,
     String? message,
   }) async {
     try {
@@ -28,20 +28,17 @@ class PaymentService {
       print('📝 Message: $message');
       print('🔑 Token: ${token?.substring(0, 20)}...');
 
+      // ✅ CORRECTION: Convertir le montant en double (float)
       final body = {
         'id_emetteur': clientId,
         'id_recepteur': commercantId,
-        'montant': montant,
+        'montant': montant.toDouble(),  // ✅ Conversion en float
         'description': message,
       };
 
       print('───────────────────────────────────────');
       print('📤 REQUEST');
       print('URL: $baseUrl/transactions');
-      print('Headers: ${jsonEncode({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${token?.substring(0, 20)}...',
-      })}');
       print('Body: ${jsonEncode(body)}');
       print('───────────────────────────────────────');
 
@@ -62,27 +59,20 @@ class PaymentService {
       print('───────────────────────────────────────');
       print('📥 RESPONSE');
       print('Status Code: ${response.statusCode}');
-      print('Status Message: ${response.reasonPhrase}');
-      print('Headers: ${response.headers}');
-      print('Body (raw): ${response.body}');
-      print('Body Length: ${response.body.length} chars');
+      print('Body: ${response.body}');
       print('═══════════════════════════════════════');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final result = jsonDecode(response.body);
         print('✅ Transaction créée avec succès');
-        print('Result: $result');
         return result;
       } else {
-        // ✅ Afficher l'erreur complète
         print('❌ ERREUR ${response.statusCode}');
-        print('Body complet: ${response.body}');
 
         try {
           final error = jsonDecode(response.body);
-          print('Error JSON: $error');
 
-          // Essayer différentes structures d'erreur
+          // Extraire le message d'erreur le plus pertinent
           String errorMessage = 'Erreur lors du paiement';
 
           if (error is Map) {
@@ -90,29 +80,24 @@ class PaymentService {
               errorMessage = error['message'].toString();
             } else if (error.containsKey('error')) {
               errorMessage = error['error'].toString();
-            } else if (error.containsKey('errors')) {
-              errorMessage = error['errors'].toString();
+            } else if (error.containsKey('exception') && error['exception'] is List) {
+              // Extraire le message de la première exception
+              final firstException = error['exception'][0];
+              if (firstException is Map && firstException.containsKey('message')) {
+                errorMessage = firstException['message'].toString();
+              }
             } else {
               errorMessage = error.toString();
             }
-          } else {
-            errorMessage = error.toString();
           }
 
-          print('Message d\'erreur extrait: $errorMessage');
           throw Exception(errorMessage);
         } catch (jsonError) {
-          print('❌ Impossible de parser le JSON d\'erreur: $jsonError');
-          print('Body brut: ${response.body}');
           throw Exception('Erreur ${response.statusCode}: ${response.body}');
         }
       }
     } catch (e) {
-      print('═══════════════════════════════════════');
-      print('❌ EXCEPTION CAPTURÉE');
-      print('Type: ${e.runtimeType}');
-      print('Message: $e');
-      print('═══════════════════════════════════════');
+      print('❌ EXCEPTION: $e');
       rethrow;
     }
   }
