@@ -363,6 +363,11 @@ main {
   color: var(--color-text-primary);
 }
 
+[data-theme="sombre"] .login-page .login-title,
+[data-theme="sombre"] .login-page .social-title {
+  color: var(--color-text-primary) !important;
+}
+
 [data-theme="sombre"] .account-card,
 [data-theme="sombre"] .historique-card,
 [data-theme="sombre"] .settings-card,
