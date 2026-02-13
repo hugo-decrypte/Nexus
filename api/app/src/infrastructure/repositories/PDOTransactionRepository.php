@@ -5,6 +5,7 @@ namespace infrastructure\repositories;
 use application_core\domain\entities\transaction\Transaction;
 use application_core\exceptions\EntityNotFoundException;
 use application_core\exceptions\NotEnoughMoneyException;
+use application_core\exceptions\SecurityException;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
 use PDO;
 use Ramsey\Uuid\Uuid;
@@ -23,6 +24,9 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
     public function calculSolde(string $id_user): float
     {
         try {
+            if (!$this->verifierHash()) {
+                throw new SecurityException();
+            }
             $stmt = $this->transaction_pdo->prepare(
                 "SELECT COALESCE(SUM(CASE WHEN recepteur_id = :id THEN montant ELSE -montant END), 0) AS solde
              FROM transactions WHERE emetteur_id = :id2 OR recepteur_id = :id3"
@@ -31,11 +35,15 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(HttpInternalServerErrorException) {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch(\Throwable) {
+        } catch (SecurityException) {
+            throw new SecurityException();
+        }
+        catch(\Throwable) {
             throw new \Exception("Erreur lors de la récupération du hash de la dernière transaction.", 400);
         }
         return (float) ($row['solde'] ?? 0);
     }
+
     public function getTransaction(string $id_user): array
     {
         try {
@@ -140,12 +148,20 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         } catch(\Throwable) {
             throw new \Exception("Erreur lors de la récupération du hash de la dernière transaction.", 400);
         }
-        return $row ? $row['hash'] : null;
+        return $row ? $row['hash'] : parse_ini_file(dirname(__DIR__, 3) . '/config/.env')['FIRST_HASH'];
     }
 
     public function creerTransaction(string $emetteur_id, string $recepteur_id, float $montant, ?string $desc): Transaction
     {
-        $prevHash = $this->getLastTransactionHash() ?? '';
+        try {
+            if (!$this->verifierHash()) {
+                throw new SecurityException();
+            }
+        }  catch (SecurityException) {
+            throw new SecurityException();
+        }
+
+        $prevHash = $this->getLastTransactionHash();
         $newHash = hash('sha256', $prevHash . '|' . $emetteur_id . '|' . $recepteur_id . '|' . $montant);
         $id = Uuid::uuid4()->toString();
 
@@ -191,6 +207,7 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             description: $desc
         );
     }
+
     public function rechargerCompte(string $recepteur_id, float $montant): Transaction{
         try {
             $userAdmin = $this->authn_repository->getUserAdmin();
@@ -203,5 +220,23 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             throw new \Exception($e->getMessage(), 400);
         }
         return $transaction;
+    }
+
+    public function verifierHash(): bool {
+        try {
+            $transactions = $this->getTransactions();
+            for ($i = 0; $i < count($transactions)-1; $i++) {
+                $prevHash = $transactions[$i+1]->hash;
+                $hash = hash('sha256', $prevHash . '|' . $transactions[$i]->emetteur_id . '|' . $transactions[$i]->recepteur_id . '|' . $transactions[$i]->montant);
+                if ($hash !== $transactions[$i]->hash) {
+                    return false;
+                }
+            }
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération des transactions.", 400);
+        }
+        return true;
     }
 }
