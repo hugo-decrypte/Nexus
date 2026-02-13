@@ -368,6 +368,18 @@ main {
   color: var(--color-text-primary) !important;
 }
 
+[data-theme="sombre"] .login-page .login-input {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="sombre"] .login-page .login-input::placeholder {
+  color: var(--color-text-secondary) !important;
+}
+
+[data-theme="sombre"] .login-page .input-wrap {
+  border-bottom-color: var(--color-border);
+}
+
 [data-theme="sombre"] .account-card,
 [data-theme="sombre"] .historique-card,
 [data-theme="sombre"] .settings-card,
