@@ -431,8 +431,20 @@ main {
   color: #fff !important;
 }
 
-[data-theme="sombre"] .envoie-montant-value {
+[data-theme="sombre"] .envoie-montant-value,
+[data-theme="sombre"] .envoie-montant-input {
   color: var(--color-text-primary) !important;
+  background-color: var(--color-card-bg) !important;
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="sombre"] .envoie-recipient-name,
+[data-theme="sombre"] .envoie-hint {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme="sombre"] .envoie-error {
+  color: #f44336;
 }
 
 [data-theme="sombre"] .settings-view .page-title,

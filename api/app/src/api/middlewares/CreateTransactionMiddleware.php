@@ -19,10 +19,12 @@ class CreateTransactionMiddleware {
         }
 
         $montant = isset($data['montant']) ? (float) $data['montant'] : null;
-
         if ($montant === null || $montant <= 0) {
             throw new HttpBadRequestException($request, 'montant (positif) requis.');
         }
+        $data['montant'] = $montant;
+        $data['id_emetteur'] = isset($data['id_emetteur']) ? (string) $data['id_emetteur'] : '';
+        $data['id_recepteur'] = isset($data['id_recepteur']) ? (string) $data['id_recepteur'] : '';
 
         try {
             v::key('id_emetteur', v::stringType()->notEmpty())

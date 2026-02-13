@@ -22,7 +22,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
     {
         try {
             $stmt = $this->authn_pdo->prepare(
-                "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE email = :email LIMIT 1"
+                "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE LOWER(TRIM(email)) = LOWER(TRIM(:email)) LIMIT 1"
             );
             $stmt->execute(['email' => $email]);
             $res = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,9 +30,11 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             if (!$res) {
                 throw new EntityNotFoundException("L'utilisateur ayant pour email " . $email . " n'existe pas.", 'utilisateur');
             }
-        } catch(HttpInternalServerErrorException) {
+        } catch (EntityNotFoundException $e) {
+            throw $e;
+        } catch (HttpInternalServerErrorException $e) {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch(\Throwable) {
+        } catch (\Throwable $e) {
             throw new \Exception("Erreur lors de la récupération de l'utilisateur par email.", 400);
         }
         return new Utilisateur(
