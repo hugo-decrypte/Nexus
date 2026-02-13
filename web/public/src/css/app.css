@@ -414,6 +414,10 @@ main {
   color: #fff !important;
 }
 
+[data-theme="sombre"] .envoie-montant-value {
+  color: var(--color-text-primary) !important;
+}
+
 [data-theme="sombre"] .settings-view .page-title,
 [data-theme="sombre"] .settings-view .section-title,
 [data-theme="sombre"] .historique-view .historique-title,
