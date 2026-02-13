@@ -49,6 +49,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import { setTheme, getTheme } from '../utils/theme.js'
 
 const SETTINGS_KEY = 'nexus_settings'
 
@@ -68,6 +69,7 @@ onMounted(() => {
       const parsed = JSON.parse(saved)
       Object.assign(settings, { ...defaultSettings, ...parsed })
     }
+    settings.theme = getTheme()
   } catch {
     // garder les valeurs par défaut
   }
@@ -75,6 +77,7 @@ onMounted(() => {
 
 function saveSettings() {
   try {
+    setTheme(settings.theme)
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
     settingsMessage.value = 'Paramètres enregistrés.'
     setTimeout(() => { settingsMessage.value = '' }, 2000)
