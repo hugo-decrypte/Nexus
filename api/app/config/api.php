@@ -1,6 +1,7 @@
 <?php
 
 use api\actions\AdminLogsAction;
+use api\actions\RechargementAction;
 use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
 use api\actions\RegisterAction;
@@ -66,6 +67,9 @@ return [
     },
     RechargeAction::class => function (ContainerInterface $c) {
         return new RechargeAction($c->get(ServiceTransactionInterface::class));
+    },
+    RechargementAction::class => function (ContainerInterface $c) {
+        return new RechargementAction($c->get(ServiceTransactionInterface::class));
     },
     LogsListAction::class =>function(ContainerInterface $c) {
         return new LogsListAction($c->get(ServiceLogInterface::class));

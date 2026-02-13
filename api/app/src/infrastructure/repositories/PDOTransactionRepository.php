@@ -191,4 +191,17 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             description: $desc
         );
     }
+    public function rechargerCompte(string $recepteur_id, float $montant): Transaction{
+        try {
+            $userAdmin = $this->authn_repository->getUserAdmin();
+            $transaction = $this->creerTransaction($userAdmin->id, $recepteur_id, $montant, "Recharge du compte ");
+        } catch (HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e, 'utilisateur');
+        } catch(\Exception $e){
+            throw new \Exception($e->getMessage(), 400);
+        }
+        return $transaction;
+    }
 }

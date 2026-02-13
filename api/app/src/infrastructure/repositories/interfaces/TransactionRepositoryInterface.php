@@ -11,4 +11,5 @@ interface TransactionRepositoryInterface {
     public function getTransactionsBetween(string $id_emetteur, string $id_recepteur): array;
     public function getLastTransactionHash(): ?string;
     public function creerTransaction(string $emetteur_id, string $recepteur_id, float $montant, ?string $desc): Transaction;
+    public function rechargerCompte(string $recepteur_id, float $montant): Transaction;
 }

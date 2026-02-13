@@ -78,6 +78,19 @@ class ServiceTransaction implements ServiceTransactionInterface {
         return $this->toDTO($trans);
     }
 
+    public function rechargerCompte($rechargement_dto): TransactionDTO{
+        try{
+            $trans = $this->transaction_repository->rechargerCompte($rechargement_dto->id_recepteur, $rechargement_dto->montant);
+            $this->serviceLog->creationLogTransaction($trans->emetteur_id, $trans->id, $trans->montant);
+            $this->serviceLog->creationLogReceptionTransaction($trans->emetteur_id, $trans->id);
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." non trouvé", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+        return $this->toDTO($trans);
+    }
+
     private function toDTO($trans): TransactionDTO
     {
         return new TransactionDTO(

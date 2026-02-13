@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use api\actions\AdminLogsAction;
+use api\actions\RechargementAction;
 use api\actions\SigninAction;
 use api\actions\CreateTransactionAction;
 use api\actions\DeleteUserAction;
@@ -63,7 +64,7 @@ return function( App $app): App {
         ->add(new AuthzUserRessourceAccessMiddleware())
         ->add(JwtAuthMiddleware::class);
 
-    $app->post('/users/{id_user}/recharge', RechargeAction::class)
+    $app->post('/users/{id_user}/recharge', RechargementAction::class)
         ->add(new AuthzUserRessourceAccessMiddleware())
         ->add(JwtAuthMiddleware::class);
 
@@ -82,7 +83,7 @@ return function( App $app): App {
         ->add(JwtAuthMiddleware::class);
     $app->get("/logs", LogsListAction::class)
         ->add(AuthzAdminMiddleware::class)
-        ->add(JwtAuthMiddleware::class);;
+        ->add(JwtAuthMiddleware::class);
 
 //    FONCTIONNALITES ETENDUES
 //    $app->get("/card/{id_card}", CarteByIdAction::class);

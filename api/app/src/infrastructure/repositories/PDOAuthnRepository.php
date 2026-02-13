@@ -45,6 +45,33 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         );
     }
 
+    public function getUserAdmin(): Utilisateur
+    {
+        try {
+            $stmt = $this->authn_pdo->prepare(
+                "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE role = 'admin' LIMIT 1"
+            );
+            $stmt->execute();
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$res) {
+                throw new EntityNotFoundException("Il n'existe pas d'admin", 'utilisateur');
+            }
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\Throwable) {
+            throw new \Exception("Erreur lors de la récupération d'un admin.", 400);
+        }
+        return new Utilisateur(
+            id: $res['id'],
+            nom: $res['nom'],
+            prenom: $res['prenom'],
+            email: $res['email'],
+            mot_de_passe: $res['mot_de_passe'],
+            role: $res['role']
+        );
+    }
+
     public function getUserById(string $id): Utilisateur
     {
         try {
