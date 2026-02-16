@@ -3,8 +3,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:untitled/presentation/screens/paiement/service/payment_service.dart';
 import '../../../domain/modeles/payment_request.dart';
 import '../auth/services/auth_service.dart';
-import '../auth/services/auth_service.dart';
-
 
 class SendScreen extends StatefulWidget {
   const SendScreen({super.key});
@@ -17,7 +15,7 @@ class _SendScreenState extends State<SendScreen> {
   MobileScannerController cameraController = MobileScannerController();
   bool _isProcessing = false;
   String? _currentUserId;
-  double? _currentSolde;
+  int? _currentSolde;
 
   @override
   void initState() {
@@ -390,8 +388,8 @@ class _SendScreenState extends State<SendScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Fermer le dialog
-                    Navigator.pop(context); // Retour au HomeScreen
+                    Navigator.pop(context); // Fermer le dialog de succès
+                    Navigator.pop(context, true); // ✅ Retourner à HomeScreen avec flag=true
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF6B6B),

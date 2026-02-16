@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double _solde = 0;
+  double _solde = 0.0;
   List<Transaction> _recentTransactions = [];
   bool _isLoadingSolde = true;
   bool _isLoadingTransactions = true;
@@ -102,6 +102,36 @@ class _HomeScreenState extends State<HomeScreen> {
     await _loadData();
   }
 
+
+  /// Navigation vers SendScreen avec refresh au retour
+  Future<void> _navigateToSendScreen() async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (context) => const SendScreen()),
+    );
+
+    // Si une transaction a été effectuée, recharger les données
+    if (result == true && mounted) {
+      print('🔄 Transaction effectuée, rechargement des données...');
+      await _refreshData();
+    }
+  }
+
+  /// Navigation vers ReceiveScreen avec refresh au retour
+  Future<void> _navigateToReceiveScreen() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ReceiveScreen()),
+    );
+
+    // Optionnel : recharger aussi après la génération de QR
+    // (au cas où le commerçant aurait reçu un paiement entre temps)
+    if (mounted) {
+      await _refreshData();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
               /// CARTE DU SOLDE
               /// =====================
               Container(
-                height: 250,
+                height: 220,
                 margin: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),

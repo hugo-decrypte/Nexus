@@ -32,6 +32,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         try {
             $user = $this->userProvider->signin($user_dto);
             $this->serviceLog->creationLogConnection($user->id);
+            $userName = $this->getUserByEmail($user->email);
         } catch(\Exception $e){
             throw new \Exception($e->getMessage(), $e->getCode());
         }
@@ -50,7 +51,7 @@ class ServiceAuthn implements ServiceAuthnInterface {
         ];
 
         // 3. On encode et on return
-        return [$user->id,JWT::encode($payload, $this->secretKey, 'HS512')];
+        return [$user->id,$userName->nom,$userName->prenom,$user->role,JWT::encode($payload, $this->secretKey, 'HS512')];
     }
 
     public function signup(InputUserDTO $user_dto, ?string $role = "client"): array {
