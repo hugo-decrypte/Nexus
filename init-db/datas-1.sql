@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS cartes;
 DROP TABLE IF EXISTS utilisateurs;
 
 CREATE TYPE user_role AS ENUM ('client', 'commercant', 'admin');
@@ -36,4 +37,15 @@ CREATE TABLE logs (
       FOREIGN KEY (acteur_id) REFERENCES utilisateurs(id)
 );
 
+CREATE TABLE cartes (
+      id UUID PRIMARY KEY,
+      id_rfid VARCHAR(32) NOT NULL UNIQUE,
+      utilisateur_id UUID NOT NULL,
+      date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      actif BOOLEAN DEFAULT true,
+      FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
+);
+
 CREATE INDEX idx_logs_created_at ON logs(date_creation);
+CREATE INDEX idx_cartes_utilisateur_id ON cartes(utilisateur_id);
+CREATE UNIQUE INDEX idx_cartes_id_rfid ON cartes(id_rfid);

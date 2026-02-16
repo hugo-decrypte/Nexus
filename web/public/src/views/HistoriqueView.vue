@@ -51,14 +51,22 @@ async function loadTransactions() {
     const data = await res.json()
     const list = Array.isArray(data) ? data : (data?.transactions ? data.transactions : [])
     if (list.length) {
-      transactions.value = list.map((t) => ({
-        id: t.id,
-        compte: `**** ${String(t.emetteur_id || t.recepteur_id || '').slice(-4)}` || '—',
-        date: t.created_at ? new Date(t.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—',
-        beneficiaire: t.beneficiaire || '—',
-        description: t.description || 'Envoi / Réception PO',
-        montant: t.montant != null ? `${t.montant > 0 ? '+' : ''} ${t.montant} PO` : '—',
-      }))
+      transactions.value = list.map((t) => {
+        const isReception = t.recepteur_id === userId
+        const signedMontant = t.montant != null ? (isReception ? t.montant : -t.montant) : null
+        const montantStr =
+          signedMontant != null
+            ? `${signedMontant >= 0 ? '+' : ''} ${signedMontant} PO`
+            : '—'
+        return {
+          id: t.id,
+          compte: `**** ${String(t.emetteur_id || t.recepteur_id || '').slice(-4)}` || '—',
+          date: t.created_at ? new Date(t.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—',
+          beneficiaire: t.beneficiaire || '—',
+          description: t.description || 'Envoi / Réception PO',
+          montant: montantStr,
+        }
+      })
     }
   } catch {
     // garde les données de démo
