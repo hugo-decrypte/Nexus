@@ -48,7 +48,7 @@ return function( App $app): App {
     $app->get('/users/search', UserSearchByEmailAction::class)
         ->add(JwtAuthMiddleware::class);
     $app->get('/users/{id_user}', UserByIdAction::class)
-        ->add(new AuthzUserRessourceAccessMiddleware())
+        //->add(new AuthzUserRessourceAccessMiddleware()) Supression temporaire
         ->add(JwtAuthMiddleware::class);
 
     $app->get('/users/{id_user}/solde', UserSoldeAction::class)
