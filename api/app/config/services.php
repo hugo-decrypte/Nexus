@@ -39,7 +39,7 @@ return [
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
     },
     ServiceTransactionInterface::class => function (ContainerInterface $c) {
-        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(ServiceLogInterface::class));
+        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class));
     },
     AuthzUserService::class => function (ContainerInterface $c) {
         return new AuthzUserService();
