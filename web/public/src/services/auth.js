@@ -1,12 +1,9 @@
 const TOKEN_KEY = 'nexus_token'
 
-// Connexion : appelle POST /api/auth/login (ou /auth/login si proxy enlève /api)
+// Connexion : POST /api/auth/login (proxy Vite ou nginx redirige vers l'API)
 export async function login(email, motDePasse) {
-  const apiBase = import.meta.env.VITE_API_BASE_URL || ''
-  const url = `${apiBase}/api/auth/login`
-
   try {
-    const response = await fetch(url, {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
