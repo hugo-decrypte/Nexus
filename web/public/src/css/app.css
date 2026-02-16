@@ -456,6 +456,21 @@ main {
   color: var(--color-text-primary);
 }
 
+[data-theme="sombre"] .recevoir-view .recevoir-back,
+[data-theme="sombre"] .recevoir-view .recevoir-back .material-icons {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .recevoir-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .recevoir-card-title,
+[data-theme="sombre"] .recevoir-hint {
+  color: var(--color-text-secondary);
+}
+
 [data-theme="sombre"] .settings-view .section-desc,
 [data-theme="sombre"] .settings-view .settings-label {
   color: var(--color-text-secondary);

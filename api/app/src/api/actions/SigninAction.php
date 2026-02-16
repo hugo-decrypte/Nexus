@@ -31,10 +31,13 @@ class SigninAction {
 
         // 3. On appelle le service
         try {
-            [$userId, $token] = $this->authnService->signin($utilisateur_dto, $host);
+            [$userId,$nom,$prenom,$role, $token] = $this->authnService->signin($utilisateur_dto, $host);
 
             $responseData = [
                 'id'    => $userId,
+                'nom' => $nom,
+                'prenom' => $prenom,
+                'role' => $role,
                 'token' => $token
             ];
 

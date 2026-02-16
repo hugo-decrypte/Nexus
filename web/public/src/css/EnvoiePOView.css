@@ -147,14 +147,6 @@
   font-size: 24px;
 }
 
-.envoie-btn-qr {
-  background: #e85d5a;
-}
-
-.envoie-btn-qr:hover {
-  background: #d64d4a;
-}
-
 .envoie-montant-row {
   display: flex;
   align-items: center;
