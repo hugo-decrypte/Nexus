@@ -13,7 +13,7 @@
       <section class="profile-card-pink">
         <div class="profile-card-left">
           <p class="profile-name">{{ form.prenom }} {{ form.nom }}</p>
-          <p class="profile-card-number">N° **** {{ maskedCardNumber }}</p>
+          <p class="profile-card-number">N° {{ accountId }}</p>
         </div>
         <div class="profile-card-right">
           <p class="profile-balance-label">Solde actuel</p>
@@ -133,7 +133,7 @@ import { getProfile, getSolde, updateProfile, updatePassword } from '../services
 const editMode = ref(false)
 const loadError = ref('')
 const solde = ref(0)
-const maskedCardNumber = ref('1234')
+const accountId = ref('')
 
 const form = reactive({
   prenom: '',
@@ -183,7 +183,7 @@ onMounted(async () => {
     solde.value = soldeData.solde
   }
 
-  maskedCardNumber.value = user.id.slice(-4)
+  accountId.value = user.id
 })
 
 function formatBalance(amount) {

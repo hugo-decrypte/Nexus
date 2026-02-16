@@ -5,7 +5,7 @@
       <p class="card-owner-name">NEXUS</p>
       <div class="balance-card-left">
         <p class="user-name">{{ userFullName }}</p>
-        <p class="account-number">{{ maskedAccountNumber }}</p>
+        <p class="account-number">{{ accountNumberDisplay }}</p>
       </div>
       <div class="balance-card-right">
         <p class="balance-label">Solde actuel</p>
@@ -74,8 +74,8 @@ const accountNumber = ref('')
 const balance = ref(0)
 const recentTransactions = ref([])
 
-const maskedAccountNumber = computed(() =>
-  accountNumber.value ? `N° **** ${accountNumber.value}` : ''
+const accountNumberDisplay = computed(() =>
+  accountNumber.value ? `N° ${accountNumber.value}` : ''
 )
 
 const formattedBalance = computed(() =>
@@ -94,7 +94,7 @@ onMounted(async () => {
     userFullName.value = [profile.prenom, profile.nom].filter(Boolean).join(' ') || 'Utilisateur'
   }
 
-  accountNumber.value = String(user.id).slice(-4)
+  accountNumber.value = user.id
 
   const soldeData = await getSolde(user.id)
   if (soldeData != null && typeof soldeData.solde !== 'undefined') {

@@ -43,8 +43,7 @@ async function loadTransactions() {
     const user = getUser()
     const userId = user?.id
     if (!token || !userId) return
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || ''
-    const res = await fetch(`${baseUrl}/api/transactions/${userId}`, {
+    const res = await fetch(`/api/transactions/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (!res.ok) return
