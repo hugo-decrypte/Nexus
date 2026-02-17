@@ -21,7 +21,7 @@ class MailSender implements MailSenderInterface {
             $mail->SMTPAuth   = false;
             $mail->SMTPAutoTLS = false;
 
-            $mail->setFrom('noreply@nexus.net', 'Nexus API');
+            $mail->setFrom('noreply@projet-tutore-nexus.com', 'Nexus');
             $mail->addAddress($to);
 
             $mail->isHTML(true);
