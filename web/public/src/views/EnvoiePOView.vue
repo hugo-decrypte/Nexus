@@ -77,12 +77,13 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, RouterLink } from 'vue-router'
 import { getUser } from '../services/auth.js'
-import { searchUserByEmail, createTransaction } from '../services/transaction.js'
+import { searchUserByEmail, createTransaction, getPublicProfile } from '../services/transaction.js'
 import '../css/EnvoiePOView.css'
 
+const route = useRoute()
 const email = ref('')
 const recipient = ref(null)
 const searchLoading = ref(false)
@@ -96,6 +97,21 @@ const sendSuccess = ref('')
 watch(email, () => {
   recipient.value = null
   searchError.value = ''
+})
+
+onMounted(async () => {
+  const dest = route.query.dest
+  const montantQuery = route.query.montant
+  if (dest) {
+    const profile = await getPublicProfile(dest)
+    if (profile) {
+      recipient.value = { id: profile.id, prenom: profile.prenom, nom: profile.nom, email: '' }
+    }
+  }
+  if (montantQuery != null && montantQuery !== '') {
+    const n = Number(montantQuery)
+    if (!Number.isNaN(n) && n > 0) montant.value = n
+  }
 })
 
 async function rechercher() {

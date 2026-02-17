@@ -37,6 +37,23 @@ export async function searchUserByEmail(email) {
 }
 
 /**
+ * Profil public (id, prenom, nom) pour afficher le destinataire après scan QR.
+ * @param {string} userId
+ * @returns {Promise<{id, prenom, nom}|null>}
+ */
+export async function getPublicProfile(userId) {
+  if (!userId) return null
+  try {
+    const res = await fetch(`/api/users/${userId}/public`, { headers: authHeaders() })
+    if (!res.ok) return null
+    return await res.json()
+  } catch (err) {
+    console.error('Erreur profil public:', err)
+    return null
+  }
+}
+
+/**
  * Crée une transaction (envoi de PO).
  * @param {string} id_emetteur
  * @param {string} id_recepteur
