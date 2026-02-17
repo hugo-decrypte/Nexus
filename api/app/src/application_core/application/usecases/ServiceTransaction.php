@@ -4,18 +4,22 @@ namespace application_core\application\usecases;
 
 use api\dtos\InputTransactionDTO;
 use api\dtos\TransactionDTO;
+use api\dtos\TransactionWithNameDTO;
 use api\middlewares\CreateTransactionMiddleware;
 use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use application_core\exceptions\EntityNotFoundException;
+use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
 
 class ServiceTransaction implements ServiceTransactionInterface {
     private TransactionRepositoryInterface $transaction_repository;
+    private AuthnRepositoryInterface $authn_repository;
     private ServiceLogInterface $serviceLog;
 
-    public function __construct(TransactionRepositoryInterface $transaction_repository, ServiceLogInterface $serviceLog) {
+    public function __construct(TransactionRepositoryInterface $transaction_repository, AuthnRepositoryInterface $authn_repository, ServiceLogInterface $serviceLog) {
         $this->transaction_repository = $transaction_repository;
+        $this->authn_repository = $authn_repository;
         $this->serviceLog = $serviceLog;
     }
 
@@ -33,7 +37,9 @@ class ServiceTransaction implements ServiceTransactionInterface {
         try {
             $transactions = $this->transaction_repository->getTransaction($id_user);
             return array_map(function($transaction) {
-                return $this->toDTO($transaction);
+                $user_emetteur = $this->authn_repository->getUserById($transaction->emetteur_id);
+                $user_recepteur = $this->authn_repository->getUserById($transaction->recepteur_id);
+                return $this->toDTOAvecNom($transaction,$user_emetteur,$user_recepteur);
             }, $transactions);
 
         } catch (EntityNotFoundException $e) {
@@ -99,6 +105,23 @@ class ServiceTransaction implements ServiceTransactionInterface {
             hash: $trans->hash,
             emetteur_id: $trans->emetteur_id,
             recepteur_id: $trans->recepteur_id,
+            description: $trans->description,
+            created_at: $trans->created_at
+        );
+    }
+
+    private function toDTOAvecNom($trans,$user_emetteur, $user_recepteur): TransactionWithNameDTO
+    {
+        return new TransactionWithNameDTO(
+            id: $trans->id,
+            montant: $trans->montant,
+            hash: $trans->hash,
+            emetteur_id: $trans->emetteur_id,
+            emetteur_nom: $user_emetteur->nom,
+            emetteur_prenom:$user_emetteur->prenom,
+            recepteur_id: $trans->recepteur_id,
+            recepteur_nom: $user_recepteur->nom,
+            recepteur_prenom: $user_recepteur->prenom,
             description: $trans->description,
             created_at: $trans->created_at
         );
