@@ -20,6 +20,7 @@ class EnregistrerUtilisateurMiddleware {
                 ->key('mot_de_passe', v::stringType()->notEmpty())
                 ->key('nom', v::stringType()->notEmpty())
                 ->key('prenom', v::stringType()->notEmpty())
+                ->key('role', v::stringType()->notEmpty())
                 ->assert($data);
 
         } catch (NestedValidationException $e) {
