@@ -48,6 +48,44 @@ export async function login(email, motDePasse) {
   }
 }
 
+// Inscription : POST /api/auth/register
+export async function register(email, motDePasse) {
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        mot_de_passe: motDePasse,
+      }),
+    })
+
+    const contentType = response.headers.get('Content-Type') || ''
+    let data = {}
+    if (contentType.includes('application/json')) {
+      try {
+        data = await response.json()
+      } catch {
+        return { success: false, error: 'Réponse du serveur invalide' }
+      }
+    }
+
+    if (response.ok) {
+      return { success: true }
+    }
+    return { success: false, error: data.error || "Erreur lors de l'inscription" }
+  } catch (err) {
+    console.error('Erreur d\'inscription:', err)
+    const message = err.message || ''
+    if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
+      return { success: false, error: 'Impossible de joindre le serveur. Vérifiez que l\'API est démarrée (ex. port 6080).' }
+    }
+    return { success: false, error: 'Erreur de connexion au serveur' }
+  }
+}
+
 // deconnexion
 export function logout() {
   localStorage.removeItem(TOKEN_KEY)

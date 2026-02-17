@@ -33,7 +33,7 @@
       <!-- Colonne droite : inscription -->
       <div class="login-col login-col-right">
         <h2 class="login-title">Première visite ?</h2>
-        <router-link to="/home" class="btn btn-create">
+        <router-link to="/register" class="btn btn-create">
           Créer mon compte
         </router-link>
       </div>

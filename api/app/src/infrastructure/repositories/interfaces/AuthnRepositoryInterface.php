@@ -3,6 +3,7 @@
 namespace infrastructure\repositories\interfaces;
 
 use api\dtos\CredentialsDTO;
+use api\dtos\CredentialsGoogleDTO;
 use application_core\domain\entities\utilisateur\Utilisateur;
 
 interface AuthnRepositoryInterface {
@@ -14,4 +15,6 @@ interface AuthnRepositoryInterface {
     public function saveUser(CredentialsDTO $cred, ?string $role = "client"): void;
     public function updateUser(string $id, string $nom, string $prenom, string $email): void;
     public function updatePassword(string $id, string $hashedPassword): void;
+    public function getUserByGoogleId(string $googleId): Utilisateur;
+    public function saveGoogleUser(CredentialsGoogleDTO $cred, ?string $role = 'client'): void;
 }

@@ -11,7 +11,7 @@ CREATE TABLE utilisateurs (
       nom VARCHAR(50) NOT NULL,
       prenom VARCHAR(50) NOT NULL,
       email VARCHAR(100) UNIQUE NOT NULL,
-      mot_de_passe VARCHAR(255) NOT NULL,
+      mot_de_passe VARCHAR(255) NULL,
       role user_role DEFAULT 'client',
       date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -43,6 +43,13 @@ CREATE TABLE cartes (
       utilisateur_id UUID NOT NULL,
       date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       actif BOOLEAN DEFAULT true,
+      FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
+);
+
+CREATE TABLE utilisateursGoogle (
+      id UUID PRIMARY KEY,
+      utilisateur_id UUID NOT NULL,
+      google_id VARCHAR UNIQUE,
       FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
 );
 

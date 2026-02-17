@@ -176,8 +176,8 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
         }
 
         try {
-            $this->authn_repository->getUserById($emetteur_id);
-            $this->authn_repository->getUserById($recepteur_id);
+            $emetteur = $this->authn_repository->getUserById($emetteur_id);
+            $recepteur = $this->authn_repository->getUserById($recepteur_id);
             $stmt = $this->transaction_pdo->prepare(
                 "INSERT INTO transactions (id, emetteur_id, recepteur_id, montant, hash, description) VALUES (:id, :emetteur_id, :recepteur_id, :montant, :hash, :desc)"
             );
@@ -201,10 +201,12 @@ class PDOTransactionRepository implements TransactionRepositoryInterface {
             id: $id,
             montant: $montant,
             hash: $newHash,
+            created_at: date('Y-m-d H:i:s'),
             emetteur_id: $emetteur_id,
             recepteur_id: $recepteur_id,
-            created_at: date('Y-m-d H:i:s'),
-            description: $desc
+            description: $desc,
+            emetteur_email: $emetteur->email,
+            recepteur_email: $recepteur->email
         );
     }
 

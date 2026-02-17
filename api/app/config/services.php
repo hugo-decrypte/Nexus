@@ -14,17 +14,23 @@ use application_core\application\usecases\ServiceAuthn;
 use application_core\application\usecases\ServiceLog;
 use application_core\application\usecases\ServiceTransaction;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
+use infrastructure\repositories\interfaces\GoogleRepositoryInterface;
 use infrastructure\repositories\interfaces\LogRepositoryInterface;
+use infrastructure\repositories\interfaces\MailSenderInterface;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
+use infrastructure\repositories\MailSender;
 use infrastructure\repositories\PDOAuthnRepository;
+use infrastructure\repositories\PDOGoogleRepository;
 use infrastructure\repositories\PDOLogRepository;
 use infrastructure\repositories\PDOTransactionRepository;
 use Psr\Container\ContainerInterface;
 
 return [
-
+    GoogleRepositoryInterface::class => function (ContainerInterface $c) {
+        return new PDOGoogleRepository($c->get("nexus.pdo"));
+    },
     AuthnRepositoryInterface::class => function (ContainerInterface $c) {
-        return new PDOAuthnRepository($c->get("nexus.pdo"));
+        return new PDOAuthnRepository($c->get("nexus.pdo"), $c->get(GoogleRepositoryInterface::class));
     },
     TransactionRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOTransactionRepository($c->get("nexus.pdo"), $c->get(AuthnRepositoryInterface::class));
@@ -39,7 +45,7 @@ return [
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
     },
     ServiceTransactionInterface::class => function (ContainerInterface $c) {
-        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class));
+        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),$c->get(MailSenderInterface::class));
     },
     AuthzUserService::class => function (ContainerInterface $c) {
         return new AuthzUserService();
@@ -55,6 +61,9 @@ return [
     },
     ServiceAuthnInterface::class => function (ContainerInterface $c) {
         return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
+    },
+    MailSenderInterface::class => function (ContainerInterface $c) {
+        return new MailSender();
     },
 
 
