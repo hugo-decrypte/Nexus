@@ -9,6 +9,8 @@ use api\middlewares\CreateTransactionMiddleware;
 use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
 use application_core\exceptions\EntityNotFoundException;
+use application_core\exceptions\SendMailException;
+use infrastructure\repositories\interfaces\MailSenderInterface;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
 
@@ -16,11 +18,13 @@ class ServiceTransaction implements ServiceTransactionInterface {
     private TransactionRepositoryInterface $transaction_repository;
     private AuthnRepositoryInterface $authn_repository;
     private ServiceLogInterface $serviceLog;
+    private MailSenderInterface $mail_sender;
 
-    public function __construct(TransactionRepositoryInterface $transaction_repository, AuthnRepositoryInterface $authn_repository, ServiceLogInterface $serviceLog) {
+    public function __construct(TransactionRepositoryInterface $transaction_repository, AuthnRepositoryInterface $authn_repository, ServiceLogInterface $serviceLog, MailSenderInterface $mail_sender) {
         $this->transaction_repository = $transaction_repository;
         $this->authn_repository = $authn_repository;
         $this->serviceLog = $serviceLog;
+        $this->mail_sender = $mail_sender;
     }
 
     public function calculSolde(string $id_user): float
@@ -76,8 +80,20 @@ class ServiceTransaction implements ServiceTransactionInterface {
             $trans = $this->transaction_repository->creerTransaction($transaction_dto->id_emetteur, $transaction_dto->id_recepteur, $transaction_dto->montant, $transaction_dto->description);
             $this->serviceLog->creationLogTransaction($transaction_dto->id_emetteur, $trans->id, $transaction_dto->montant);
             $this->serviceLog->creationLogReceptionTransaction($transaction_dto->id_recepteur, $trans->id);
+            $this->mail_sender->send(
+                $trans->emetteur_email,
+                'Confirmation de transaction',
+                'Votre virement de ' . $transaction_dto->montant . 'PO a bien été effectué envers ' . $trans->recepteur_email . '.'
+            );
+            $this->mail_sender->send(
+                $trans->recepteur_email,
+                'Reception de transaction',
+                'Vous venez de recevoir ' . $transaction_dto->montant . 'PO de la part de ' . $trans->emetteur_email . '.'
+            );
         } catch (EntityNotFoundException $e) {
             throw new EntityNotFoundException($e->getEntity()." non trouvé", $e->getEntity());
+        } catch (SendMailException) {
+            throw new SendMailException();
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage(), $e->getCode());
         }
