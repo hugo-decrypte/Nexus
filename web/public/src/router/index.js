@@ -8,6 +8,7 @@ import RecevoirView from '../views/RecevoirView.vue'
 import AccountView from '../views/AccountView.vue'
 import SettingsView from '../views/SettingsView.vue'
 import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 /** true = connexion obligatoire pour accéder aux pages, false = accès libre à toutes les pages */
 const AUTH_REQUIRED = true
@@ -16,6 +17,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/login', name: 'login', component: Login, meta: { public: true } },
+    { path: '/register', name: 'register', component: Register, meta: { public: true } },
     { path: '/home', name: 'home', component: HomeView },
     { path: '/historique', name: 'historique', component: HistoriqueView },
     { path: '/rechargement', name: 'rechargement', component: RechargementView },
@@ -37,7 +39,7 @@ router.beforeEach((to, from, next) => {
   const authenticated = isAuthenticated()
 
   if (isPublic) {
-    if (to.path === '/login' && authenticated) {
+    if ((to.path === '/login' || to.path === '/register') && authenticated) {
       next({ path: '/home', replace: true })
     } else {
       next()

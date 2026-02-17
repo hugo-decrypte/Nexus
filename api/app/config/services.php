@@ -16,7 +16,9 @@ use application_core\application\usecases\ServiceTransaction;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use infrastructure\repositories\interfaces\GoogleRepositoryInterface;
 use infrastructure\repositories\interfaces\LogRepositoryInterface;
+use infrastructure\repositories\interfaces\MailSenderInterface;
 use infrastructure\repositories\interfaces\TransactionRepositoryInterface;
+use infrastructure\repositories\MailSender;
 use infrastructure\repositories\PDOAuthnRepository;
 use infrastructure\repositories\PDOGoogleRepository;
 use infrastructure\repositories\PDOLogRepository;
@@ -43,7 +45,7 @@ return [
         return new AuthnProvider($c->get(AuthnRepositoryInterface::class));
     },
     ServiceTransactionInterface::class => function (ContainerInterface $c) {
-        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class));
+        return new ServiceTransaction($c->get(TransactionRepositoryInterface::class),$c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),$c->get(MailSenderInterface::class));
     },
     AuthzUserService::class => function (ContainerInterface $c) {
         return new AuthzUserService();
@@ -59,6 +61,9 @@ return [
     },
     ServiceAuthnInterface::class => function (ContainerInterface $c) {
         return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
+    },
+    MailSenderInterface::class => function (ContainerInterface $c) {
+        return new MailSender();
     },
 
 

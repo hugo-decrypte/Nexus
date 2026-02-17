@@ -12,6 +12,7 @@ use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
+use api\actions\UserPublicProfileAction;
 use api\actions\UserSearchByEmailAction;
 use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
@@ -46,6 +47,8 @@ return function( App $app): App {
         ->add(AuthzAdminMiddleware::class)
         ->add(JwtAuthMiddleware::class);
     $app->get('/users/search', UserSearchByEmailAction::class)
+        ->add(JwtAuthMiddleware::class);
+    $app->get('/users/{id_user}/public', UserPublicProfileAction::class)
         ->add(JwtAuthMiddleware::class);
     $app->get('/users/{id_user}', UserByIdAction::class)
         //->add(new AuthzUserRessourceAccessMiddleware()) Supression temporaire

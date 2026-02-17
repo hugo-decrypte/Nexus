@@ -471,6 +471,29 @@ main {
   color: var(--color-text-secondary);
 }
 
+[data-theme="sombre"] .recevoir-option,
+[data-theme="sombre"] .recevoir-option-desc {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="sombre"] .recevoir-montant-input {
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .recevoir-qr-modal {
+  background: var(--color-card-bg);
+}
+
+[data-theme="sombre"] .recevoir-qr-title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .recevoir-qr-desc {
+  color: var(--color-text-secondary);
+}
+
 [data-theme="sombre"] .settings-view .section-desc,
 [data-theme="sombre"] .settings-view .settings-label {
   color: var(--color-text-secondary);

@@ -2,9 +2,15 @@ class Transaction {
   final String id;
   final double montant;
   final String? hash;
+
   final String? emetteurId;
+  final String? emetteurNom;
+  final String? emetteurPrenom;
+
   final String? recepteurId;
-  final String? compteId;
+  final String? recepteurNom;
+  final String? recepteurPrenom;
+
   final String? description;
   final DateTime date;
 
@@ -12,9 +18,15 @@ class Transaction {
     required this.id,
     required this.montant,
     this.hash,
+
     this.emetteurId,
+    this.emetteurNom,
+    this.emetteurPrenom,
+
     this.recepteurId,
-    this.compteId,
+    this.recepteurNom,
+    this.recepteurPrenom,
+
     this.description,
     required this.date,
   });
@@ -25,8 +37,11 @@ class Transaction {
       montant: double.tryParse(json['montant']?.toString() ?? '0') ?? 0.0,
       hash: json['hash']?.toString(),
       emetteurId: json['emetteur_id']?.toString(),
+      emetteurNom: json['emetteur_nom']?.toString(),
+      emetteurPrenom: json['emetteur_prenom']?.toString(),
       recepteurId: json['recepteur_id']?.toString(),
-      compteId: json['compte_id']?.toString(),
+      recepteurNom: json['recepteur_nom']?.toString(),
+      recepteurPrenom: json['recepteur_prenom']?.toString(),
       description: json['description']?.toString() ?? json['libelle']?.toString(),
       date: json['date'] != null
           ? DateTime.parse(json['date'])

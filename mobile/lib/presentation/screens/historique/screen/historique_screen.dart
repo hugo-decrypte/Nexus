@@ -42,7 +42,7 @@ class _HistoriqueScreenState extends State<HistoriqueScreen> {
         throw Exception('Utilisateur non connecté');
       }
 
-      // ✅ Sauvegarder l'userId
+      // Sauvegarder l'userId
       _currentUserId = userId;
 
       final transactions = await TransactionService.getTransactions(userId);
@@ -219,7 +219,7 @@ class _HistoriqueScreenState extends State<HistoriqueScreen> {
   }
 
   Widget _buildTransactionCard(Transaction transaction) {
-    // ✅ Utiliser l'userId pour déterminer le type
+    // Utiliser l'userId pour déterminer le type
     final isIncome = _currentUserId != null
         ? transaction.isIncomeFor(_currentUserId!)
         : transaction.isIncome;
@@ -286,13 +286,30 @@ class _HistoriqueScreenState extends State<HistoriqueScreen> {
 
                 // Montant
                 Text(
-                  '${isIncome ? '+' : '-'}${transaction.getFormattedAmount()} €',
+                  '${isIncome ? '+' : '-'}${transaction.getFormattedAmount()}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
                 ),
+
+                const SizedBox(width: 4),
+
+                // Icône PO
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage('images/logo_PO.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+
+
               ],
             ),
           ),
@@ -341,15 +358,15 @@ class _HistoriqueScreenState extends State<HistoriqueScreen> {
             ),
             const SizedBox(height: 24),
             _buildDetailRow('Type', isIncome ? 'Réception' : 'Envoi'),
-            _buildDetailRow('Montant', '${transaction.getFormattedAmount()} €'),
+            _buildDetailRow('Montant', '${transaction.getFormattedAmount()} PO'),
             _buildDetailRow('Date', transaction.getFormattedDate()),
             _buildDetailRow('Heure', transaction.getFormattedTime()),
             if (transaction.description != null)
               _buildDetailRow('Description', transaction.description!),
             if (transaction.emetteurId != null)
-              _buildDetailRow('Emetteur', transaction.emetteurId!),
+              _buildDetailRow('Emetteur', '${transaction.emetteurPrenom} ${transaction.emetteurNom}'),
             if (transaction.recepteurId != null)
-              _buildDetailRow('Destinataire :', transaction.recepteurId!),
+              _buildDetailRow('Destinataire :', '${transaction.recepteurPrenom} ${transaction.recepteurNom}'),
             _buildDetailRow('reference transaction', transaction.id),
             const SizedBox(height: 24),
             SizedBox(

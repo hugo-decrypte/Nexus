@@ -10,6 +10,7 @@ use api\actions\TransactionByIdAction;
 use api\actions\TransactionsAction;
 use api\actions\TransactionsBetweenAction;
 use api\actions\UserByIdAction;
+use api\actions\UserPublicProfileAction;
 use api\actions\UserSearchByEmailAction;
 use api\actions\UserSoldeAction;
 use api\actions\DeleteUserAction;
@@ -50,6 +51,9 @@ return [
     },
     UserByIdAction::class => function (ContainerInterface $c) {
         return new UserByIdAction($c->get(ServiceAuthnInterface::class));
+    },
+    UserPublicProfileAction::class => function (ContainerInterface $c) {
+        return new UserPublicProfileAction($c->get(ServiceAuthnInterface::class));
     },
     UserSearchByEmailAction::class => function (ContainerInterface $c) {
         return new UserSearchByEmailAction($c->get(ServiceAuthnInterface::class));

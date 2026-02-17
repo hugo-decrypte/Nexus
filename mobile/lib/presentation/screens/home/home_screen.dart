@@ -231,16 +231,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 8),
+                                    // Icône PO
                                     Container(
-                                      padding: const EdgeInsets.all(6),
+                                      width: 50,
+                                      height: 50,
                                       decoration: const BoxDecoration(
-                                        color: Color(0xFFFFC107),
                                         shape: BoxShape.circle,
-                                      ),
-                                      child: const Icon(
-                                        Icons.monetization_on,
-                                        color: Colors.white,
-                                        size: 20,
+                                        image: DecorationImage(
+                                          image: AssetImage('images/logo_PO.png'),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -586,15 +586,14 @@ class _TransactionItem extends StatelessWidget {
 
                 // Icône PO
                 Container(
-                  padding: const EdgeInsets.all(4),
+                  width: 30,
+                  height: 30,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFFFC107),
                     shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.monetization_on,
-                    color: Colors.white,
-                    size: 12,
+                    image: DecorationImage(
+                      image: AssetImage('images/logo_PO.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ],
@@ -649,9 +648,9 @@ class _TransactionItem extends StatelessWidget {
             if (transaction.description != null)
               _buildDetailRow('Description', transaction.description!),
             if (transaction.emetteurId != null)
-              _buildDetailRow('Émetteur', transaction.emetteurId!),
+              _buildDetailRow('Emetteur', '${transaction.emetteurPrenom} ${transaction.emetteurNom}'),
             if (transaction.recepteurId != null)
-              _buildDetailRow('Récepteur', transaction.recepteurId!),
+              _buildDetailRow('Destinataire :', '${transaction.recepteurPrenom} ${transaction.recepteurNom}'),
             _buildDetailRow('ID', transaction.id),
             const SizedBox(height: 24),
             SizedBox(
