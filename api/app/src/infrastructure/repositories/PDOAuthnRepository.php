@@ -166,10 +166,12 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
                 'role' => $role
             ]);
 
-        } catch(HttpInternalServerErrorException) {
-            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch(\PDOException $e) {
-            throw new \Exception("Erreur lors de l'enregistrement de l'utilisateur : " . $e->getMessage(), 400);
+        } catch(HttpInternalServerErrorException $e) {
+            throw $e;
+        } catch(\PDOException) {
+            throw new \PDOException("Erreur lors de l'enregistrement de l'utilisateur", 400);
+        } catch(\Exception) {
+            throw new \Exception("Erreur par rapport à l'enregistrement d'un utilisateur", 400);
         }
     }
 
