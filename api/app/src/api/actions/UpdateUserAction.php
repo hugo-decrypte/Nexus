@@ -8,6 +8,7 @@ use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
 
 class UpdateUserAction
@@ -24,6 +25,22 @@ class UpdateUserAction
         $id_user = $args['id_user'] ?? null;
         if (empty($id_user)) {
             throw new HttpNotFoundException($request, 'id_user requis.');
+        }
+
+        $payload = $request->getAttribute('user_payload');
+        $current_id = $payload ? $payload->sub : null;
+        $current_role = $payload->data->role ?? null;
+        if ($current_role === 'admin' && $id_user !== $current_id) {
+            try {
+                $target = $this->authnService->getUserById($id_user);
+                if ($target->role === 'admin') {
+                    throw new HttpForbiddenException($request, 'Impossible de modifier un autre compte administrateur.');
+                }
+            } catch (HttpForbiddenException $e) {
+                throw $e;
+            } catch (\Exception $e) {
+                // Utilisateur cible introuvable : laisser UpdateUser gérer (404)
+            }
         }
 
         // Récupérer les données du corps de la requête

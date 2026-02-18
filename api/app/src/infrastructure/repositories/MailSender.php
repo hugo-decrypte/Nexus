@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class MailSender implements MailSenderInterface {
     private string $host = 'mailer';
-    private int $port = 25;
+    private int $port = 1025;
 
     public function send(string $to, string $subject, string $htmlBody) : void {
         $mail = new PHPMailer(true);

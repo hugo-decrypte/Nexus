@@ -13,6 +13,7 @@
       <div v-show="userMenuOpen" class="avatar-menu" role="menu">
         <RouterLink to="/account" class="avatar-menu-item" role="menuitem" @click="closeMenu">Mon compte</RouterLink>
         <RouterLink to="/settings" class="avatar-menu-item" role="menuitem" @click="closeMenu">Paramètres</RouterLink>
+        <RouterLink v-if="isAdmin" to="/admin" class="avatar-menu-item" role="menuitem" @click="closeMenu">Admin</RouterLink>
         <button type="button" class="avatar-menu-item avatar-menu-item-btn" role="menuitem" @click="handleLogout">Se déconnecter</button>
       </div>
     </Transition>
@@ -20,11 +21,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { logout } from '../services/auth.js'
+import { logout, getUser } from '../services/auth.js'
 
 const emit = defineEmits(['logout'])
+const isAdmin = computed(() => getUser()?.role === 'admin')
 
 const userMenuOpen = ref(false)
 const avatarDropdownRef = ref(null)

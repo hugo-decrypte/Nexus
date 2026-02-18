@@ -24,6 +24,10 @@
           <span class="menu-icon material-icons" aria-hidden="true">schedule</span>
           <span class="menu-label">Historique</span>
         </RouterLink>
+        <RouterLink v-if="isAdmin" to="/admin" class="menu-item">
+          <span class="menu-icon material-icons" aria-hidden="true">admin_panel_settings</span>
+          <span class="menu-label">Admin</span>
+        </RouterLink>
       </nav>
 
       <div class="user">
@@ -45,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute, RouterLink, RouterView } from 'vue-router'
 import { isAuthenticated, getUser } from './services/auth.js'
 import { getProfile } from './services/account.js'
@@ -56,6 +60,7 @@ const router = useRouter()
 const route = useRoute()
 const isLoggedIn = ref(isAuthenticated())
 const userDisplayName = ref('')
+const isAdmin = computed(() => getUser()?.role === 'admin')
 
 const isMobile = ref(typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches)
 const showLoading = ref(isMobile.value)
