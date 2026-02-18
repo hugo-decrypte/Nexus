@@ -11,24 +11,26 @@ use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\exceptions\EntityNotFoundException;
 use Firebase\JWT\JWT;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
+use infrastructure\repositories\interfaces\MailSenderInterface;
 
 class ServiceAuthn implements ServiceAuthnInterface {
 
     private AuthnProviderInterface $userProvider;
     private AuthnRepositoryInterface $authnRepository;
     private ServiceLogInterface $serviceLog;
+    private MailSenderInterface $mailSender;
     private string $secretKey;
 
-    public function __construct(AuthnProviderInterface $provider, AuthnRepositoryInterface $authnRepository, ServiceLogInterface $serviceLog, $jwtSecret) {
+    public function __construct(AuthnProviderInterface $provider, AuthnRepositoryInterface $authnRepository, ServiceLogInterface $serviceLog, MailSenderInterface $mailSender, $jwtSecret) {
         $this->userProvider = $provider;
         $this->authnRepository = $authnRepository;
         $this->serviceLog = $serviceLog;
         $this->secretKey = $jwtSecret;
+        $this->mailSender = $mailSender;
     }
 
     public function signin(InputAuthnDTO $user_dto, string $host) : array {
 
-        // 1. On valide l'user
         try {
             $user = $this->userProvider->signin($user_dto);
             $this->serviceLog->creationLogConnection($user->id);
@@ -37,7 +39,6 @@ class ServiceAuthn implements ServiceAuthnInterface {
             throw new \Exception($e->getMessage(), $e->getCode());
         }
 
-        // 2. On construit le payload
         $payload = [
             "iss" => $host,
             "aud" => $host,
@@ -50,7 +51,6 @@ class ServiceAuthn implements ServiceAuthnInterface {
             ]
         ];
 
-        // 3. On encode et on return
         return [$user->id,$userName->nom,$userName->prenom,$user->role,JWT::encode($payload, $this->secretKey, 'HS512')];
     }
 
@@ -58,8 +58,19 @@ class ServiceAuthn implements ServiceAuthnInterface {
         try {
             $passwordhash = password_hash($user_dto->mot_de_passe, PASSWORD_BCRYPT);
             $credential = new CredentialsDTO($user_dto->nom, $user_dto->prenom, $user_dto->email, $passwordhash);
-
-            $this->authnRepository->saveUser($credential, $role);
+            $validation_token = $this->authnRepository->saveUser($credential, $role);
+            $this->mailSender->send($user_dto->email, "Activation de votre compte Nexus - Action requise", <<<EOT
+            <html>
+            <body style="background-color: #f4f4f4;">
+            <h2 style="color: #2c3e50;">Bienvenue sur Nexus</h2>
+            <p>Cliquez ici :</p>
+            <a href="http://localhost:6080/verify-email?token=$validation_token" style="color: blue;">
+            Vérifier mon email
+            </a>
+            </body>
+            </html>
+            EOT
+            );
         } catch (\Exception $e) {
             return [
                 'status' => $e->getCode(),
@@ -187,5 +198,16 @@ class ServiceAuthn implements ServiceAuthnInterface {
             'email' => $user->email,
             'role' => $user->role,
         ]);
+    }
+
+    public function validateAccount(string $token): void
+    {
+        try {
+            $this->authnRepository->validateAccount($token);
+        } catch (EntityNotFoundException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

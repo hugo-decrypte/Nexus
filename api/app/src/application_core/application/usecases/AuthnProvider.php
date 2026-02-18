@@ -5,6 +5,7 @@ namespace application_core\application\usecases;
 use api\dtos\AuthnDTO;
 use api\dtos\InputAuthnDTO;
 use application_core\application\usecases\interfaces\AuthnProviderInterface;
+use application_core\exceptions\AccountNotValidatedException;
 use application_core\exceptions\ConnexionException;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 
@@ -30,6 +31,10 @@ class AuthnProvider implements AuthnProviderInterface {
 
         if (!$user || !password_verify($user_dto->mot_de_passe, $user->mot_de_passe)) {
             throw new ConnexionException("Identifiants incorrects.");
+        }
+
+        if (!$user->is_validated) {
+            throw new AccountNotValidatedException();
         }
 
         return new AuthnDTO(

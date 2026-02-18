@@ -55,7 +55,7 @@ return [
         return new AuthzClientMiddleware($c->get(AuthzUserService::class));
     },
     ServiceAuthnInterface::class => function (ContainerInterface $c) {
-        return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
+        return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),$c->get(MailSenderInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
     },
     MailSenderInterface::class => function (ContainerInterface $c) {
         return new MailSender();

@@ -13,6 +13,7 @@ class Utilisateur
     private string $mot_de_passe;
     private string $role;
     private string $date_creation;
+    private ?bool $is_validated;
 
     public function __construct(
         string $id,
@@ -20,7 +21,8 @@ class Utilisateur
         string $prenom,
         string $email,
         string $mot_de_passe,
-        string $role
+        string $role,
+        ?bool $is_validated = null
     ) {
         $this->id = $id;
         $this->nom = $nom;
@@ -29,6 +31,7 @@ class Utilisateur
         $this->mot_de_passe = $mot_de_passe;
         $this->role = $role;
         $this->date_creation = date('Y-m-d H:i:s');
+        $this->is_validated = $is_validated;
     }
 
     /**

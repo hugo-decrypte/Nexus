@@ -5,6 +5,7 @@ namespace infrastructure\repositories;
 use api\dtos\CredentialsDTO;
 use application_core\domain\entities\utilisateur\Utilisateur;
 use application_core\exceptions\EntityNotFoundException;
+use application_core\exceptions\VerifyEmailTokenException;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use PDO;
 use Ramsey\Uuid\Uuid;
@@ -22,7 +23,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
     {
         try {
             $stmt = $this->authn_pdo->prepare(
-                "SELECT id, nom, prenom, email, mot_de_passe, role FROM utilisateurs WHERE LOWER(TRIM(email)) = LOWER(TRIM(:email)) LIMIT 1"
+                "SELECT id, nom, prenom, email, mot_de_passe, role, is_validated FROM utilisateurs WHERE LOWER(TRIM(email)) = LOWER(TRIM(:email)) LIMIT 1"
             );
             $stmt->execute(['email' => $email]);
             $res = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -43,7 +44,8 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             prenom: $res['prenom'],
             email: $res['email'],
             mot_de_passe: $res['mot_de_passe'],
-            role: $res['role']
+            role: $res['role'],
+            is_validated: $res['is_validated']
         );
     }
 
@@ -149,13 +151,13 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
         }
     }
 
-    public function saveUser(CredentialsDTO $cred, ?string $role = 'client'): void
+    public function saveUser(CredentialsDTO $cred, ?string $role = 'client'): string
     {
         try {
             $id = Uuid::uuid4()->toString();
-            // Le mot de passe est hashé dans le DTO
+            $token = bin2hex(random_bytes(64));
             $stmt = $this->authn_pdo->prepare(
-                "INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role) VALUES (:id, :nom, :prenom, :email, :mdp, :role)"
+                "INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role, validation_token) VALUES (:id, :nom, :prenom, :email, :mdp, :role, :validation_token)"
             );
             $stmt->execute([
                 'id' => $id,
@@ -163,14 +165,15 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
                 'prenom' => $cred->prenom,
                 'email' => $cred->email,
                 'mdp' => $cred->mot_de_passe,
-                'role' => $role
+                'role' => $role,
+                'validation_token' => $token
             ]);
-
         } catch(HttpInternalServerErrorException) {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de l'enregistrement de l'utilisateur : " . $e->getMessage(), 400);
         }
+        return $token;
     }
 
     public function updateUser(string $id, string $nom, string $prenom, string $email): void
@@ -218,6 +221,35 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de la mise à jour du mot de passe : " . $e->getMessage(), 400);
+        }
+    }
+
+    public function validateAccount(string $token): void
+    {
+        try {
+            $stmt = $this->authn_pdo->prepare(
+                "SELECT id FROM utilisateurs WHERE validation_token = :token"
+            );
+            $stmt->execute([
+                'token' => $token
+            ]);
+
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+            if (!$user) {
+                throw new EntityNotFoundException("Lien invalide ou expiré.", 'utilisateur');
+            }
+
+            $userId = $user['id'];
+            $updateStmt = $this->authn_pdo->prepare(
+                "UPDATE utilisateurs SET is_validated = true, validation_token = NULL WHERE id = :id"
+            );
+            $updateStmt->execute([
+                'id' => $userId
+            ]);
+        } catch(EntityNotFoundException $e) {
+            throw $e;
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage(), 500);
         }
     }
 }

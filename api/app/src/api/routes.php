@@ -18,6 +18,7 @@ use api\actions\UserSoldeAction;
 use api\actions\UsersListAction;
 use api\actions\UpdateUserAction;
 use api\actions\UpdatePasswordAction;
+use api\actions\VerifyEmailAction;
 use api\middlewares\AuthnSigninValidationMiddleware;
 use api\middlewares\authz\AuthzAdminMiddleware;
 use api\middlewares\authz\AuthzCreateTransactionMiddleware;
@@ -86,16 +87,7 @@ return function( App $app): App {
     $app->get("/logs", LogsListAction::class)
         ->add(AuthzAdminMiddleware::class)
         ->add(JwtAuthMiddleware::class);
-
-//    FONCTIONNALITES ETENDUES
-//    $app->get("/card/{id_card}", CarteByIdAction::class);
-//    //récupérer les infos d’une carte (suite au scan d’un QR code notamment)
-//    $app->get("/card/{id_card}/qrcode", GenerateQrCodeAction::class);
-//    //génère l'image du QR Code contenant l'identifiant sécurisé de la carte
-//    $app->post("/card",CreateCardAction::class);
-//    //Activer une nouvelle carte (création en base)
-//    $app->get("/invoice/{id_invoice}", GenerateInvoiceAction::class);
-
+    $app->get("/verify-email", VerifyEmailAction::class);
 
     $app->post("/transactions", CreateTransactionAction::class)
         ->add(new AuthzCreateTransactionMiddleware())
