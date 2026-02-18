@@ -20,6 +20,7 @@ class MailSender implements MailSenderInterface {
             $mail->Port       = $this->port;
             $mail->SMTPAuth   = false;
             $mail->SMTPAutoTLS = false;
+            $mail->CharSet = 'UTF-8';
 
             $mail->setFrom('noreply@projet-tutore-nexus.com', 'Nexus');
             $mail->addAddress($to);
