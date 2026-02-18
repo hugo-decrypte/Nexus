@@ -44,8 +44,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             prenom: $res['prenom'],
             email: $res['email'],
             mot_de_passe: $res['mot_de_passe'],
-            role: $res['role'],
-            is_validated: $res['is_validated']
+            role: $res['role']
         );
     }
 
@@ -168,10 +167,12 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
                 'role' => $role,
                 'validation_token' => $token
             ]);
-        } catch(HttpInternalServerErrorException) {
-            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch(\PDOException $e) {
-            throw new \Exception("Erreur lors de l'enregistrement de l'utilisateur : " . $e->getMessage(), 400);
+        } catch(HttpInternalServerErrorException $e) {
+            throw $e;
+        } catch(\PDOException) {
+            throw new \PDOException("Erreur lors de l'enregistrement de l'utilisateur", 400);
+        } catch(\Exception) {
+            throw new \Exception("Erreur par rapport à l'enregistrement d'un utilisateur", 400);
         }
         return $token;
     }

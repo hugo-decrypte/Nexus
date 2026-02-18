@@ -12,6 +12,7 @@ use application_core\exceptions\EntityNotFoundException;
 use Firebase\JWT\JWT;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use infrastructure\repositories\interfaces\MailSenderInterface;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class ServiceAuthn implements ServiceAuthnInterface {
 
@@ -71,12 +72,12 @@ class ServiceAuthn implements ServiceAuthnInterface {
             </html>
             EOT
             );
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \PDOException($e->getMessage(), 400);
         } catch (\Exception $e) {
-            return [
-                'status' => $e->getCode(),
-                'success' => false,
-                "message" => $e->getMessage()
-            ];
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
         return [
             'status' => 201,

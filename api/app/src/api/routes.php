@@ -31,7 +31,7 @@ use Slim\App;
 
 
 return function( App $app): App {
-    $app->get('/admin/logs', AdminLogsAction::class)
+    $app->get('/admin/logs', LogsListAction::class)
         ->add(AuthzAdminMiddleware::class)
         ->add(JwtAuthMiddleware::class);
     $app->get('/admin/accounts', UsersListAction::class)
