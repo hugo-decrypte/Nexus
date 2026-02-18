@@ -7,6 +7,7 @@ class AuthService {
   static const String _tokenKey = 'auth_token';
   static const String _userIdKey = 'user_id';
   static const String _userEmailKey = 'user_email';
+  static const String _userRoleKey = 'user_role';
 
   // ✅ Login et sauvegarde du token
   static Future<Map<String, dynamic>> login({
@@ -55,9 +56,8 @@ class AuthService {
         await saveUserData(
           token: data['token'],
           userId: userId,
-          email: data['user']?['email']?.toString() ??
-              data['email']?.toString() ??
-              email,
+          email: data['user']?['email']?.toString() ?? data['email']?.toString() ?? email,
+          role: data['user']?['role']?.toString() ?? data['role']?.toString(),
         );
 
         return data;
@@ -70,40 +70,66 @@ class AuthService {
     }
   }
 
-  static Future<Map<String, dynamic>> register({
+  static Future<void> register({
     required String nom,
     required String prenom,
     required String email,
     required String password,
+    required String role,
   }) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'nom': nom,
-          'prenom': prenom,
-          'email': email,
-          'mot_de_passe': password,
-        }),
-      );
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nom': nom,
+        'prenom': prenom,
+        'email': email,
+        'mot_de_passe': password,
+        'role': role,
+      }),
+    );
 
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Erreur lors de l\'inscription');
-      }
-    } catch (e) {
-      rethrow;
+    print('📝 Register status: ${response.statusCode}');
+    print('📦 Register response: ${response.body}');
+
+    Map<String, dynamic>? data;
+
+    try {
+      data = jsonDecode(response.body);
+    } catch (_) {
+      data = null;
     }
+
+    // ✅ Succès
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    }
+
+    if (response.statusCode == 400) {
+      throw Exception(
+        data?['message'] ?? 'Données invalides.',
+      );
+    }
+
+    if (response.statusCode >= 500) {
+      throw Exception(
+        'Cette adresse mail existe déjà.',
+      );
+    }
+
+    throw Exception(
+      data?['message'] ?? 'Erreur lors de l\'inscription.',
+    );
   }
+
+
 
   //Sauvegarder toutes les données utilisateur
   static Future<void> saveUserData({
     required String token,
     String? userId,
     String? email,
+    String? role,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, token);
@@ -128,6 +154,7 @@ class AuthService {
       'token': prefs.getString(_tokenKey),
       'userId': prefs.getString(_userIdKey),
       'email': prefs.getString(_userEmailKey),
+      'role': prefs.getString(_userRoleKey),
     };
     return data;
   }
