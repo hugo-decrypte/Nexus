@@ -14,7 +14,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
-  //tab Connexion/Inscription
   late TabController _tabController;
 
   final _loginFormKey = GlobalKey<FormState>();
@@ -30,6 +29,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   final _registerEmailController = TextEditingController();
   final _registerPasswordController = TextEditingController();
   final _registerValideMDPController = TextEditingController();
+
+  // ✅ Rôle sélectionné ('client' par défaut)
+  String _selectedRole = 'client';
 
   // State
   bool _isLoginLoading = false;
@@ -73,13 +75,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       _successMessage = null;
     });
 
-    if (!_loginFormKey.currentState!.validate()) {
-      return;
-    }
+    if (!_loginFormKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoginLoading = true;
-    });
+    setState(() => _isLoginLoading = true);
 
     try {
       await AuthService.login(
@@ -89,21 +87,14 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
       if (!mounted) return;
 
-      // Naviguer vers l'accueil
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } catch (e) {
-      setState(() {
-        _loginError = e.toString().replaceAll('Exception: ', '');
-      });
+      setState(() => _loginError = e.toString().replaceAll('Exception: ', ''));
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoginLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoginLoading = false);
     }
   }
 
@@ -113,13 +104,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       _successMessage = null;
     });
 
-    if (!_registerFormKey.currentState!.validate()) {
-      return;
-    }
+    if (!_registerFormKey.currentState!.validate()) return;
 
-    setState(() {
-      _isRegisterLoading = true;
-    });
+    setState(() => _isRegisterLoading = true);
 
     try {
       await AuthService.register(
@@ -127,36 +114,171 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
         prenom: _registerPrenomController.text.trim(),
         email: _registerEmailController.text.trim(),
         password: _registerPasswordController.text,
+        role: _selectedRole,
       );
 
       if (!mounted) return;
 
-      // Succès
-      setState(() {
-        _successMessage = 'Compte créé avec succès ! Vous pouvez vous connecter.';
-      });
-
-      // Basculer vers l'onglet login après 1 seconde
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (!mounted) return;
-
-      _tabController.animateTo(0);
-      _loginEmailController.text = _registerEmailController.text;
+      // ✅ Succès uniquement si aucune exception
+      _showEmailVerificationDialog();
 
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _registerError = e.toString().replaceAll('Exception: ', '');
-        });
+      if (!mounted) return;
+
+      String errorMessage =
+      e.toString().replaceAll('Exception: ', '');
+
+      if (errorMessage.contains('duplicate key') ||
+          errorMessage.contains('already exists')) {
+        errorMessage = 'Cette adresse email est déjà utilisée.';
       }
+
+      setState(() => _registerError = errorMessage);
+
     } finally {
       if (mounted) {
-        setState(() {
-          _isRegisterLoading = false;
-        });
+        setState(() => _isRegisterLoading = false);
       }
     }
+  }
+
+
+  /// ✅ Dialog de vérification email
+  void _showEmailVerificationDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        contentPadding: const EdgeInsets.all(32),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Icône email avec animation
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFF6B6B).withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.mark_email_unread_rounded,
+                size: 64,
+                color: Color(0xFFFF6B6B),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Titre
+            const Text(
+              'Vérifiez votre email',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF3C3C3C),
+              ),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 16),
+
+            // Message principal
+            Text(
+              'Un email de vérification a été envoyé à :',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 8),
+
+            // Email de l'utilisateur
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                _registerEmailController.text.trim(),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFFFF6B6B),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Instructions
+            Text(
+              'Veuillez cliquer sur le lien dans l\'email pour activer votre compte.',
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[700],
+                height: 1.4,
+              ),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 24),
+
+            // Note importante
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, size: 18, color: Colors.blue.shade700),
+                  const SizedBox(width: 10),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Bouton OK
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Fermer le dialog
+                  _tabController.animateTo(0); // Retour à l'onglet login
+                  _loginEmailController.text = _registerEmailController.text;
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF6B6B),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'J\'ai compris',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -166,13 +288,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       body: SafeArea(
         child: Column(
           children: [
-            // Header
             _buildHeader(),
-
-            // Tab Bar
             _buildTabBar(),
-
-            // Tab Views
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -193,7 +310,6 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
       child: Column(
         children: [
-          // Logo
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -204,22 +320,13 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               ),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Icon(
-              Icons.account_balance_wallet,
-              size: 48,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.account_balance_wallet, size: 48, color: Colors.white),
           ),
           const SizedBox(height: 20),
           const Text(
             'NEXUS',
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFFF6B6B),
-            ),
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color(0xFFFF6B6B)),
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );
@@ -234,20 +341,11 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
       ),
       child: TabBar(
         controller: _tabController,
-        indicator: BoxDecoration(
-          color: const Color(0xFFFF6B6B),
-          borderRadius: BorderRadius.circular(12),
-        ),
+        indicator: BoxDecoration(color: const Color(0xFFFF6B6B), borderRadius: BorderRadius.circular(12)),
         labelColor: Colors.white,
         unselectedLabelColor: const Color(0xFF3C3C3C),
-        labelStyle: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w600,
-        ),
-        tabs: const [
-          Tab(text: 'Connexion'),
-          Tab(text: 'Inscription'),
-        ],
+        labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        tabs: const [Tab(text: 'Connexion'), Tab(text: 'Inscription')],
       ),
     );
   }
@@ -262,33 +360,16 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
           children: [
             const SizedBox(height: 20),
 
-            // Error message
             if (_loginError != null) ...[
-              ErrorMessage(
-                message: _loginError!,
-                onDismiss: () {
-                  setState(() {
-                    _loginError = null;
-                  });
-                },
-              ),
+              ErrorMessage(message: _loginError!, onDismiss: () => setState(() => _loginError = null)),
               const SizedBox(height: 20),
             ],
 
-            // Success message
             if (_successMessage != null && _tabController.index == 0) ...[
-              SuccessMessage(
-                message: _successMessage!,
-                onDismiss: () {
-                  setState(() {
-                    _successMessage = null;
-                  });
-                },
-              ),
+              SuccessMessage(message: _successMessage!, onDismiss: () => setState(() => _successMessage = null)),
               const SizedBox(height: 20),
             ],
 
-            // Email field
             CustomTextField(
               controller: _loginEmailController,
               label: 'Email',
@@ -297,10 +378,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               keyboardType: TextInputType.emailAddress,
               validator: FormValidators.validateEmail,
             ),
-
             const SizedBox(height: 20),
 
-            // Password field
             CustomTextField(
               controller: _loginPasswordController,
               label: 'Mot de passe',
@@ -309,59 +388,32 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               obscureText: !_showLoginPassword,
               validator: FormValidators.validatePassword,
               suffixIcon: IconButton(
-                icon: Icon(
-                  _showLoginPassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.black38,
-                  size: 20,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showLoginPassword = !_showLoginPassword;
-                  });
-                },
+                icon: Icon(_showLoginPassword ? Icons.visibility_off : Icons.visibility, color: Colors.black38, size: 20),
+                onPressed: () => setState(() => _showLoginPassword = !_showLoginPassword),
               ),
             ),
-
             const SizedBox(height: 12),
 
-            // Login button
-            CustomButton(
-              text: 'Se connecter',
-              onPressed: _handleLogin,
-              isLoading: _isLoginLoading,
-            ),
+            CustomButton(text: 'Se connecter', onPressed: _handleLogin, isLoading: _isLoginLoading),
 
             const SizedBox(height: 20),
-
-            // Divider
             Row(
               children: [
                 Expanded(child: Divider(color: Colors.grey.shade300)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'ou',
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 14,
-                    ),
-                  ),
+                  child: Text('ou', style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
                 ),
                 Expanded(child: Divider(color: Colors.grey.shade300)),
               ],
             ),
-
             const SizedBox(height: 20),
 
-            // Social login buttons (optional)
             CustomButton(
               text: 'Continuer avec Google',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Fonctionnalité à venir'),
-                    duration: Duration(seconds: 2),
-                  ),
+                  const SnackBar(content: Text('Fonctionnalité à venir'), duration: Duration(seconds: 2)),
                 );
               },
               isOutlined: true,
@@ -383,20 +435,11 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
           children: [
             const SizedBox(height: 20),
 
-            // Error message
             if (_registerError != null) ...[
-              ErrorMessage(
-                message: _registerError!,
-                onDismiss: () {
-                  setState(() {
-                    _registerError = null;
-                  });
-                },
-              ),
+              ErrorMessage(message: _registerError!, onDismiss: () => setState(() => _registerError = null)),
               const SizedBox(height: 20),
             ],
 
-            // Prenom field
             CustomTextField(
               controller: _registerPrenomController,
               label: 'Prénom',
@@ -404,10 +447,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               prefixIcon: Icons.person_2_outlined,
               validator: FormValidators.validateName,
             ),
-
             const SizedBox(height: 20),
 
-            // Name field
             CustomTextField(
               controller: _registerNameController,
               label: 'Nom',
@@ -415,10 +456,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               prefixIcon: Icons.person_outline,
               validator: FormValidators.validateName,
             ),
-
             const SizedBox(height: 20),
 
-            // Email field
             CustomTextField(
               controller: _registerEmailController,
               label: 'Email',
@@ -427,10 +466,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               keyboardType: TextInputType.emailAddress,
               validator: FormValidators.validateEmail,
             ),
-
             const SizedBox(height: 20),
 
-            // Password field
             CustomTextField(
               controller: _registerPasswordController,
               label: 'Mot de passe',
@@ -439,53 +476,160 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               obscureText: !_showRegisterPassword,
               validator: FormValidators.validatePassword,
               suffixIcon: IconButton(
-                icon: Icon(
-                  _showRegisterPassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.black38,
-                  size: 20,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showRegisterPassword = !_showRegisterPassword;
-                  });
-                },
+                icon: Icon(_showRegisterPassword ? Icons.visibility_off : Icons.visibility, color: Colors.black38, size: 20),
+                onPressed: () => setState(() => _showRegisterPassword = !_showRegisterPassword),
               ),
             ),
-
             const SizedBox(height: 20),
 
-            // Confirm password field
             CustomTextField(
               controller: _registerValideMDPController,
               label: 'Confirmer le mot de passe',
               hintText: '••••••••',
               prefixIcon: Icons.lock_outline,
               obscureText: !_showConfirmPassword,
-              validator: (value) => FormValidators.validateConfirmPassword(
-                value,
-                _registerPasswordController.text,
-              ),
+              validator: (value) => FormValidators.validateConfirmPassword(value, _registerPasswordController.text),
               suffixIcon: IconButton(
-                icon: Icon(
-                  _showConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.black38,
-                  size: 20,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showConfirmPassword = !_showConfirmPassword;
-                  });
-                },
+                icon: Icon(_showConfirmPassword ? Icons.visibility_off : Icons.visibility, color: Colors.black38, size: 20),
+                onPressed: () => setState(() => _showConfirmPassword = !_showConfirmPassword),
               ),
             ),
-
             const SizedBox(height: 24),
 
-            // Register button
-            CustomButton(
-              text: 'Créer un compte',
-              onPressed: _handleRegister,
-              isLoading: _isRegisterLoading,
+            // Sélecteur de rôle
+            _buildRoleSelector(),
+            const SizedBox(height: 24),
+
+            CustomButton(text: 'Créer un compte', onPressed: _handleRegister, isLoading: _isRegisterLoading),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Widget de sélection du rôle
+  Widget _buildRoleSelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Je suis un :',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF3C3C3C)),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _RoleCard(
+                icon: Icons.person,
+                label: 'Client',
+                description: 'Je veux payer des commerçants',
+                isSelected: _selectedRole == 'client',
+                onTap: () => setState(() => _selectedRole = 'client'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _RoleCard(
+                icon: Icons.store,
+                label: 'Commerçant',
+                description: 'Je veux recevoir des paiements',
+                isSelected: _selectedRole == 'commercant',
+                onTap: () => setState(() => _selectedRole = 'commercant'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// ✅ Widget carte de rôle
+class _RoleCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String description;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _RoleCard({
+    required this.icon,
+    required this.label,
+    required this.description,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const selectedColor = Color(0xFFFF6B6B);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? selectedColor.withOpacity(0.06) : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? selectedColor : Colors.grey.shade300,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Icône
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected ? selectedColor.withOpacity(0.12) : Colors.grey.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 28,
+                color: isSelected ? selectedColor : Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Label
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? selectedColor : const Color(0xFF3C3C3C),
+              ),
+            ),
+            const SizedBox(height: 4),
+
+            // Description
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 11, color: Colors.grey.shade600, height: 1.3),
+            ),
+            const SizedBox(height: 10),
+
+            // Radio indicator
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? selectedColor : Colors.grey.shade400,
+                  width: 2,
+                ),
+                color: isSelected ? selectedColor : Colors.transparent,
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 13, color: Colors.white)
+                  : null,
             ),
           ],
         ),
