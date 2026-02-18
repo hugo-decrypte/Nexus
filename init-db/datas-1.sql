@@ -11,7 +11,7 @@ CREATE TABLE utilisateurs (
       nom VARCHAR(50) NOT NULL,
       prenom VARCHAR(50) NOT NULL,
       email VARCHAR(100) UNIQUE NOT NULL,
-      mot_de_passe VARCHAR(255) NULL,
+      mot_de_passe VARCHAR(255) NOT NULL,
       role user_role DEFAULT 'client',
       date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -46,12 +46,6 @@ CREATE TABLE cartes (
       FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
 );
 
-CREATE TABLE utilisateursGoogle (
-      id UUID PRIMARY KEY,
-      utilisateur_id UUID NOT NULL,
-      google_id VARCHAR UNIQUE,
-      FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
-);
 
 CREATE INDEX idx_logs_created_at ON logs(date_creation);
 CREATE INDEX idx_cartes_utilisateur_id ON cartes(utilisateur_id);
