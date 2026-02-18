@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class MailSender implements MailSenderInterface {
     private string $host = 'mailer';
-    private int $port = 25;
+    private int $port = 1025;
 
     public function send(string $to, string $subject, string $htmlBody) : void {
         $mail = new PHPMailer(true);
@@ -20,6 +20,7 @@ class MailSender implements MailSenderInterface {
             $mail->Port       = $this->port;
             $mail->SMTPAuth   = false;
             $mail->SMTPAutoTLS = false;
+            $mail->CharSet = 'UTF-8';
 
             $mail->setFrom('noreply@projet-tutore-nexus.com', 'Nexus');
             $mail->addAddress($to);

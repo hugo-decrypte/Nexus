@@ -556,6 +556,51 @@ main {
   color: var(--color-text-secondary) !important;
 }
 
+[data-theme="sombre"] .admin-view .admin-back,
+[data-theme="sombre"] .admin-view .admin-back .material-icons {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .admin-view .admin-title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .admin-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .admin-card-title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .admin-table th,
+[data-theme="sombre"] .admin-table td {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .admin-label,
+[data-theme="sombre"] .admin-input {
+  color: var(--color-text-primary);
+}
+
+[data-theme="sombre"] .admin-input {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .admin-search-input,
+[data-theme="sombre"] .admin-limit-select {
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="sombre"] .admin-limit-label {
+  color: var(--color-text-secondary);
+}
+
 [data-theme="sombre"] .historique-view .historique-card,
 [data-theme="sombre"] .historique-view .historique-table-wrapper {
   background-color: var(--color-card-bg) !important;

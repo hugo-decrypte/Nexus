@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticated } from '../services/auth.js'
+import { isAuthenticated, getUser } from '../services/auth.js'
 import HomeView from '../views/HomeView.vue'
 import HistoriqueView from '../views/HistoriqueView.vue'
 import RechargementView from '../views/RechargementView.vue'
@@ -7,6 +7,7 @@ import EnvoiePOView from '../views/EnvoiePOView.vue'
 import RecevoirView from '../views/RecevoirView.vue'
 import AccountView from '../views/AccountView.vue'
 import SettingsView from '../views/SettingsView.vue'
+import AdminView from '../views/AdminView.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 
@@ -25,6 +26,7 @@ const router = createRouter({
     { path: '/recevoir', name: 'recevoir', component: RecevoirView },
     { path: '/account', name: 'account', component: AccountView },
     { path: '/settings', name: 'settings', component: SettingsView },
+    { path: '/admin', name: 'admin', component: AdminView, meta: { adminOnly: true } },
     { path: '/', redirect: '/home' },
   ],
 })
@@ -49,9 +51,16 @@ router.beforeEach((to, from, next) => {
 
   if (!authenticated) {
     next({ path: '/login', replace: true })
-  } else {
-    next()
+    return
   }
+  if (to.meta.adminOnly === true) {
+    const user = getUser()
+    if (user?.role !== 'admin') {
+      next({ path: '/home', replace: true })
+      return
+    }
+  }
+  next()
 })
 
 export default router

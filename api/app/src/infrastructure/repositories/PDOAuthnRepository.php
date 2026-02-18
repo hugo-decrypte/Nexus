@@ -3,7 +3,6 @@
 namespace infrastructure\repositories;
 
 use api\dtos\CredentialsDTO;
-use api\dtos\CredentialsGoogleDTO;
 use application_core\domain\entities\utilisateur\Utilisateur;
 use application_core\exceptions\EntityNotFoundException;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
@@ -14,11 +13,9 @@ use Slim\Exception\HttpInternalServerErrorException;
 class PDOAuthnRepository implements AuthnRepositoryInterface {
 
     private PDO $authn_pdo;
-    private PDOGoogleRepository $googleRepository;
 
-    public function __construct(PDO $authn_pdo, PDOGoogleRepository $googleRepository) {
+    public function __construct(PDO $authn_pdo) {
         $this->authn_pdo = $authn_pdo;
-        $this->googleRepository = $googleRepository;
     }
 
     public function getUserByEmail(string $email): Utilisateur
@@ -169,10 +166,12 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
                 'role' => $role
             ]);
 
-        } catch(HttpInternalServerErrorException) {
-            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch(\PDOException $e) {
-            throw new \Exception("Erreur lors de l'enregistrement de l'utilisateur : " . $e->getMessage(), 400);
+        } catch(HttpInternalServerErrorException $e) {
+            throw $e;
+        } catch(\PDOException) {
+            throw new \PDOException("Erreur lors de l'enregistrement de l'utilisateur", 400);
+        } catch(\Exception) {
+            throw new \Exception("Erreur par rapport à l'enregistrement d'un utilisateur", 400);
         }
     }
 
@@ -221,61 +220,6 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
         } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de la mise à jour du mot de passe : " . $e->getMessage(), 400);
-        }
-    }
-
-    public function getUserByGoogleId(string $googleId): Utilisateur
-    {
-        try{
-        $stmt = $this->authn_pdo->prepare("SELECT * FROM utilisateurs WHERE google_id = :google_id LIMIT 1");
-        $stmt->execute([
-            'google_id' => $googleId
-        ]);
-            $res = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$res) {
-                throw new EntityNotFoundException("Aucun un utilisateur trouvé.", 'utilisateur');
-            }
-        } catch (EntityNotFoundException $e) {
-            throw $e;
-        } catch (HttpInternalServerErrorException $e) {
-            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch (\Throwable $e) {
-            throw new \Exception("Erreur lors de la récupération de l'utilisateur par google id.", 400);
-        }
-        return new Utilisateur(
-            id: $res['id'],
-            nom: $res['nom'],
-            prenom: $res['prenom'],
-            email: $res['email'],
-            mot_de_passe: $res['mot_de_passe'],
-            role: $res['role']
-        );
-    }
-
-    public function saveGoogleUser(CredentialsGoogleDTO $cred, ?string $role = 'client'): void
-    {
-        try {
-            $id = Uuid::uuid4()->toString();
-
-            $stmt = $this->pdo->prepare("
-                INSERT INTO utilisateurs (id, nom, prenom, email, role) 
-                VALUES (:id, :nom, :prenom, :email, :role)
-            ");
-
-            $stmt->execute([
-                'id' => $id,
-                'nom' => $cred->nom,
-                'prenom' => $cred->prenom,
-                'email' => $cred->email,
-                'role' => 'client'
-            ]);
-
-            $this->googleRepository->saveGoogleUser($id,$cred->google_id);
-        } catch(HttpInternalServerErrorException) {
-            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
-        } catch(\PDOException $e) {
-            throw new \Exception("Erreur lors de l'enregistrement de l'utilisateur : " . $e->getMessage(), 400);
         }
     }
 }

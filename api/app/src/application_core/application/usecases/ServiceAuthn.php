@@ -11,6 +11,7 @@ use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\exceptions\EntityNotFoundException;
 use Firebase\JWT\JWT;
 use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class ServiceAuthn implements ServiceAuthnInterface {
 
@@ -60,12 +61,12 @@ class ServiceAuthn implements ServiceAuthnInterface {
             $credential = new CredentialsDTO($user_dto->nom, $user_dto->prenom, $user_dto->email, $passwordhash);
 
             $this->authnRepository->saveUser($credential, $role);
+        } catch(HttpInternalServerErrorException) {
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.", 500);
+        } catch(\PDOException $e) {
+            throw new \PDOException($e->getMessage(), 400);
         } catch (\Exception $e) {
-            return [
-                'status' => $e->getCode(),
-                'success' => false,
-                "message" => $e->getMessage()
-            ];
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
         return [
             'status' => 201,

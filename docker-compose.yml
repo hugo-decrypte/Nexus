@@ -58,15 +58,25 @@ services:
   #
   # service mail
   #
-  mailer:
-    image: bytemark/smtp
-    restart: always
-    ports:
-      - "2525:25"
-    networks:
-      - nexus.net
+#  mailer:
+#    image: bytemark/smtp
+#    restart: always
+#    ports:
+#      - "2525:25"
+#    networks:
+#      - nexus.net
 #    environment:
 #      - REMOTE_SMARTHOST=in-v3.mailjet.com
 #      - REMOTE_PORT=587
 #      - SMTP_USER=${MAILJET_API_KEY}
 #      - SMTP_PASSWORD=${MAILJET_SECRET_KEY}
+
+  mailer:
+    image: axllent/mailpit
+    container_name: nexus-mailer
+    restart: always
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - nexus.net

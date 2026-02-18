@@ -15,6 +15,4 @@ interface AuthnRepositoryInterface {
     public function saveUser(CredentialsDTO $cred, ?string $role = "client"): void;
     public function updateUser(string $id, string $nom, string $prenom, string $email): void;
     public function updatePassword(string $id, string $hashedPassword): void;
-    public function getUserByGoogleId(string $googleId): Utilisateur;
-    public function saveGoogleUser(CredentialsGoogleDTO $cred, ?string $role = 'client'): void;
 }
