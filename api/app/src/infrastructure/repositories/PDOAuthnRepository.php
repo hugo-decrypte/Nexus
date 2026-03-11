@@ -44,7 +44,8 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             prenom: $res['prenom'],
             email: $res['email'],
             mot_de_passe: $res['mot_de_passe'],
-            role: $res['role']
+            role: $res['role'],
+            is_validated: (bool)$res['is_validated']
         );
     }
 
@@ -156,7 +157,7 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             $id = Uuid::uuid4()->toString();
             $token = bin2hex(random_bytes(64));
             $stmt = $this->authn_pdo->prepare(
-                "INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role, validation_token) VALUES (:id, :nom, :prenom, :email, :mdp, :role, :validation_token)"
+                "INSERT INTO utilisateurs (id, nom, prenom, email, mot_de_passe, role, validation_token, is_validated) VALUES (:id, :nom, :prenom, :email, :mdp, :role, :validation_token, true)"
             );
             $stmt->execute([
                 'id' => $id,

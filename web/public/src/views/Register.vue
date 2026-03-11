@@ -97,8 +97,8 @@ async function onSubmit() {
     error.value = 'Les mots de passe ne correspondent pas.'
     return
   }
-  if (motDePasse.value.length < 6) {
-    error.value = 'Le mot de passe doit contenir au moins 6 caractères.'
+  if (motDePasse.value.length < 8) {
+    error.value = 'Le mot de passe doit contenir au moins 8 caractères.'
     return
   }
   loading.value = true
