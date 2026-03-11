@@ -69,9 +69,7 @@ const loading = ref(false)
 async function onSubmit() {
   error.value = ''
   loading.value = true
-
   const result = await login(email.value, motDePasse.value)
-
   loading.value = false
 
   if (result.success) {

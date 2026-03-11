@@ -49,7 +49,7 @@ export async function login(email, motDePasse) {
 }
 
 // Inscription : POST /api/auth/register
-export async function register(email, motDePasse) {
+export async function register(email, motDePasse, nom, prenom) {
   try {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
@@ -59,6 +59,8 @@ export async function register(email, motDePasse) {
       body: JSON.stringify({
         email,
         mot_de_passe: motDePasse,
+        nom,
+        prenom,
       }),
     })
 
