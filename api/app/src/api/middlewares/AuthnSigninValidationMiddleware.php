@@ -20,8 +20,8 @@ class AuthnSigninValidationMiddleware {
             $data = [];
         }
 
-        $data["email"] = $data["email"] ?? "";
-        $data["mot_de_passe"] = $data["mot_de_passe"] ?? "";
+        $data['email'] = trim((string) ($data['email'] ?? ''));
+        $data['mot_de_passe'] = trim((string) ($data['mot_de_passe'] ?? ''));
 
 
         try {

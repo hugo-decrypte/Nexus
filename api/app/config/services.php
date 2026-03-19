@@ -55,7 +55,17 @@ return [
         return new AuthzClientMiddleware($c->get(AuthzUserService::class));
     },
     ServiceAuthnInterface::class => function (ContainerInterface $c) {
-        return new ServiceAuthn($c->get(AuthnProviderInterface::class), $c->get(AuthnRepositoryInterface::class),$c->get(ServiceLogInterface::class),$c->get(MailSenderInterface::class),parse_ini_file($c->get('db.config'))["JWT_SECRET"]);
+        $config = parse_ini_file($c->get('db.config'));
+        $skipOtp = filter_var($config['AUTH_SKIP_EMAIL_OTP'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        return new ServiceAuthn(
+            $c->get(AuthnProviderInterface::class),
+            $c->get(AuthnRepositoryInterface::class),
+            $c->get(ServiceLogInterface::class),
+            $c->get(MailSenderInterface::class),
+            $config['JWT_SECRET'] ?? '',
+            $skipOtp
+        );
     },
     MailSenderInterface::class => function (ContainerInterface $c) {
         return new MailSender();

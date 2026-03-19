@@ -254,4 +254,34 @@ class PDOAuthnRepository implements AuthnRepositoryInterface {
             throw new \Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage(), 500);
         }
     }
+
+    public function setLoginOtp(string $userId, string $codeHash, string $expiresAt): void
+    {
+        $stmt = $this->authn_pdo->prepare(
+            'UPDATE utilisateurs SET login_otp_hash = :h, login_otp_expires_at = :e WHERE id = :id'
+        );
+        $stmt->execute(['h' => $codeHash, 'e' => $expiresAt, 'id' => $userId]);
+    }
+
+    public function getLoginOtp(string $userId): ?array
+    {
+        $stmt = $this->authn_pdo->prepare(
+            'SELECT login_otp_hash AS hash, login_otp_expires_at AS expires_at FROM utilisateurs WHERE id = :id LIMIT 1'
+        );
+        $stmt->execute(['id' => $userId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row || empty($row['hash']) || empty($row['expires_at'])) {
+            return null;
+        }
+
+        return ['hash' => $row['hash'], 'expires_at' => $row['expires_at']];
+    }
+
+    public function clearLoginOtp(string $userId): void
+    {
+        $stmt = $this->authn_pdo->prepare(
+            'UPDATE utilisateurs SET login_otp_hash = NULL, login_otp_expires_at = NULL WHERE id = :id'
+        );
+        $stmt->execute(['id' => $userId]);
+    }
 }

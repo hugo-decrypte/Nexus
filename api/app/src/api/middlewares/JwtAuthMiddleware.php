@@ -27,8 +27,13 @@ class JwtAuthMiddleware {
         try {
             $payload = JWT::decode($token, new Key($this->secret, 'HS512'));
 
-            $request = $request->withAttribute('user_payload', $payload);
+            if (!empty($payload->mfa_pending) && $payload->mfa_pending === true) {
+                throw new HttpUnauthorizedException($request, 'Token pré-connexion : validez le code e-mail.');
+            }
 
+            $request = $request->withAttribute('user_payload', $payload);
+        } catch (HttpUnauthorizedException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new HttpUnauthorizedException($request, 'Token invalide', $e);
         }
