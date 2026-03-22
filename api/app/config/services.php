@@ -24,6 +24,8 @@ use infrastructure\repositories\PDOTransactionRepository;
 use Psr\Container\ContainerInterface;
 
 return [
+    'db.config' => __DIR__ . '/.env',
+
     AuthnRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOAuthnRepository($c->get("nexus.pdo"));
     },
