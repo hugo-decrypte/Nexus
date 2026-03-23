@@ -1,44 +1,68 @@
-# public
+# Interface web Nexus (Vue 3 + Vite)
 
-This template should help get you started developing with Vue 3 in Vite.
+Application front du projet **Nexus** : connexion, compte, envoi / réception de paiements, rechargement, historique, réglages et espace administrateur. Elle consomme l’API PHP via des appels HTTP (préfixe `/api` en développement).
 
-## Recommended IDE Setup
+## Prérequis
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Node.js** : `^20.19.0` ou `>=22.12.0` (voir `package.json` → `engines`)
+- L’**API** doit être joignable (voir [README racine](../../README.md) et [PREPARATION.md](../../PREPARATION.md))
 
-## Recommended Browser Setup
+## Structure du dossier
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+web/public/
+├── index.html
+├── vite.config.js          # Proxy /api → API (voir ci-dessous)
+├── package.json
+└── src/
+    ├── main.js
+    ├── App.vue
+    ├── router/               # Vue Router, garde d’auth
+    ├── views/                # Pages (home, login, admin, etc.)
+    ├── components/
+    ├── services/             # auth, transactions, compte, admin…
+    └── css/
 ```
 
-### Compile and Hot-Reload for Development
+## Installation et développement local
 
-```sh
+```bash
+cd web/public
+npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
+Par défaut, Vite démarre sur **http://localhost:5173** (sauf configuration contraire).
 
-```sh
+### Appel de l’API en dev
+
+Dans `vite.config.js`, les requêtes vers **`/api`** sont proxifiées vers l’URL définie par la variable d’environnement **`VITE_API_URL`**, ou par défaut **`http://localhost:6080`** (port habituel de `api.nexus` avec Docker).
+
+Exemple sous PowerShell :
+
+```powershell
+$env:VITE_API_URL="http://localhost:6080"; npm run dev
+```
+
+Les services du front utilisent des chemins du type `/api/auth/login` : le proxy enlève le préfixe `/api` avant d’atteindre l’API.
+
+## Build de production
+
+```bash
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+Le résultat est généré dans `dist/`. L’image Docker du dossier `web/` copie ce build et le sert avec **nginx** (voir [`../Dockerfile`](../Dockerfile) et [`../nginx.conf`](../nginx.conf)).
 
-```sh
+## Lint
+
+```bash
 npm run lint
 ```
+
+(Oxlint + ESLint, corrections automatiques où c’est prévu.)
+
+## Liens utiles
+
+- [README du dépôt Nexus](../../README.md)
+- [Préparation / Docker](../../PREPARATION.md)
