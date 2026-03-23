@@ -20,7 +20,6 @@ Projet de conception et de développement d’un système de paiement sécurisé
 | **TD d’explication** | [Guenego_MonnaieVirtuelle.pdf](./Guenego_MonnaieVirtuelle.pdf) |
 | **Analyse des besoins (livré projet tuteuré)** | [Projet Tuto - Analyse des besoins.pdf](./Projet%20Tuto%20-%20Analyse%20des%20besoins.pdf) |
 
-Placez les fichiers PDF à la racine du dépôt (à côté de ce README) pour que les liens relatifs fonctionnent sur GitHub ou en local. Si le nom exact du second PDF diffère légèrement, renommez-le ou ajustez le lien dans ce fichier.
 
 ---
 
@@ -110,7 +109,3 @@ docker compose up -d --build
 - Mailpit : http://localhost:8025  
 
 ---
-
-## Références
-
-- Site de suivi du projet : [Accueil — Nexus (CMS)](https://great-panini.163-5-143-4.plesk.page/)
