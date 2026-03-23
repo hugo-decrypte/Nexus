@@ -19,6 +19,7 @@ use api\actions\UsersListAction;
 use api\actions\UpdateUserAction;
 use api\actions\UpdatePasswordAction;
 use api\actions\VerifyEmailAction;
+use api\actions\VerifyLoginOtpAction;
 use api\middlewares\AuthnSigninValidationMiddleware;
 use api\middlewares\authz\AuthzAdminMiddleware;
 use api\middlewares\authz\AuthzCreateTransactionMiddleware;
@@ -95,7 +96,7 @@ return function( App $app): App {
         ->add(JwtAuthMiddleware::class);;
     $app->post('/auth/login', SigninAction::class)
         ->add(AuthnSigninValidationMiddleware::class);
-
+    $app->post('/auth/login/verify-otp', VerifyLoginOtpAction::class);
 
     $app->post('/auth/register', RegisterAction::class)
         ->add(new EnregistrerUtilisateurMiddleware());

@@ -3,6 +3,7 @@
 namespace api\actions;
 
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
+use application_core\exceptions\AccountNotValidatedException;
 use application_core\exceptions\ConnexionException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -26,28 +27,54 @@ class SigninAction {
         $host = $request->getUri()->getHost();
 
         try {
-            [$userId,$nom,$prenom,$role, $token] = $this->authnService->signin($utilisateur_dto, $host);
+            $result = $this->authnService->signin($utilisateur_dto, $host);
+
+            if (!empty($result['pending'])) {
+                $responseData = [
+                    'needsOtp' => true,
+                    'pending_token' => $result['pending_token'],
+                    'email_masked' => $result['email_masked'],
+                ];
+                $response->getBody()->write(json_encode($responseData));
+                return $response
+                    ->withHeader('Content-Type', 'application/json')
+                    ->withStatus(200);
+            }
 
             $responseData = [
-                'id'    => $userId,
-                'nom' => $nom,
-                'prenom' => $prenom,
-                'role' => $role,
-                'token' => $token
+                'id' => $result['id'],
+                'nom' => $result['nom'],
+                'prenom' => $result['prenom'],
+                'role' => $result['role'],
+                'token' => $result['token'],
             ];
 
             $response->getBody()->write(json_encode($responseData));
             return $response
-                ->withHeader("Content-Type", "application/json")
+                ->withHeader('Content-Type', 'application/json')
                 ->withStatus(200);
-
         } catch (ConnexionException $e) {
-            $errorData = ['error' => $e->getMessage()];
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
 
-            $response->getBody()->write(json_encode($errorData));
             return $response
-                ->withHeader("Content-Type", "application/json")
+                ->withHeader('Content-Type', 'application/json')
                 ->withStatus(401);
+        } catch (AccountNotValidatedException $e) {
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(403);
+        } catch (\Exception $e) {
+            $code = (int) $e->getCode();
+            if ($code === 503) {
+                $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+
+                return $response
+                    ->withHeader('Content-Type', 'application/json')
+                    ->withStatus(503);
+            }
+            throw $e;
         }
     }
 }

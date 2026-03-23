@@ -19,6 +19,7 @@ use api\actions\UpdateUserAction;
 use api\actions\UpdatePasswordAction;
 use api\actions\RechargeAction;
 use api\actions\VerifyEmailAction;
+use api\actions\VerifyLoginOtpAction;
 use api\middlewares\JwtAuthMiddleware;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceLogInterface;
@@ -32,6 +33,9 @@ return [
     },
     SigninAction::class => function (ContainerInterface $c) {
         return new SigninAction($c->get(ServiceAuthnInterface::class));
+    },
+    VerifyLoginOtpAction::class => function (ContainerInterface $c) {
+        return new VerifyLoginOtpAction($c->get(ServiceAuthnInterface::class));
     },
     RegisterAction::class => function (ContainerInterface $c) {
         return new RegisterAction($c->get(ServiceAuthnInterface::class));

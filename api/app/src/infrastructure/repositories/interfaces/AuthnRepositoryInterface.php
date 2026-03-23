@@ -15,4 +15,11 @@ interface AuthnRepositoryInterface {
     public function updateUser(string $id, string $nom, string $prenom, string $email): void;
     public function updatePassword(string $id, string $hashedPassword): void;
     public function validateAccount(string $token): void;
+
+    public function setLoginOtp(string $userId, string $codeHash, string $expiresAt): void;
+
+    /** @return array{hash: string, expires_at: string}|null */
+    public function getLoginOtp(string $userId): ?array;
+
+    public function clearLoginOtp(string $userId): void;
 }

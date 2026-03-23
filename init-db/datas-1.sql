@@ -15,6 +15,8 @@ CREATE TABLE utilisateurs (
       role user_role DEFAULT 'client',
       is_validated BOOLEAN DEFAULT false,
       validation_token VARCHAR(255) DEFAULT NULL,
+      login_otp_hash VARCHAR(255) DEFAULT NULL,
+      login_otp_expires_at TIMESTAMP DEFAULT NULL,
       date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

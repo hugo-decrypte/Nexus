@@ -1,2 +1,9 @@
 api/app/vendor/
 api/app/composer.lock
+mobile/build/
+mobile/.dart_tool/
+mobile/ios/
+mobile/android/
+mobile/macos
+mobile/
+mobile/windows/
