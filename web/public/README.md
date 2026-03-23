@@ -61,8 +61,3 @@ npm run lint
 ```
 
 (Oxlint + ESLint, corrections automatiques où c’est prévu.)
-
-## Liens utiles
-
-- [README du dépôt Nexus](../../README.md)
-- [Préparation / Docker](../../PREPARATION.md)
