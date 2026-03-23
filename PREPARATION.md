@@ -37,8 +37,6 @@ npm install
 npm run dev
 ```
 
-Le serveur de dev Vite utilise en général le port configuré dans `vite.config.js` (souvent 5173). Pointez l’API vers l’URL du service `api.nexus` si vous testez en local hors Docker.
-
 ### API (`api/app`)
 
 Avec PHP et Composer installés localement, depuis `api/app` :
@@ -47,8 +45,6 @@ Avec PHP et Composer installés localement, depuis `api/app` :
 composer install
 php -S 0.0.0.0:8080 -t public
 ```
-
-Sinon, privilégiez le conteneur `api.nexus` après `docker compose up`.
 
 ### Mobile (`mobile`)
 
@@ -97,12 +93,3 @@ docker compose down
 ```
 
 ---
-
-## Fichiers PDF du cours et du projet
-
-Les liens dans le [README principal](./README.md) pointent vers :
-
-- `Guenego_MonnaieVirtuelle.pdf`
-- `Projet Tuto - Analyse des besoins.pdf`
-
-Assurez-vous que ces fichiers sont bien à la racine du dépôt (même niveau que `README.md`) pour que les liens Markdown fonctionnent.
