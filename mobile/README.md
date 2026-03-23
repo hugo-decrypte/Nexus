@@ -45,21 +45,6 @@ flutter run
 
 Choisissez un appareil connecté ou un émulateur quand Flutter le demande.
 
-### Configurer l’URL de l’API
-
-La constante **`baseUrl`** est dupliquée dans trois fichiers : mettez la **même** valeur partout pour un environnement donné.
-
-- `lib/presentation/screens/auth/services/auth_service.dart`
-- `lib/presentation/screens/paiement/service/payment_service.dart`
-- `lib/presentation/screens/historique/service/transaction_service.dart`
-
-(Idéalement, centraliser l’URL dans une seule config partagée évite les oublis.)
-
-- **Émulateur Android** : souvent `http://10.0.2.2:6080` pour joindre `localhost:6080` sur la machine hôte.
-- **Appareil physique** : utilisez l’**adresse IP locale** de votre PC (même Wi‑Fi) et le port exposé par l’API (ex. `6080` si vous utilisez `docker compose` comme dans le README racine).
-- **Serveur distant** : remplacez par l’URL complète du déploiement (schéma `http` ou `https` selon le cas).
-
-Pensez à aligner `baseUrl` (et les autres services qui appellent l’API) sur le même hôte pour éviter les mélanges entre environnements.
 
 ## Build release (rappel)
 
@@ -78,10 +63,3 @@ flutter build ios
 ```bash
 flutter test
 flutter analyze
-```
-
-## Liens utiles
-
-- [README du dépôt Nexus](../README.md)
-- [Préparation / Docker](../PREPARATION.md)
-- [Documentation Flutter](https://docs.flutter.dev/)
