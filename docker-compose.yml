@@ -54,6 +54,7 @@ services:
       - '8080:8080'
     networks:
       - nexus.net
+    command: php -S 0.0.0.0:8080 -t /var/www/html
 
   #
   # service mail

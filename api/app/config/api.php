@@ -18,12 +18,12 @@ use api\actions\UsersListAction;
 use api\actions\UpdateUserAction;
 use api\actions\UpdatePasswordAction;
 use api\actions\RechargeAction;
-use api\middlewares\authz\AuthzUserRessourceAccessMiddleware;
+use api\actions\VerifyEmailAction;
+use api\actions\VerifyLoginOtpAction;
 use api\middlewares\JwtAuthMiddleware;
 use application_core\application\usecases\interfaces\ServiceAuthnInterface;
 use application_core\application\usecases\interfaces\ServiceLogInterface;
 use application_core\application\usecases\interfaces\ServiceTransactionInterface;
-use infrastructure\repositories\interfaces\AuthnRepositoryInterface;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -33,6 +33,9 @@ return [
     },
     SigninAction::class => function (ContainerInterface $c) {
         return new SigninAction($c->get(ServiceAuthnInterface::class));
+    },
+    VerifyLoginOtpAction::class => function (ContainerInterface $c) {
+        return new VerifyLoginOtpAction($c->get(ServiceAuthnInterface::class));
     },
     RegisterAction::class => function (ContainerInterface $c) {
         return new RegisterAction($c->get(ServiceAuthnInterface::class));
@@ -81,6 +84,9 @@ return [
     },
     LogsListAction::class =>function(ContainerInterface $c) {
         return new LogsListAction($c->get(ServiceLogInterface::class));
+    },
+    VerifyEmailAction::class => function (ContainerInterface $c) {
+        return new VerifyEmailAction($c->get(ServiceAuthnInterface::class));
     },
     JwtAuthMiddleware::class => function (ContainerInterface $c) {
         return new JwtAuthMiddleware(parse_ini_file($c->get('db.config'))["JWT_SECRET"]);

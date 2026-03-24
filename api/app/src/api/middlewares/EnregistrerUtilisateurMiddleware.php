@@ -20,11 +20,15 @@ class EnregistrerUtilisateurMiddleware {
                 ->key('mot_de_passe', v::stringType()->notEmpty())
                 ->key('nom', v::stringType()->notEmpty())
                 ->key('prenom', v::stringType()->notEmpty())
-                ->key('role', v::stringType()->notEmpty())
                 ->assert($data);
 
         } catch (NestedValidationException $e) {
             throw new HttpBadRequestException($request, "Invalid data: " . $e->getFullMessage(), $e);
+        }
+
+        // Role par défaut : client (seul un admin peut créer un compte admin via l'interface admin)
+        if (empty($data['role'])) {
+            $data['role'] = 'client';
         }
 
         $userDTO = new InputUserDTO($data);

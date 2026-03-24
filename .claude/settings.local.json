@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose:*)",
+      "Bash(docker run:*)",
+      "Bash(docker exec:*)",
+      "Bash(winpty docker:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(curl -s -X POST http://localhost:6080/auth/login -H \"Content-Type: application/json\" -d '{\"\"email\"\":\"\"admin@mail.com\"\",\"\"mot_de_passe\"\":\"\"admin\"\"}')",
+      "Bash(curl -s -X POST http://localhost:6080/auth/login -H \"Content-Type: application/json\" -d '{\"\"email\"\":\"\"admin@mail.com\"\",\"\"mot_de_passe\"\":\"\"Admin123!\"\"}')",
+      "Bash(curl -s -X POST http://localhost:6080/auth/login -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"admin@mail.com\"\",\"\"mot_de_passe\"\":\"\"Admin123!\"\"}\")",
+      "Bash(curl -s -X POST http://localhost:6080/auth/register -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"test@test.com\"\",\"\"mot_de_passe\"\":\"\"test123\"\",\"\"nom\"\":\"\"Test\"\",\"\"prenom\"\":\"\"User\"\",\"\"role\"\":\"\"client\"\"}\")",
+      "Bash(curl -s -X POST http://localhost:6080/auth/register -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"test@test.com\"\",\"\"mot_de_passe\"\":\"\"Test1234\"\",\"\"nom\"\":\"\"Test\"\",\"\"prenom\"\":\"\"User\"\",\"\"role\"\":\"\"client\"\"}\")",
+      "Bash(curl -s -X POST http://localhost:6080/auth/login -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"test@test.com\"\",\"\"mot_de_passe\"\":\"\"Test1234\"\"}\")"
+    ]
+  }
+}

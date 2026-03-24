@@ -1,6 +1,12 @@
 # Use an official PHP runtime as a base image
 FROM php:8.4-cli
 
+# Installation des dépendances système pour PostgreSQL
+RUN apt-get update && apt-get install -y libpq-dev
+
+# Installation et activation des extensions PHP
+RUN docker-php-ext-install pdo pdo_pgsql
+
 # basic update
 RUN apt-get update && \
     apt-get install --yes --force-yes \

@@ -13,6 +13,10 @@ CREATE TABLE utilisateurs (
       email VARCHAR(100) UNIQUE NOT NULL,
       mot_de_passe VARCHAR(255) NOT NULL,
       role user_role DEFAULT 'client',
+      is_validated BOOLEAN DEFAULT false,
+      validation_token VARCHAR(255) DEFAULT NULL,
+      login_otp_hash VARCHAR(255) DEFAULT NULL,
+      login_otp_expires_at TIMESTAMP DEFAULT NULL,
       date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

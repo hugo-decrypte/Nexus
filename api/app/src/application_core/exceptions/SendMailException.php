@@ -9,7 +9,6 @@ class SendMailException extends Exception
 
     public function __construct()
     {
-        //401 unauthorized
-        parent::__construct("Poblème lors de l'envoi du mail.", 404);
+        parent::__construct("Problème lors de l'envoi du mail.", 404);
     }
 }

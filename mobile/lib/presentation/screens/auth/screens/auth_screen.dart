@@ -22,6 +22,10 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
   // Login controllers
   final _loginEmailController = TextEditingController();
   final _loginPasswordController = TextEditingController();
+  final _loginOtpController = TextEditingController();
+
+  String? _loginPendingToken;
+  String? _loginEmailMasked;
 
   // Register controllers
   final _registerNameController = TextEditingController();
@@ -61,6 +65,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     _tabController.dispose();
     _loginEmailController.dispose();
     _loginPasswordController.dispose();
+    _loginOtpController.dispose();
     _registerNameController.dispose();
     _registerPrenomController.dispose();
     _registerEmailController.dispose();
@@ -80,12 +85,22 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     setState(() => _isLoginLoading = true);
 
     try {
-      await AuthService.login(
+      final result = await AuthService.login(
         email: _loginEmailController.text.trim(),
         password: _loginPasswordController.text,
       );
 
       if (!mounted) return;
+
+      if (result['needsOtp'] == true) {
+        setState(() {
+          _loginPendingToken = result['pending_token'] as String?;
+          _loginEmailMasked =
+              result['email_masked'] as String? ?? 'votre e-mail';
+          _loginOtpController.clear();
+        });
+        return;
+      }
 
       Navigator.pushReplacement(
         context,
@@ -96,6 +111,51 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     } finally {
       if (mounted) setState(() => _isLoginLoading = false);
     }
+  }
+
+  Future<void> _handleVerifyOtp() async {
+    if (_loginPendingToken == null) return;
+    final code = _loginOtpController.text.replaceAll(RegExp(r'\D'), '');
+    if (code.length != 6) {
+      setState(() => _loginError = 'Saisissez les 6 chiffres du code.');
+      return;
+    }
+    setState(() {
+      _loginError = null;
+      _isLoginLoading = true;
+    });
+    try {
+      await AuthService.verifyLoginOtp(
+        pendingToken: _loginPendingToken!,
+        code: code,
+        fallbackEmail: _loginEmailController.text.trim(),
+      );
+      if (!mounted) return;
+      setState(() {
+        _loginPendingToken = null;
+        _loginEmailMasked = null;
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } catch (e) {
+      if (mounted) {
+        setState(() =>
+            _loginError = e.toString().replaceAll('Exception: ', ''));
+      }
+    } finally {
+      if (mounted) setState(() => _isLoginLoading = false);
+    }
+  }
+
+  void _cancelOtpStep() {
+    setState(() {
+      _loginPendingToken = null;
+      _loginEmailMasked = null;
+      _loginOtpController.clear();
+      _loginError = null;
+    });
   }
 
   Future<void> _handleRegister() async {
@@ -370,31 +430,59 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               const SizedBox(height: 20),
             ],
 
-            CustomTextField(
-              controller: _loginEmailController,
-              label: 'Email',
-              hintText: 'votre.email@exemple.com',
-              prefixIcon: Icons.email_outlined,
-              keyboardType: TextInputType.emailAddress,
-              validator: FormValidators.validateEmail,
-            ),
-            const SizedBox(height: 20),
-
-            CustomTextField(
-              controller: _loginPasswordController,
-              label: 'Mot de passe',
-              hintText: '••••••••',
-              prefixIcon: Icons.lock_outline,
-              obscureText: !_showLoginPassword,
-              validator: FormValidators.validatePassword,
-              suffixIcon: IconButton(
-                icon: Icon(_showLoginPassword ? Icons.visibility_off : Icons.visibility, color: Colors.black38, size: 20),
-                onPressed: () => setState(() => _showLoginPassword = !_showLoginPassword),
+            if (_loginPendingToken != null) ...[
+              Text(
+                'Code envoyé à $_loginEmailMasked',
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
               ),
-            ),
-            const SizedBox(height: 12),
-
-            CustomButton(text: 'Se connecter', onPressed: _handleLogin, isLoading: _isLoginLoading),
+              const SizedBox(height: 16),
+              CustomTextField(
+                controller: _loginOtpController,
+                label: 'Code à 6 chiffres',
+                hintText: '000000',
+                prefixIcon: Icons.pin_outlined,
+                keyboardType: TextInputType.number,
+                validator: (v) {
+                  final d = (v ?? '').replaceAll(RegExp(r'\D'), '');
+                  if (d.length != 6) return '6 chiffres requis';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              CustomButton(
+                text: 'Valider le code',
+                onPressed: _handleVerifyOtp,
+                isLoading: _isLoginLoading,
+              ),
+              TextButton(
+                onPressed: _isLoginLoading ? null : _cancelOtpStep,
+                child: const Text('Retour'),
+              ),
+            ] else ...[
+              CustomTextField(
+                controller: _loginEmailController,
+                label: 'Email',
+                hintText: 'votre.email@exemple.com',
+                prefixIcon: Icons.email_outlined,
+                keyboardType: TextInputType.emailAddress,
+                validator: FormValidators.validateEmail,
+              ),
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: _loginPasswordController,
+                label: 'Mot de passe',
+                hintText: '••••••••',
+                prefixIcon: Icons.lock_outline,
+                obscureText: !_showLoginPassword,
+                validator: FormValidators.validatePassword,
+                suffixIcon: IconButton(
+                  icon: Icon(_showLoginPassword ? Icons.visibility_off : Icons.visibility, color: Colors.black38, size: 20),
+                  onPressed: () => setState(() => _showLoginPassword = !_showLoginPassword),
+                ),
+              ),
+              const SizedBox(height: 12),
+              CustomButton(text: 'Se connecter', onPressed: _handleLogin, isLoading: _isLoginLoading),
+            ],
 
             const SizedBox(height: 20),
             Row(

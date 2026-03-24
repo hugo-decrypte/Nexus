@@ -28,46 +28,83 @@ class AuthService {
       print('📦 Login Response: ${response.body}');
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
 
-        // ✅ Extraire l'ID utilisateur (ajuster selon la structure de ta réponse)
+        if (data['needsOtp'] == true && data['pending_token'] != null) {
+          return {
+            'needsOtp': true,
+            'pending_token': data['pending_token'].toString(),
+            'email_masked': data['email_masked']?.toString() ?? '',
+          };
+        }
+
+        if (data['token'] == null) {
+          throw Exception(data['error']?.toString() ?? 'Réponse invalide');
+        }
+
         String? userId;
-
-        // Cas 1 : Si l'API retourne { "token": "...", "user": { "id": "..." } }
         if (data['user'] != null && data['user']['id'] != null) {
           userId = data['user']['id'].toString();
-        }
-        // Cas 2 : Si l'API retourne { "token": "...", "userId": "..." }
-        else if (data['userId'] != null) {
+        } else if (data['userId'] != null) {
           userId = data['userId'].toString();
-        }
-        // Cas 3 : Si l'API retourne { "token": "...", "user_id": "..." }
-        else if (data['user_id'] != null) {
+        } else if (data['user_id'] != null) {
           userId = data['user_id'].toString();
-        }
-        // Cas 4 : Si l'API retourne { "token": "...", "id": "..." }
-        else if (data['id'] != null) {
+        } else if (data['id'] != null) {
           userId = data['id'].toString();
         }
 
-        print('✅ User ID extrait: $userId');
-
-        // Sauvegarder automatiquement le token et les infos user
         await saveUserData(
-          token: data['token'],
+          token: data['token'].toString(),
           userId: userId,
-          email: data['user']?['email']?.toString() ?? data['email']?.toString() ?? email,
+          email: data['user']?['email']?.toString() ??
+              data['email']?.toString() ??
+              email,
           role: data['user']?['role']?.toString() ?? data['role']?.toString(),
         );
 
         return data;
-      } else {
-        throw Exception('Email ou mot de passe incorrect');
       }
+
+      Map<String, dynamic>? err;
+      try {
+        err = jsonDecode(response.body) as Map<String, dynamic>?;
+      } catch (_) {}
+      throw Exception(err?['error']?.toString() ?? 'Email ou mot de passe incorrect');
     } catch (e) {
       print('❌ Erreur login: $e');
       rethrow;
     }
+  }
+
+  /// Après connexion avec OTP e-mail (double authentification).
+  static Future<void> verifyLoginOtp({
+    required String pendingToken,
+    required String code,
+    required String fallbackEmail,
+  }) async {
+    final digits = code.replaceAll(RegExp(r'\D'), '');
+    if (digits.length != 6) {
+      throw Exception('Code à 6 chiffres requis');
+    }
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login/verify-otp'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'pending_token': pendingToken,
+        'code': digits,
+      }),
+    );
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode != 200 || data['token'] == null) {
+      throw Exception(data['error']?.toString() ?? 'Code incorrect ou expiré');
+    }
+    String? userId = data['id']?.toString();
+    await saveUserData(
+      token: data['token'].toString(),
+      userId: userId,
+      email: data['email']?.toString() ?? fallbackEmail,
+      role: data['role']?.toString(),
+    );
   }
 
   static Future<void> register({
