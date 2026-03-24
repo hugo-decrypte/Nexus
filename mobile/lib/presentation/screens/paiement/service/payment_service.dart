@@ -18,30 +18,12 @@ class PaymentService {
   }) async {
     try {
       final token = await AuthService.getToken();
-
-      print('═══════════════════════════════════════');
-      print('💳 CRÉATION TRANSACTION');
-      print('═══════════════════════════════════════');
-      print('👤 Client ID: $clientId');
-      print('🏪 Commerçant ID: $commercantId');
-      print('💰 Montant: $montant PO');
-      print('📝 Message: $message');
-      print('🔑 Token: ${token?.substring(0, 20)}...');
-
-      // ✅ CORRECTION: Convertir le montant en double (float)
       final body = {
         'id_emetteur': clientId,
         'id_recepteur': commercantId,
-        'montant': montant.toDouble(),  // ✅ Conversion en float
+        'montant': montant.toDouble(),
         'description': message,
       };
-
-      print('───────────────────────────────────────');
-      print('📤 REQUEST');
-      print('URL: $baseUrl/transactions');
-      print('Body: ${jsonEncode(body)}');
-      print('───────────────────────────────────────');
-
       final response = await http.post(
         Uri.parse('$baseUrl/transactions'),
         headers: {
@@ -56,18 +38,12 @@ class PaymentService {
         },
       );
 
-      print('───────────────────────────────────────');
-      print('📥 RESPONSE');
-      print('Status Code: ${response.statusCode}');
-      print('Body: ${response.body}');
-      print('═══════════════════════════════════════');
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         final result = jsonDecode(response.body);
         print('✅ Transaction créée avec succès');
         return result;
       } else {
-        print('❌ ERREUR ${response.statusCode}');
+        print('ERREUR ${response.statusCode}');
 
         try {
           final error = jsonDecode(response.body);
@@ -119,7 +95,7 @@ class PaymentService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('❌ Erreur vérification commerçant: $e');
+      print('Erreur vérification commerçant: $e');
       return false;
     }
   }
@@ -144,7 +120,7 @@ class PaymentService {
       }
       return null;
     } catch (e) {
-      print('❌ Erreur infos commerçant: $e');
+      print('Erreur infos commerçant: $e');
       return null;
     }
   }
