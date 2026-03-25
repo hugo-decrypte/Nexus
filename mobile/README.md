@@ -1,16 +1,65 @@
-# untitled
+# Application mobile Nexus (Flutter)
 
-A new Flutter project.
+Client **Flutter** du projet **Nexus** : authentification, accueil, paiement (envoi / réception avec QR), rechargement, historique des transactions. Elle communique avec la même API REST que le front web.
 
-## Getting Started
+## Prérequis
 
-This project is a starting point for a Flutter application.
+- **Flutter SDK** compatible avec `environment.sdk: ^3.7.2` du `pubspec.yaml`
+- Un **appareil** ou **émulateur** (Android, iOS, etc.)
+- L’**API** accessible depuis la machine ou le réseau du téléphone (URL à configurer, voir ci-dessous)
 
-A few resources to get you started if this is your first Flutter project:
+## Structure du projet
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
+mobile/
+├── lib/
+│   ├── main.dart
+│   ├── domain/
+│   │   └── modeles/          # Modèles (transaction, paiement…)
+│   └── presentation/
+│       ├── screens/          # Splash, auth, home, paiement, historique, rechargement…
+│       └── widgets/          # Barre d’app, navigation, composants auth
+├── assets/
+│   └── images/
+├── pubspec.yaml
+└── android/ / ios/ / …       # Projets plateforme générés / natifs
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Dépendances principales
+
+| Paquet | Usage |
+|--------|--------|
+| `http` | Appels REST vers l’API |
+| `qr_flutter` | Affichage de QR codes |
+| `mobile_scanner` | Scan de QR codes |
+| `permission_handler` | Permissions caméra, etc. |
+| `shared_preferences` | Stockage local (token, infos utilisateur) |
+
+## Installation et lancement
+
+```bash
+cd mobile
+flutter pub get
+flutter run
+```
+
+Choisissez un appareil connecté ou un émulateur quand Flutter le demande.
+
+
+## Build release (rappel)
+
+```bash
+# Android (APK / App Bundle selon votre config)
+flutter build apk
+# ou
+flutter build appbundle
+
+# iOS (macOS + Xcode)
+flutter build ios
+```
+
+## Tests et qualité
+
+```bash
+flutter test
+flutter analyze
