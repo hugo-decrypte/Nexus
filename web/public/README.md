@@ -32,7 +32,7 @@ npm install
 npm run dev
 ```
 
-Par défaut, Vite démarre sur **http://localhost:5173** (sauf configuration contraire).
+Par défaut, Vite démarre sur **http://localhost:5173**.
 
 ### Appel de l’API en dev
 
