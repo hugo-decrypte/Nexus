@@ -1,4 +1,4 @@
-# Nexus — Monnaie virtuelle (projet tutoré)
+# Nexus - Monnaie virtuelle (projet tutoré)
 
 Projet de conception et de développement d’un système de paiement sécurisé inspiré des principes de la blockchain, destiné à des contextes ponctuels et localisés (festivals, marchés, campus, etc.). Ce dépôt regroupe l’application (API, interface web, client mobile) et la configuration Docker.
 
